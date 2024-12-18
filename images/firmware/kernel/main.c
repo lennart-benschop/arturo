@@ -141,7 +141,7 @@ int main() {
 		for (int x = BORDER; x < FRAME_WIDTH - BORDER; ++x)
 			putpixel(x, y, WHITE);
 
-	puttext(200, 20, GREEN, BLACK, "009 DHT11 Temperature/Humidity Logging");
+	puttext(200, 20, GREEN, BLACK, "011 DHT11 Temperature/Humidity Logging");
 
 	const uint CHART_LEFT = 200;
 	const uint CHART_RIGHT = FRAME_WIDTH - 20;

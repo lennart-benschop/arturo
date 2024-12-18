@@ -1,3 +1,0 @@
-- git checkout 0.17.0 on USB if not remember ?
-- add link
-- create /bin

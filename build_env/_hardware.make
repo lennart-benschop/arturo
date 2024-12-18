@@ -3,7 +3,7 @@
 #
 #		Name : 		hardware.make
 #		Purpose :	Common make code for building / uploading RISC images
-#		Date :		12th December 2024
+#		Date :		18th December 2024
 #		Author : 	Paul Robson (paul@robsons.org.uk)
 #
 # *******************************************************************************************

@@ -1,2 +1,0 @@
-cmake -DPICO_SDK_PATH=/aux/riscv/pico-sdk -DPICO_PLATFORM=rp2040 -DPICO_COPY_TO_RAM=0 -DDVI_DEFAULT_SERIAL_CONFIG=pico_sock_cfg ..
-

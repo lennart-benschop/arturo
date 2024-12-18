@@ -21,7 +21,7 @@ include_directories(
 	)
 
 add_subdirectory(PicoDVI/software/libdvi)
-add_subdirectory(PicoDVI/software/libsprite)
+#add_subdirectory(PicoDVI/software/libsprite)
 
 add_subdirectory(firmware)
 
