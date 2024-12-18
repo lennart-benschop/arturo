@@ -18,6 +18,8 @@
 
 add_executable(kernel
 	main.c
+	hardware/dvi_640x480.c
+	support/console.c
 )
 
 # ***************************************************************************************
@@ -25,6 +27,10 @@ add_executable(kernel
 #										Build options
 #
 # ***************************************************************************************
+
+include_directories(
+	include
+)
 
 target_compile_options(kernel PRIVATE -Wall)
 

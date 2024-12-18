@@ -1,3 +1,18 @@
+// ***************************************************************************************
+// ***************************************************************************************
+//
+//		Name : 		font8x8.h
+//		Author :	Luke Wren
+//		Date : 		18th December 2024
+//		Reviewed :	No
+//		Purpose :	Simple 8x8 font borrowed from PicoDVI
+//
+// ***************************************************************************************
+// ***************************************************************************************
+
+#ifndef _FONT8X8_H
+#define _FONT8X8_H
+
 #ifndef _IMG_ASSET_SECTION
 #define _IMG_ASSET_SECTION ".data"
 #endif
@@ -52,3 +67,5 @@ static const char __attribute__((aligned(4), section(_IMG_ASSET_SECTION ".font_8
 	0x3c, 0x00, 0x00, 0x1c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x60, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x3c, 0x00, 0x00, 0x18, 0x00, 0x00, 
 };
+
+#endif
