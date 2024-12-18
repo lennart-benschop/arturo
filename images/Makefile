@@ -15,7 +15,7 @@ include $(BUILDENVDIR)/config.make
 
 PROJECT = kernel
 
-CMAKEOPTS = -DSTORAGE_TYPE=$(STORAGE) -DPICO_SDK_PATH=$(PICO_SDK_PATH)
+CMAKEOPTS = -DSTORAGE_TYPE=$(STORAGE) -DPICO_SDK_PATH=$(PICO_SDK_PATH) 
 all: build
 
 always:
@@ -27,12 +27,11 @@ always:
 # ***************************************************************************************
 
 prelim:
-	cd $(ROOTDIR)tinyusb ; git checkout 0.17.0
 	mkdir -p $(BINDIR)
 	rm -f $(BINDIR)*.elf $(BINDIR)*.uf2
-	rm -f PicoDVI tinyusb
+	rm -f PicoDVI 
 	ln -s ../PicoDVI
-	ln -s ../tinyusb
+
 
 # ***************************************************************************************
 #

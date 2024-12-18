@@ -1,10 +1,30 @@
-# Replace TMDS with 10 bit UART (same baud rate):
-# add_definitions(-DDVI_SERIAL_DEBUG=1)
-# add_definitions(-DRUN_FROM_CRYSTAL)
+# ***************************************************************************************
+# ***************************************************************************************
+#
+#		Name : 		CMakeLists.txt
+#		Author :	Paul Robson (paul@robsons.org.uk)
+#		Date : 		18th December 2024
+#		Reviewed :	No
+#		Purpose :	Outer level CMake configuration
+#
+# ***************************************************************************************
+# ***************************************************************************************
+
+# ***************************************************************************************
+#
+#							Set up the program components
+#
+# ***************************************************************************************
 
 add_executable(kernel
 	main.c
 )
+
+# ***************************************************************************************
+#
+#										Build options
+#
+# ***************************************************************************************
 
 target_compile_options(kernel PRIVATE -Wall)
 
@@ -13,7 +33,6 @@ target_compile_definitions(kernel PRIVATE
 	DVI_VERTICAL_REPEAT=1
 	DVI_N_TMDS_BUFFERS=3
 	)
-
 
 target_link_libraries(kernel
 	pico_stdlib
@@ -25,8 +44,13 @@ target_link_libraries(kernel
  	fatfs
 )
 
-# create map/bin/hex file etc.
 pico_add_extra_outputs(kernel)
+
+# ***************************************************************************************
+#
+#						Set up for the Extended Flash ROM / Stage 2 boot.
+#
+# ***************************************************************************************
 
 target_compile_definitions(kernel
     PRIVATE PICO

@@ -1,11 +1,31 @@
+# ***************************************************************************************
+# ***************************************************************************************
+#
+#		Name : 		CMakeLists.txt
+#		Author :	Paul Robson (paul@robsons.org.uk)
+#		Date : 		18th December 2024
+#		Reviewed :	No
+#		Purpose :	Outer level CMake configuration
+#
+# ***************************************************************************************
+# ***************************************************************************************
+
+# ***************************************************************************************
+#
+#										Set up
+#
+# ***************************************************************************************
+
 cmake_minimum_required(VERSION 3.14)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 23)
 
-#set(PICO_BOARD olimex_neo6502)
-#set(PICO_BOARD olimex_rp2040pc)
-# set(PICO_BOARD pico_zero)
+# ***************************************************************************************
+# 
+# 								  Set up the Pico SDK
+#
+# ***************************************************************************************
 
 if(NOT DEFINED ENV{PICO_SDK_FETCH_FROM_GIT})
     set(PICO_SDK_FETCH_FROM_GIT on)
@@ -13,7 +33,27 @@ if(NOT DEFINED ENV{PICO_SDK_FETCH_FROM_GIT})
 endif()
 include(pico_sdk_import.cmake)
 
+# ***************************************************************************************
+#
+#								Project configuration
+#
+# ***************************************************************************************
+
 project(firmware C CXX ASM)
+
+add_compile_options(-Wall -Werror -O2)
+
+include_directories(
+	include
+)
+
+pico_sdk_init()
+
+# ***************************************************************************************
+#
+#									Install tinyUSB
+#
+# ***************************************************************************************
 
 include(FetchContent)
 
@@ -30,22 +70,19 @@ else()
 endif()
 set(PICO_TINYUSB_PATH ${tinyusb_SOURCE_DIR})
 
-pico_sdk_init()
-
-add_compile_options(-Wall -Werror -O2)
-
-# To change the default serial config for all apps, pass e.g.
-#   cmake -DDVI_DEFAULT_SERIAL_CONFIG=pimoroni_demo_hdmi_cfg ..
-# then rebuild. This is applied via target_compile_definitions on each app
-# individually.
-set(DVI_DEFAULT_SERIAL_CONFIG "pico_sock_cfg" CACHE STRING
-    "Select a default pin configuration from common_dvi_pin_configs.h")
-
-include_directories(
-	include
-)
+# ***************************************************************************************
+#
+#							 	Access libdvi from PicoDVI
+#
+# ***************************************************************************************
 
 add_subdirectory(PicoDVI/software/libdvi)
+
+# ***************************************************************************************
+#
+#										Access FatFS
+#
+# ***************************************************************************************
 
 add_library(fatfs INTERFACE)
 target_sources(fatfs INTERFACE
@@ -54,6 +91,12 @@ target_sources(fatfs INTERFACE
     ${tinyusb_SOURCE_DIR}/lib/fatfs/source/ffunicode.c
 )
 target_include_directories(fatfs INTERFACE ${tinyusb_SOURCE_DIR}/lib/fatfs/source/)
+
+# ***************************************************************************************
+#
+#								Added the sources subdirectory
+#
+# ***************************************************************************************
 
 add_subdirectory(firmware)
 
