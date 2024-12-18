@@ -19,6 +19,10 @@ target_link_libraries(kernel
 	pico_stdlib
 	pico_multicore
 	libdvi
+   	tinyusb_host
+  	tinyusb_device
+ 	tinyusb_board
+ 	fatfs
 )
 
 # create map/bin/hex file etc.

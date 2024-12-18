@@ -30,8 +30,9 @@ prelim:
 	cd $(ROOTDIR)tinyusb ; git checkout 0.17.0
 	mkdir -p $(BINDIR)
 	rm -f $(BINDIR)*.elf $(BINDIR)*.uf2
-	rm -f PicoDVI
+	rm -f PicoDVI tinyusb
 	ln -s ../PicoDVI
+	ln -s ../tinyusb
 
 # ***************************************************************************************
 #
