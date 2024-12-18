@@ -12,15 +12,25 @@
 
 #ifndef _DVI_COMMON_H
 #define _DVI_COMMON_H
-
-#define FRAME_WIDTH 640
-#define FRAME_HEIGHT 480
+//
+//		PicoDVI Configuration
+//
 #define VREG_VSEL VREG_VOLTAGE_1_20
 #define DVI_TIMING dvi_timing_640x480p_60hz
+//
+//		Structure for mode information.
+//
+#define DVI_MAX_BITPLANES 	(8)  													// This many bitplanes.
 
-#define PLANE_SIZE_BYTES (FRAME_WIDTH * FRAME_HEIGHT / 8)
-extern uint8_t framebuf[3 * PLANE_SIZE_BYTES];
+struct DVIModeInformation {
+	int width,height;  																// Size of screen
+	int bitPlaneCount; 																// Number of bitPlanes
+	uint8_t *bitPlane[DVI_MAX_BITPLANES]; 											// Up to 8 bitplanes
+	int bitPlaneSize;  																// Byte size of each bitplane.
+};
 
 void DVIStart(void);
+struct dvi_serialiser_cfg *DVIGetHDMIConfig(void);
+struct DVIModeInformation *DVIGetModeInformation(void);
 
 #endif

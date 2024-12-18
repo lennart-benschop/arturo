@@ -1,33 +1,38 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//		Name : 		main.c
+//		Name : 		dvi_pinout.c
 //		Author :	Paul Robson (paul@robsons.org.uk)
 //		Date : 		18th December 2024
 //		Reviewed :	No
-//		Purpose :	Main Program.
+//		Purpose :	DVI HDMI setup function.
 //
 // ***************************************************************************************
 // ***************************************************************************************
 
 #include "common.h"
 
+#include "dvi.h"
+#include "dvi_serialiser.h"
+#include "common_dvi_pin_configs.h"
+
+#include "hardware/dvi_common.h"
+
+
 // ***************************************************************************************
 //
-//										Start the kernel
+//					Neo6502 / RP2040PC Serialiser & Access function
 //
 // ***************************************************************************************
 
-int main() {
-	DVIStart();																		// Start DVI running.
-	CONInitialise();  																// Initialise the console.
+static struct dvi_serialiser_cfg pico_neo6502_cfg = {
+	.pio = DVI_DEFAULT_PIO_INST,
+	.sm_tmds = {0, 1, 2},
+	.pins_tmds = {14, 18, 16},
+	.pins_clk = 12,
+	.invert_diffpairs = true
+};
 
-	CONWriteString("%d DHT11 Temperature/Humidity Logging",12);
-	int n = 0;
-	while (1) {
-		sleep_ms(20);
-		CONWrite(48+n);
-		n = (n + 1) % 7;
-	}
-
+struct dvi_serialiser_cfg *DVIGetHDMIConfig(void) {
+	return &pico_neo6502_cfg;
 }

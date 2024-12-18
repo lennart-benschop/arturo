@@ -27,6 +27,7 @@
 //
 //		Console output functionality.
 //
+void CONInitialise(void);
 void CONWrite(char c);
 void CONWriteString(const char *fmt, ...);
 

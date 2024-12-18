@@ -1,11 +1,11 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//		Name : 		dvi_common.h
+//		Name : 		console.c
 //		Author :	Paul Robson (paul@robsons.org.uk)
 //		Date : 		18th December 2024
 //		Reviewed :	No
-//		Purpose :	Common values, DVI driver
+//		Purpose :	Console output code, for debugging primarily.
 //
 // ***************************************************************************************
 // ***************************************************************************************
@@ -19,7 +19,6 @@
 #define FONT_N_CHARS 95
 #define FONT_FIRST_ASCII 32
 
-
 // ***************************************************************************************
 //
 //										Set one pixel
@@ -27,13 +26,18 @@
 // ***************************************************************************************
 
 static inline void putpixel(uint x, uint y, uint rgb) {
+	struct DVIModeInformation *dmi = DVIGetModeInformation();
+
 	uint8_t mask = 1u << (x % 8);
+
 	for (uint component = 0; component < 3; ++component) {
-		uint idx = (x / 8) + y * FRAME_WIDTH / 8 + component * PLANE_SIZE_BYTES;
+
+		uint8_t *idx = (x / 8) + y * dmi->width / 8 + dmi->bitPlane[component];
+
 		if (rgb & (1u << component))
-			framebuf[idx] |= mask;
+			*idx = *idx | mask;
 		else
-			framebuf[idx] &= ~mask;
+			*idx = *idx & (~mask);
 	}
 }
 
@@ -50,6 +54,16 @@ static uint bgcol = CON_COL_RED;
 
 // ***************************************************************************************
 //
+//									Console Initialise
+//
+// ***************************************************************************************
+
+void CONInitialise(void) {
+	CONWrite(12);
+}
+
+// ***************************************************************************************
+//
 //							Write one character or control code.
 //
 // ***************************************************************************************
@@ -59,8 +73,8 @@ void CONWrite(char c) {
 		case 12:  																	// Clear Screen.
 			for (uint x = 0; x < 640; ++x)
 				for (uint y = 0; y < 480; ++y)
-					putpixel(x, y, CON_COL_BLUE);
-			fgcol = CON_COL_GREEN;  												// Reset colours.
+					putpixel(x, y, CON_COL_BLACK);
+			fgcol = CON_COL_CYAN;	  												// Reset colours.
 			bgcol = CON_COL_BLACK;
 			x0 = y0 = 0;  															// Home cursor
 			break;

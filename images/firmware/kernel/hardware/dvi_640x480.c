@@ -25,10 +25,31 @@
 //
 // ***************************************************************************************
 
-uint8_t framebuf[3 * PLANE_SIZE_BYTES];
+#define FRAME_WIDTH 640
+#define FRAME_HEIGHT 480
 
-struct dvi_inst dvi0;
+#define PLANE_SIZE_BYTES (FRAME_WIDTH * FRAME_HEIGHT / 8)
+static uint8_t framebuf[3 * PLANE_SIZE_BYTES];
 
+struct dvi_inst dvi0;																// PicoDVI structure
+struct DVIModeInformation dvi_modeInfo;  											// Mode information structure.
+
+// ***************************************************************************************
+//
+//									Get mode information
+//
+// ***************************************************************************************
+
+struct DVIModeInformation *DVIGetModeInformation(void) {
+	dvi_modeInfo.width = FRAME_WIDTH;
+	dvi_modeInfo.height = FRAME_HEIGHT;
+	dvi_modeInfo.bitPlaneCount = 3;
+	dvi_modeInfo.bitPlaneSize = PLANE_SIZE_BYTES;
+	dvi_modeInfo.bitPlane[0] = framebuf;
+	dvi_modeInfo.bitPlane[1] = framebuf + PLANE_SIZE_BYTES;
+	dvi_modeInfo.bitPlane[2] = framebuf + PLANE_SIZE_BYTES*2;	
+	return &dvi_modeInfo;
+}
 // ***************************************************************************************
 //
 //									The main line renderer
@@ -56,20 +77,6 @@ void __not_in_flash("main") dvi_core1_main() {
 
 // ***************************************************************************************
 //
-//								Neo6502 / RP2040PC Serialiser
-//
-// ***************************************************************************************
-
-static const struct dvi_serialiser_cfg pico_neo6502_cfg = {
-	.pio = DVI_DEFAULT_PIO_INST,
-	.sm_tmds = {0, 1, 2},
-	.pins_tmds = {14, 18, 16},
-	.pins_clk = 12,
-	.invert_diffpairs = true
-};
-
-// ***************************************************************************************
-//
 //									Start the DVI driver
 //
 // ***************************************************************************************
@@ -81,7 +88,7 @@ void DVIStart(void) {
 	setup_default_uart();  															// Initialise the UART
 
 	dvi0.timing = &DVI_TIMING;  													// Select timing and pinout
-	dvi0.ser_cfg = pico_neo6502_cfg;
+	dvi0.ser_cfg = *DVIGetHDMIConfig();
 
 	dvi_init(&dvi0, next_striped_spin_lock_num(), next_striped_spin_lock_num());	// Initialise DVI
 	multicore_launch_core1(dvi_core1_main);  										// Run DVI driver on core #1

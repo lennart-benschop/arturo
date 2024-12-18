@@ -18,7 +18,7 @@
 
 add_executable(kernel
 	main.c
-	hardware/dvi_640x480.c
+	hardware/dvi_640x480.c hardware/dvi_pinout.c
 	support/console.c
 )
 
