@@ -31,7 +31,9 @@ prelim:
 	mkdir -p $(BINDIR)
 	rm -f $(BINDIR)*.elf $(BINDIR)*.uf2
 	cd firmware/kernel/locale ; $(PYTHON) keymaps.py >../include/data/__locale.h
-
+	#echo -e '$(subst $(newline),\n,${CONFIG_DATA})'
+	$(PYTHON) scripts/makeconfig.py '$(CONFIG_DATA)' >firmware/kernel/include/data/__config.h
+	
 # ***************************************************************************************
 #
 #									Build the firmware

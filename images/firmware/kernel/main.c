@@ -23,7 +23,7 @@ int main() {
 	CONInitialise();  															// Initialise the console.
     CONWriteString("Arturo pre-release\r\r");                                   // Prompt string.
     CONWriteString("Sample speed %d\r",SNDGetSampleFrequency());
-    SNDInitialise();                                                            // Start the sound system.
+    SNDInitialise(false);                                                       // Start the sound system, seperate channels.
     USBInitialise();                                                            // Initialise keyboard & USB system.
     USBKeyboardEvent(0,0xFF,0);                                                 // Announce keyboard has been reset
     USBSynchronise();                                                           // Synchronise storage

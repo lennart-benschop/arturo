@@ -15,6 +15,7 @@
 
 
 static int sampleFrequency = -1;
+static bool combineSoundChannels = false;
 
 // ***************************************************************************************
 //
@@ -36,32 +37,54 @@ int SNDGetSampleFrequency(void) {
 // ***************************************************************************************
 
 void pwm_interrupt_handler() {
-    pwm_clear_irq(pwm_gpio_to_slice_num(AUDIO_PIN));    
-    pwm_set_gpio_level(AUDIO_PIN,SNDGetNextSample()+128);
+    pwm_clear_irq(pwm_gpio_to_slice_num(AUDIO_PIN_L));    
+    uint8_t sample0 = SNDGetNextSample(0)+128;
+    pwm_set_gpio_level(AUDIO_PIN_L,sample0);
+    if (AUDIO_HARDWARE_CHANNELS == 2) {
+        uint8_t sample1 = (combineSoundChannels ? sample0 : SNDGetNextSample(1)+128);
+        pwm_set_gpio_level(AUDIO_PIN_R,sample1);
+    }
 }
 
 // ***************************************************************************************
 //
-//				Initialise sound channel, return # of supported channels
+//          Initialise a specific channel, only doing the interrupt for the first
+//                      (both driven off the same interrupt)
 //
 // ***************************************************************************************
 
-void SNDInitialise(void) {
-    gpio_set_function(AUDIO_PIN, GPIO_FUNC_PWM);
-    int audio_pin_slice = pwm_gpio_to_slice_num(AUDIO_PIN);
-    // Setup PWM interrupt to fire when PWM cycle is complete
-    pwm_clear_irq(audio_pin_slice);
-    // set the handle function above
-    irq_set_exclusive_handler(PWM_IRQ_WRAP, pwm_interrupt_handler); 
-    irq_set_enabled(PWM_IRQ_WRAP, true);
+static void _SND_Initialise_Channel(int pin,bool enableInterrupt) {
+    gpio_set_function(pin, GPIO_FUNC_PWM);
+    int pin_slice = pwm_gpio_to_slice_num(pin);
+    if (enableInterrupt) {
+        // Setup PWM interrupt to fire when PWM cycle is complete
+        pwm_clear_irq(pin_slice);
+        // set the handle function above
+        irq_set_exclusive_handler(PWM_IRQ_WRAP, pwm_interrupt_handler); 
+        irq_set_enabled(PWM_IRQ_WRAP, true);
+        pwm_set_irq_enabled(pin_slice, true);
+    }
     // Setup PWM for audio output
     pwm_config config = pwm_get_default_config();
     pwm_config_set_clkdiv(&config, SAMPLE_DIVIDER); 
     pwm_config_set_wrap(&config, 255); 
-    pwm_init(audio_pin_slice, &config, true);
+    pwm_init(pin_slice, &config, true);
     //
-    pwm_set_gpio_level(AUDIO_PIN, 0);
-    pwm_set_irq_enabled(audio_pin_slice, true);
+    pwm_set_gpio_level(pin, 0);
+}
+
+// ***************************************************************************************
+//
+//				                  Initialise sound system
+//
+// ***************************************************************************************
+
+void SNDInitialise(bool _combineChannels) {
+    combineSoundChannels = _combineChannels;
+    _SND_Initialise_Channel(AUDIO_PIN_L,true);
+    if (AUDIO_HARDWARE_CHANNELS == 2) {
+        _SND_Initialise_Channel(AUDIO_PIN_R,false);
+    }    
 }
 
 

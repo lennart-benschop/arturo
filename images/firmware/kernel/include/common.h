@@ -28,6 +28,8 @@
 #include "hardware/watchdog.h"
 #include "hardware/pwm.h"
 
+#include "data/__config.h"
+
 #include "hardware/dvi_common.h"
 #include "hardware/kbd_codes.h"
 #include "hardware/usb_interface.h"
@@ -40,6 +42,7 @@
 #include "support/miscellany.h"
 #include "support/keyboard.h"
 #include "support/control_codes.h"
+
 
 void TASKManager(void);
 
