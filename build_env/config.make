@@ -17,7 +17,8 @@
 #
 #		Set these accordingly. 
 #
-PICO_SDK_PATH = /aux/riscv/pico-sdk/
+export PICO_SDK_PATH := /aux/riscv/pico-sdk/
+export PICO_DVI_PATH := /aux/riscv/PicoDVI/
 #
 #		Configure Platform (rp2350,rp2350-riscv)
 #

@@ -86,7 +86,7 @@ void CONWrite(char c) {
 		default:
 			if (c >= FONT_FIRST_ASCII && c < FONT_FIRST_ASCII+FONT_N_CHARS) {  		// ASCII character set.
 				for (int y = y0; y < y0 + 8; ++y) {
-					uint8_t font_bits = font_8x8[(c - FONT_FIRST_ASCII) + (y - y0) * FONT_N_CHARS];
+					uint8_t font_bits = font_8x8[(c - FONT_FIRST_ASCII) * FONT_CHAR_HEIGHT+y-y0];
 					for (int i = 0; i < 8; ++i)
 						putpixel(x0 + i, y, font_bits & (1u << i) ? fgcol : bgcol);
 					}

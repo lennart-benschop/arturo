@@ -76,7 +76,7 @@ set(PICO_TINYUSB_PATH ${tinyusb_SOURCE_DIR})
 #
 # ***************************************************************************************
 
-add_subdirectory(PicoDVI/software/libdvi)
+add_subdirectory($ENV{PICO_DVI_PATH}/software/libdvi subproject/picodvi)
 
 # ***************************************************************************************
 #

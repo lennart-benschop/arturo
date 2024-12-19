@@ -23,7 +23,7 @@ void TASKManager(void) {
     while (1) {
         sleep_ms(100);
         n = KBDGetKey();
-        if (n != 0) CONWriteString("%d %c\n",n,n);
+        if (n != 0) CONWriteString("%d %c\r",n,n);
 
         USBUpdate();
         #ifndef HANDLE_USB_KBD_MESSAGES

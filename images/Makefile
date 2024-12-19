@@ -15,7 +15,7 @@ include $(BUILDENVDIR)/config.make
 
 PROJECT = kernel
 
-CMAKEOPTS = -DSTORAGE_TYPE=$(STORAGE) -DPICO_SDK_PATH=$(PICO_SDK_PATH) 
+CMAKEOPTS = #-DSTORAGE_TYPE=$(STORAGE) #-DPICO_SDK_PATH=$(PICO_SDK_PATH) -DPICO_DVI_PATH=$(PICO_DVI_PATH)
 
 all: build
 
@@ -30,9 +30,6 @@ always:
 prelim:
 	mkdir -p $(BINDIR)
 	rm -f $(BINDIR)*.elf $(BINDIR)*.uf2
-	rm -f PicoDVI 
-	ln -s ../PicoDVI
-
 
 # ***************************************************************************************
 #
