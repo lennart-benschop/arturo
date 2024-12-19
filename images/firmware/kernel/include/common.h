@@ -33,7 +33,7 @@
 
 #include "support/console.h"
 
-#define KBDEvent(x,y,z) {}
+#define KBDEvent(x,y,z) CONWriteString("%d %d %d\r",x,y,z)
 void KBDSync(void);
 void __time_critical_func(TASKManager)(void);
 void KBDInitialise(void);

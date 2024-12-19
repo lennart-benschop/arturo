@@ -19,9 +19,9 @@
 #define CON_COL_BLACK 0x0
 #define CON_COL_BLUE 0x1
 #define CON_COL_GREEN 0x2
-#define CON_COL_MAGENTA 0x3
+#define CON_COL_CYAN 0x3
 #define CON_COL_RED 0x4
-#define CON_COL_CYAN 0x4
+#define CON_COL_MAGENTA 0x5
 #define CON_COL_YELLOW 0x6
 #define CON_COL_WHITE 0x7
 //

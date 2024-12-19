@@ -40,8 +40,8 @@ void CatUSB(void) {
 // ***************************************************************************************
 
 int main() {
-	DVIStart();																		// Start DVI running.
-	CONInitialise();  																// Initialise the console.
+	DVIStart();																	// Start DVI running.
+	CONInitialise();  															// Initialise the console.
     CONWriteString("Mordred v0.0.13\r\r");
 	CONWriteString("%d DHT11 Temperature/Humidity Logging",12);
     KBDInitialise();                                                            // Initialise keyboard & USB system.

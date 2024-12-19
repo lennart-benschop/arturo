@@ -23,8 +23,8 @@
 void __time_critical_func(TASKManager)(void) {
     int n = 0;
     while (1) {
-        sleep_ms(20);
-        CONWrite(48+n);
+        sleep_ms(100);
+        //CONWrite(48+n);
         n = (n + 1) % 7;
         KBDSync();
     }
