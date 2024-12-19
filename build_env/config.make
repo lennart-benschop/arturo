@@ -24,11 +24,6 @@ export PICO_DVI_PATH := /aux/riscv/PicoDVI/
 #
 PLATFORM = rp2040
 #
-#		Can be SDCARD or USB currently. If you change this use make switch to
-#		rebuild as it cmake clean doesn't clean things up enough (probably me)
-#
-STORAGE = USB
-#
 # *******************************************************************************************
 #
 #									  OpenOCD Configuration
