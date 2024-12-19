@@ -28,7 +28,7 @@ bool msc_inquiry_complete = false;
 // ***************************************************************************************
 
 void USBSynchronise(void) {
-    CONWriteString("Waiting for USB Key..\r\r");
+    CONWriteString("Waiting for USB to stabilise..\r");
     uint16_t timeOut = 200;                                                         // 2 seconds waiting for timeout.
     while (!msc_inquiry_complete && timeOut > 0) {                                  // Until USB live, or time out.
         USBUpdate();                                                                // USB Check

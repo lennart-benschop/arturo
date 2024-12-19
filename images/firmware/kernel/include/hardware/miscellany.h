@@ -18,5 +18,10 @@
 //
 void TMRStartTickInterrupt(void);
 uint32_t TMRRead(void);
+//
+extern bool tick50HzHasFired;
+
+#define TICK50_RESET() 		{ tick50HzHasFired = false; }
+#define HASTICK50_FIRED()	(tick50HzHasFired)
 
 #endif

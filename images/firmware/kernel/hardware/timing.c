@@ -14,13 +14,29 @@
 
 struct repeating_timer timer;
 
+bool tick50HzHasFired = false;
+
 // ***************************************************************************************
 //
-// 							      50Hz Callback function
+// 		   This is optimised out because gcc doesn't recognise side effects 
+//
+// ***************************************************************************************
+
+#pragma GCC push_options      
+#pragma GCC optimize ("O0")
+static void _tmrSetTick(void) {
+    tick50HzHasFired = true;                                                    // Set tick flag.    
+}
+#pragma GCC pop_options
+
+// ***************************************************************************************
+//
+//                                50Hz Callback function
 //
 // ***************************************************************************************
 
 static bool Tick50Callback(struct repeating_timer *t) {
+    _tmrSetTick();
     // Code here called at 50Hz.
     return true;
 }

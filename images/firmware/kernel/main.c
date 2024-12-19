@@ -24,7 +24,7 @@ int main() {
     CONWriteString("Arturo pre-release\r\r");                                   // Prompt string.
     USBInitialise();                                                            // Initialise keyboard & USB system.
     USBKeyboardEvent(0,0xFF,0);                                                 // Announce keyboard has been reset
-    LOCSetLocale("gb"); 
+    LOCSetLocale("gb");                                                         // GB Locale
     USBSynchronise();                                                           // Synchronise storage
     TMRStartTickInterrupt();                                                    // Start the tick interrupt.
     TESTShowUSBRootDirectory();                                                 // Test function.
