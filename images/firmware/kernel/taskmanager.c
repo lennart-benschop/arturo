@@ -22,8 +22,12 @@ void TASKManager(void) {
     int n = 0;
     while (1) {
         sleep_ms(100);
-        // CONWrite(48+n);
-        n = (n + 1) % 7;
+        n = KBDGetKey();
+        if (n != 0) CONWriteString("%d %c\n",n,n);
+
         USBUpdate();
+        #ifndef HANDLE_USB_KBD_MESSAGES
+        KBDCheckTimer();
+        #endif
     }
 }

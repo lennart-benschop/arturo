@@ -3,7 +3,7 @@
 //
 //      Name :      keyboard.cpp
 //      Authors :   Paul Robson (paul@robsons.org.uk)
-//      Date :      15th December 2024
+//      Date :      18th December 2024
 //      Reviewed :  No
 //      Purpose :   Converts keyboard events to a queue and key state array.
 //
@@ -11,7 +11,8 @@
 // ***************************************************************************************
 
 #include "common.h"
-#include "core.h"
+
+#ifndef HANDLE_USB_KBD_MESSAGES
 
 #define MAX_QUEUE_SIZE (64) 													// Max size of keyboard queue.
 
@@ -33,6 +34,7 @@ static uint32_t nextRepeat = 9999;  											// Time of next repeat.
 
 static uint8_t KBDMapToASCII(uint8_t keyCode,uint8_t modifiers);
 static uint8_t KBDDefaultASCIIKeys(uint8_t keyCode,uint8_t isShift);
+static uint8_t KBDDefaultControlKeys(uint8_t keyCode,uint8_t isShift);
 
 // ***************************************************************************************
 //
@@ -40,7 +42,7 @@ static uint8_t KBDDefaultASCIIKeys(uint8_t keyCode,uint8_t isShift);
 //
 // ***************************************************************************************
 
-void KBDEvent(uint8_t isDown,uint8_t keyCode,uint8_t modifiers) {
+void KBDReceiveEvent(uint8_t isDown,uint8_t keyCode,uint8_t modifiers) {
 
 	if (isDown && keyCode == KEY_ESC) {   										// Pressed ESC
 		// TODO: Might want to notify ESC pressed.
@@ -75,7 +77,7 @@ void KBDEvent(uint8_t isDown,uint8_t keyCode,uint8_t modifiers) {
 
 // ***************************************************************************************
 //
-//								Handle Repeat
+//								Handle auto Repeat
 //
 // ***************************************************************************************
 
@@ -86,11 +88,6 @@ void KBDCheckTimer(void) {
 			nextRepeat = TMRRead()+KBD_REPEAT_AFTER; 							// Quicker repeat after first time.
 		}
 	}
-
-//	int ascii = getchar_timeout_us(0);
-//	if (ascii != PICO_ERROR_TIMEOUT) {
-//		KBDInsertQueue(ascii);
-//	}
 }
 
 // ***************************************************************************************
@@ -114,7 +111,6 @@ uint8_t KBDGetModifiers(void) {
 // ***************************************************************************************
 
 void KBDInsertQueue(uint8_t ascii) {
-	CONWriteString("Key %d ",ascii);
 	if (queueSize < MAX_QUEUE_SIZE) {   										// Do we have a full queue ?
 		queue[queueSize] = ascii;  												// If not insert it.
 		queueSize++;
@@ -170,6 +166,9 @@ static uint8_t KBDMapToASCII(uint8_t keyCode,uint8_t modifiers) {
 	if (ascii == 0) {															// This maps all the other ASCII keys.
 		ascii = KBDDefaultASCIIKeys(keyCode,modifiers); 						
 	}
+	if (ascii == 0) {															// This maps all the control keys
+		ascii = KBDDefaultControlKeys(keyCode,modifiers); 						
+	}
 
 	return ascii;
 }
@@ -202,3 +201,29 @@ static uint8_t KBDDefaultASCIIKeys(uint8_t keyCode,uint8_t isShift) {
 	return ascii;
 }
 
+// ***************************************************************************************
+//
+//						Work out standard controls (include CHR(127))
+//
+// ***************************************************************************************
+
+static const uint8_t defaultControlKeys[] = {
+	KEY_LEFT,CC_LEFT,KEY_RIGHT,CC_RIGHT,KEY_INSERT,CC_INSERT,
+	KEY_PAGEDOWN,CC_PAGEDOWN,KEY_END,CC_END,KEY_DELETE,CC_DELETE,
+	KEY_TAB,CC_TAB,KEY_ENTER,CC_ENTER,KEY_PAGEUP,CC_PAGEUP,KEY_DOWN,CC_DOWN,
+	KEY_HOME,CC_HOME,KEY_UP,CC_UP,KEY_ESC,CC_ESC, 
+	KEY_BACKSPACE, CC_BACKSPACE, 0
+};	
+
+static uint8_t KBDDefaultControlKeys(uint8_t keyCode,uint8_t isShift) {
+	uint8_t index = 0;
+	while (defaultControlKeys[index] != 0) {
+		if (defaultControlKeys[index] == keyCode) {
+			return defaultControlKeys[index+1];
+		}
+		index += 2;
+	} 
+	return 0;
+}	
+
+#endif

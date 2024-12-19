@@ -41,7 +41,7 @@ include(pico_sdk_import.cmake)
 
 project(firmware C CXX ASM)
 
-add_compile_options(-Wall -Werror -O2)
+add_compile_options(-Wall -Werror -O2 -Wno-unused-function)
 
 include_directories(
 	include

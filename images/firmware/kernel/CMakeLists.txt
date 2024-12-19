@@ -19,7 +19,7 @@
 add_executable(kernel
 	main.c taskmanager.c
 	hardware/dvi_640x480.c hardware/dvi_pinout.c hardware/usb_storage.c hardware/usb_driver.c hardware/timing.c
-	support/console.c support/directory_test.c
+	support/console.c support/directory_test.c support/keyboard.c
 )
 
 # ***************************************************************************************
@@ -32,7 +32,7 @@ include_directories(
 	include
 )
 
-target_compile_options(kernel PRIVATE -Wall)
+target_compile_options(kernel PRIVATE -Wall -Wno-unused-function)
 
 target_compile_definitions(kernel PRIVATE
 	DVI_DEFAULT_SERIAL_CONFIG=${DVI_DEFAULT_SERIAL_CONFIG}

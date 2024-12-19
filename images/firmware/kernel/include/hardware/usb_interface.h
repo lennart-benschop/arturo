@@ -17,6 +17,4 @@ void USBInitialise(void);
 void USBUpdate(void);
 void USBSynchronise(void);
 
-#define USBKeyboardEvent(x,y,z) CONWriteString("%d %d %d\r",x,y,z)
-
 #endif

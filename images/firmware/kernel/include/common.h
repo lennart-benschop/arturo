@@ -35,6 +35,8 @@
 
 #include "support/console.h"
 #include "support/miscellany.h"
+#include "support/keyboard.h"
+#include "support/control_codes.h"
 
 void TASKManager(void);
 
