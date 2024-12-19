@@ -12,9 +12,7 @@
 // ***************************************************************************************
 
 #include "common.h"
-#include <inttypes.h>
 #include "tusb.h"
-#include "ff.h"
 #include "diskio.h"
 
 static FATFS msc_fatfs_volumes[CFG_TUH_DEVICE_MAX];
@@ -29,10 +27,11 @@ bool msc_inquiry_complete = false;
 //
 // ***************************************************************************************
 
-void STOSynchronise(void) {
+void USBSynchronise(void) {
+    CONWriteString("Waiting for USB Key..\r\r");
     uint16_t timeOut = 200;                                                         // 2 seconds waiting for timeout.
     while (!msc_inquiry_complete && timeOut > 0) {                                  // Until USB live, or time out.
-        KBDSync();                                                                  // USB Check
+        USBUpdate();                                                                // USB Check
         sleep_ms(100);                                                              // 0.1 second delay
         timeOut--;
     }

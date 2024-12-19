@@ -42,14 +42,14 @@ static void usbProcessReport(uint8_t const *report) {
         }
         
         if (key != 0 && key < KBD_MAX_KEYCODE) {                                // If key is down, and not too high.
-            if (lastReport[key] == 0) KBDEvent(1,key,report[0]);                // It wasn't down before so key press.
+            if (lastReport[key] == 0) USBKeyboardEvent(1,key,report[0]);        // It wasn't down before so key press.
             lastReport[key] = 1;                                                // Flag it as now being down.
         }
     } 
 
     for (int i = 0;i < KBD_MAX_KEYCODE;i++) {                                   // Any remaining -ve keys are up actions.
         if (lastReport[i] < 0) {
-            KBDEvent(0,i,0);                                                    // Flag going up.
+            USBKeyboardEvent(0,i,0);                                            // Flag going up.
             lastReport[i] = 0;                                                  // Mark as now up
         }
     }
@@ -115,22 +115,22 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
 
 // ***************************************************************************************
 //
-//                               Keyboard initialisation
+//                               USB initialisation
 //
 // ***************************************************************************************
 
-void KBDInitialise(void) {
-//    for (int i = 0;i < KBD_MAX_KEYCODE;i++) lastReport[i] = 0;                  // No keys currently known
+void USBInitialise(void) {
+    for (int i = 0;i < KBD_MAX_KEYCODE;i++) lastReport[i] = 0;                  // No keys currently known
     tusb_init();
 }
 
 // ***************************************************************************************
 //
-//                                  Keyboard polling
+//                              Update the USB system
 //
 // ***************************************************************************************
 
-void KBDSync(void) {
+void USBUpdate(void) {
     tuh_task();
 //    KBDCheckTimer();
 }

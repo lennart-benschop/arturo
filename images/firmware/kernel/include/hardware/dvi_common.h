@@ -27,6 +27,8 @@ struct DVIModeInformation {
 	int bitPlaneCount; 																// Number of bitPlanes
 	uint8_t *bitPlane[DVI_MAX_BITPLANES]; 											// Up to 8 bitplanes
 	int bitPlaneSize;  																// Byte size of each bitplane.
+	void *userMemory;  																// Any available RAM, NULL if none.
+	int userMemorySize; 															// Byts of user memory.
 };
 
 void DVIStart(void);

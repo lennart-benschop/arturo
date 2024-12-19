@@ -48,6 +48,8 @@ struct DVIModeInformation *DVIGetModeInformation(void) {
 	dvi_modeInfo.bitPlane[0] = framebuf;
 	dvi_modeInfo.bitPlane[1] = framebuf + PLANE_SIZE_BYTES;
 	dvi_modeInfo.bitPlane[2] = framebuf + PLANE_SIZE_BYTES*2;	
+	dvi_modeInfo.userMemory = NULL;
+	dvi_modeInfo.userMemorySize = 0;
 	return &dvi_modeInfo;
 }
 // ***************************************************************************************
@@ -66,7 +68,7 @@ void __not_in_flash("main") dvi_core1_main() {
 			for (uint component = 0; component < 3; ++component) {
 				tmds_encode_1bpp(
 					(const uint32_t*)&framebuf[y * FRAME_WIDTH / 8 + component * PLANE_SIZE_BYTES],
-					tmdsbuf + component * FRAME_WIDTH / DVI_SYMBOLS_PER_WORD,
+					tmdsbuf + (2-component) * FRAME_WIDTH / DVI_SYMBOLS_PER_WORD,  	// The (2-x) here makes it BGR Acordn standard
 					FRAME_WIDTH
 				);
 			}

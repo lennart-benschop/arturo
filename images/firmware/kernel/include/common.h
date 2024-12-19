@@ -28,19 +28,16 @@
 
 #include "hardware/dvi_common.h"
 #include "hardware/kbd_codes.h"
+#include "hardware/usb_interface.h"
+#include "hardware/miscellany.h"
 
 #include "ff.h"
 
 #include "support/console.h"
+#include "support/miscellany.h"
 
-#define KBDEvent(x,y,z) CONWriteString("%d %d %d\r",x,y,z)
-void KBDSync(void);
-void __time_critical_func(TASKManager)(void);
-void KBDInitialise(void);
-void KBDSync(void);
-void STOSynchronise(void);
+void TASKManager(void);
 
-void TMRStartTickInterrupt(void);
-uint32_t TMRRead(void);
+
 
 #endif
