@@ -61,21 +61,42 @@ struct DVIModeInformation *DVIGetModeInformation(void) {
 // ***************************************************************************************
 
 void __not_in_flash("main") dvi_core1_main() {
+	uint32_t *tmdsbuf;
 	dvi_register_irqs_this_core(&dvi0, DMA_IRQ_0);
 	dvi_start(&dvi0);
+	uint y = -1;
+	uint16_t buffer[320],buffer2[320];
 	while (true) {
-		for (uint y = 0; y < FRAME_HEIGHT; ++y) {
-			uint32_t *tmdsbuf;
-			queue_remove_blocking_u32(&dvi0.q_tmds_free, &tmdsbuf);
-			for (uint component = 0; component < 3; ++component) {
-				tmds_encode_1bpp(
-					(const uint32_t*)&framebuf[y * FRAME_WIDTH / 8 + component * PLANE_SIZE_BYTES],
-					tmdsbuf + (2-component) * FRAME_WIDTH / DVI_SYMBOLS_PER_WORD,  	// The (2-x) here makes it BGR Acordn standard
-					FRAME_WIDTH
-				);
+			y = (y + 1) % FRAME_HEIGHT;
+			switch(currentMode) {
+				//
+				//		Mode 0 is 640x480x8 colours as 3 bitplanes.
+				//
+				case DVI_MODE_640_480_8:
+					queue_remove_blocking_u32(&dvi0.q_tmds_free, &tmdsbuf);
+					for (uint component = 0; component < 3; ++component) {
+						tmds_encode_1bpp(
+							(const uint32_t*)&framebuf[y * FRAME_WIDTH / 8 + component * PLANE_SIZE_BYTES],
+							tmdsbuf + (2-component) * FRAME_WIDTH / DVI_SYMBOLS_PER_WORD,  	// The (2-x) here makes it BGR Acordn standard
+							FRAME_WIDTH
+						);
+					}
+					queue_add_blocking_u32(&dvi0.q_tmds_valid, &tmdsbuf);
+					break;
+				//
+				//		Mode 1 is 340x240x256 colours in byte format.
+				//
+				case DVI_MODE_320_240_256:					
+					queue_remove_blocking_u32(&dvi0.q_tmds_free, &tmdsbuf);
+					tmdsbuf = (uint32_t *)((y & 1) ? buffer : buffer2);
+					queue_add_blocking_u32(&dvi0.q_tmds_valid, &tmdsbuf);
+					tmdsbuf = (uint32_t *)((y & 1) ? buffer : buffer2);
+					for (int i = 0;i < 320;i++) tmdsbuf[i] = 0x7654;
+					break;
+
+				default:
+					break;
 			}
-			queue_add_blocking_u32(&dvi0.q_tmds_valid, &tmdsbuf);
-		}
 	}
 }
 
@@ -87,6 +108,7 @@ void __not_in_flash("main") dvi_core1_main() {
 
 void DVIStart(void) {
 	currentMode = DVI_MODE_640_480_8;
+	//currentMode = DVI_MODE_320_240_256;
 	vreg_set_voltage(VREG_VSEL);  													// Set CPU voltage
 	sleep_ms(10);  																	// Let it settle for 0.01s
 	set_sys_clock_khz(DVI_TIMING.bit_clk_khz, true);  								// Set the DVI compatible clock speed

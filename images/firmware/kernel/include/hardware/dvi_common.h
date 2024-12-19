@@ -21,6 +21,7 @@
 //		Structure for mode information.
 //
 #define DVI_MODE_640_480_8 		(0)   												// Modes.
+#define DVI_MODE_320_240_256	(1)
 
 #define DVI_MAX_BITPLANES 	(8)  													// This many bitplanes.
 
