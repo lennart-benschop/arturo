@@ -27,12 +27,16 @@ always:
 #
 # ***************************************************************************************
 
-prelim:
+CONFIG_OUT_FILE = firmware/kernel/include/data/__config.h
+LOCALE_OUT_FILE = ../include/data/__locale.h
+
+prelim: $(CONFIG_OUT_FILE)
 	mkdir -p $(BINDIR)
 	rm -f $(BINDIR)*.elf $(BINDIR)*.uf2
-	cd firmware/kernel/locale ; $(PYTHON) keymaps.py >../include/data/__locale.h
-	#echo -e '$(subst $(newline),\n,${CONFIG_DATA})'
-	$(PYTHON) scripts/makeconfig.py '$(CONFIG_DATA)' >firmware/kernel/include/data/__config.h
+	cd firmware/kernel/locale ; $(PYTHON) keymaps.py >$(LOCALE_OUT_FILE)
+
+$(CONFIG_OUT_FILE) : $(BUILDENVDIR)/config.make
+	$(PYTHON) scripts/makeconfig.py '$(CONFIG_DATA)' >$(CONFIG_OUT_FILE)
 	
 # ***************************************************************************************
 #
@@ -67,3 +71,5 @@ clean: always
 
 upload: 
 	$(UPLOADER) $(UPCONFIG) $(UPCOMMANDS)
+
+	

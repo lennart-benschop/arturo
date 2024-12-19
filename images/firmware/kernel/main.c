@@ -21,7 +21,7 @@
 int main() {
 	DVIStart();																	// Start DVI running.
 	CONInitialise();  															// Initialise the console.
-    CONWriteString("Arturo pre-release\r\r");                                   // Prompt string.
+    CONWriteString("Arturo pre-release %s\r\r",PICO_PLATFORM_NAME);             // Prompt string.
     SNDInitialise(false);                                                       // Start the sound system, seperate channels.
     USBInitialise();                                                            // Initialise keyboard & USB system.
     USBKeyboardEvent(0,0xFF,0);                                                 // Announce keyboard has been reset
