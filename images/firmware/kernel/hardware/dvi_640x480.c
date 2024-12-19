@@ -61,11 +61,22 @@ struct DVIModeInformation *DVIGetModeInformation(void) {
 // ***************************************************************************************
 
 void __not_in_flash("main") dvi_core1_main() {
+	const uint red_msb   = 7;
+	const uint red_lsb   = 5;
+	const uint green_msb = 4;
+	const uint green_lsb = 2;
+	const uint blue_msb  = 1;
+	const uint blue_lsb  = 0;
+
+	uint pixwidth = dvi0.timing->h_active_pixels;
+
 	uint32_t *tmdsbuf;
 	dvi_register_irqs_this_core(&dvi0, DMA_IRQ_0);
 	dvi_start(&dvi0);
 	uint y = -1;
-	uint16_t buffer[320],buffer2[320];
+
+	uint8_t buffer[640];
+
 	while (true) {
 			y = (y + 1) % FRAME_HEIGHT;
 			switch(currentMode) {
@@ -88,10 +99,12 @@ void __not_in_flash("main") dvi_core1_main() {
 				//
 				case DVI_MODE_320_240_256:					
 					queue_remove_blocking_u32(&dvi0.q_tmds_free, &tmdsbuf);
-					tmdsbuf = (uint32_t *)((y & 1) ? buffer : buffer2);
+					// NB the scanline buffers are half-resolution!
+					for (int i = 0;i < 640;i++) buffer[i] = 0x1C;
+					tmds_encode_data_channel_8bpp((const uint32_t *)buffer, tmdsbuf, pixwidth / 2, blue_msb, blue_lsb);
+					tmds_encode_data_channel_8bpp((const uint32_t *)buffer, tmdsbuf + pixwidth, pixwidth / 2, green_msb, green_lsb);
+					tmds_encode_data_channel_8bpp((const uint32_t *)buffer, tmdsbuf + 2 * pixwidth, pixwidth / 2, red_msb, red_lsb);
 					queue_add_blocking_u32(&dvi0.q_tmds_valid, &tmdsbuf);
-					tmdsbuf = (uint32_t *)((y & 1) ? buffer : buffer2);
-					for (int i = 0;i < 320;i++) tmdsbuf[i] = 0x7654;
 					break;
 
 				default:
