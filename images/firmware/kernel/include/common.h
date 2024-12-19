@@ -26,11 +26,13 @@
 #include "hardware/gpio.h"
 #include "hardware/vreg.h"
 #include "hardware/watchdog.h"
+#include "hardware/pwm.h"
 
 #include "hardware/dvi_common.h"
 #include "hardware/kbd_codes.h"
 #include "hardware/usb_interface.h"
 #include "hardware/miscellany.h"
+#include "hardware/sound.h"
 
 #include "ff.h"
 

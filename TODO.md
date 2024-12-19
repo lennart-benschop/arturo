@@ -1,3 +1,3 @@
 # TODO stuff
 
-- Implement Sound code
+- Implement two channel sound code.

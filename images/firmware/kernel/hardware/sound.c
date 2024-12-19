@@ -11,13 +11,8 @@
 // ***************************************************************************************
 
 #include "common.h"
-#include "stdlib.h"
-#include "hardware/pwm.h"
 #include "dvi.h"
-#include "core.h"
 
-#define AUDIO_PIN 	(20) 					// Beeper pin.
-#define SAMPLE_DIVIDER (32)                 // Divider, affects the interrupts / second of the PWM sample output
 
 static int sampleFrequency = -1;
 
@@ -42,7 +37,7 @@ int SNDGetSampleFrequency(void) {
 
 void pwm_interrupt_handler() {
     pwm_clear_irq(pwm_gpio_to_slice_num(AUDIO_PIN));    
-//  pwm_set_gpio_level(AUDIO_PIN,SNDGetNextSample()+128);
+    pwm_set_gpio_level(AUDIO_PIN,SNDGetNextSample()+128);
 }
 
 // ***************************************************************************************

@@ -35,3 +35,10 @@ void TASKManager(void) {
         }
     }
 }
+
+static int count = 0;
+
+int8_t SNDGetNextSample(void) {
+    count++;
+    return (count & 0x80) ? -127:127;
+}

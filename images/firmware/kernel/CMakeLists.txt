@@ -18,7 +18,7 @@
 
 add_executable(kernel
 	main.c taskmanager.c
-	hardware/dvi_640x480.c hardware/dvi_pinout.c hardware/usb_storage.c hardware/usb_driver.c hardware/timing.c
+	hardware/dvi_640x480.c hardware/dvi_pinout.c hardware/usb_storage.c hardware/usb_driver.c hardware/timing.c hardware/sound.c
 	support/console.c support/directory_test.c support/keyboard.c support/locale.c
 )
 
