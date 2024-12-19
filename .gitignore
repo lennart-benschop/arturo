@@ -1,5 +1,3 @@
-*.prg
-*.rep
 *.sym
 *.bin
 *.pyc
@@ -19,5 +17,4 @@ memory.dump
 *.obj
 bin/*
 __*
-/hardware/risc_test/include_link/
 CMakeCache.txt
