@@ -5,7 +5,7 @@
 //		Author :	Paul Robson (paul@robsons.org.uk)
 //		Date : 		18th December 2024
 //		Reviewed :	No
-//		Purpose :	DVI Driver 640x480 / 8 bit colour
+//		Purpose :	DVI Driver 640x480 frame size. 
 //
 // ***************************************************************************************
 // ***************************************************************************************
@@ -25,7 +25,7 @@
 //
 // ***************************************************************************************
 
-#define FRAME_WIDTH 640
+#define FRAME_WIDTH 640  															// Not the *pixels*, it's the display setting.
 #define FRAME_HEIGHT 480
 
 #define PLANE_SIZE_BYTES (FRAME_WIDTH * FRAME_HEIGHT / 8)

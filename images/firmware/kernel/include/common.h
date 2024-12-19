@@ -18,6 +18,8 @@
 #include <stdarg.h>
 #include <ctype.h>
 
+#include <malloc.h>
+
 #include "pico/stdlib.h"
 #include "pico/multicore.h"
 #include "hardware/clocks.h"
