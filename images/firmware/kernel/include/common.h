@@ -24,9 +24,22 @@
 #include "hardware/sync.h"
 #include "hardware/gpio.h"
 #include "hardware/vreg.h"
+#include "hardware/watchdog.h"
 
 #include "hardware/dvi_common.h"
+#include "hardware/kbdcodes.h"
+
+#include "ff.h"
 
 #include "support/console.h"
+
+#define KBDEvent(x,y,z) {}
+void KBDSync(void);
+void __time_critical_func(TASKManager)(void);
+void KBDInitialise(void);
+void KBDSync(void);
+void STOSynchronise(void);
+void THWStart(void);
+uint32_t TMRRead(void);
 
 #endif

@@ -17,8 +17,8 @@
 # ***************************************************************************************
 
 add_executable(kernel
-	main.c
-	hardware/dvi_640x480.c hardware/dvi_pinout.c
+	main.c taskmanager.c
+	hardware/dvi_640x480.c hardware/dvi_pinout.c hardware/usb_storage.c hardware/usb_driver.c hardware/timing.c
 	support/console.c
 )
 
@@ -62,7 +62,7 @@ target_compile_definitions(kernel
     PRIVATE PICO
     PRIVATE PICO_FLASH_SPI_CLKDIV=4
 )
-
+	
 pico_define_boot_stage2(firmware_boot2 ${PICO_SDK_PATH}/src/rp2040/boot_stage2/boot2_generic_03h.S)
 
 target_compile_definitions(firmware_boot2 PRIVATE
