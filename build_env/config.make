@@ -28,10 +28,11 @@ PLATFORM = rp2040
 #
 CONFIG_DATA="\
 \#define PICO_PLATFORM_NAME "$(PLATFORM)" |\
-\
 \#define PICO_HW_RP2040PC 	(0) 				|\
 \#define PICO_HW_NEO6502 	(1) 				|\
 \#define PICO_HARDWARE 		(PICO_HW_RP2040PC) 	|\
+\#define ARTURO_RUN_FUNCTION TESTApplication		|\
+\#define ARTURO_PROCESS_KEYS (1) 					|\
 "
 #
 #

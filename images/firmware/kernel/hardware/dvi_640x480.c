@@ -33,6 +33,7 @@ static uint8_t framebuf[3 * PLANE_SIZE_BYTES];
 
 struct dvi_inst dvi0;																// PicoDVI structure
 struct DVIModeInformation dvi_modeInfo;  											// Mode information structure.
+static int currentMode;
 
 // ***************************************************************************************
 //
@@ -41,13 +42,14 @@ struct DVIModeInformation dvi_modeInfo;  											// Mode information structur
 // ***************************************************************************************
 
 struct DVIModeInformation *DVIGetModeInformation(void) {
+	dvi_modeInfo.mode = currentMode;
 	dvi_modeInfo.width = FRAME_WIDTH;
 	dvi_modeInfo.height = FRAME_HEIGHT;
 	dvi_modeInfo.bitPlaneCount = 3;
 	dvi_modeInfo.bitPlaneSize = PLANE_SIZE_BYTES;
-	dvi_modeInfo.bitPlane[0] = framebuf;
-	dvi_modeInfo.bitPlane[1] = framebuf + PLANE_SIZE_BYTES;
-	dvi_modeInfo.bitPlane[2] = framebuf + PLANE_SIZE_BYTES*2;	
+	dvi_modeInfo.bitPlaneDepth = 1;
+	for (int i = 0;i <dvi_modeInfo.bitPlaneCount;i++)
+		dvi_modeInfo.bitPlane[i] = framebuf + PLANE_SIZE_BYTES * i;
 	dvi_modeInfo.userMemory = NULL;
 	dvi_modeInfo.userMemorySize = 0;
 	return &dvi_modeInfo;
@@ -84,6 +86,7 @@ void __not_in_flash("main") dvi_core1_main() {
 // ***************************************************************************************
 
 void DVIStart(void) {
+	currentMode = DVI_MODE_640_480_8;
 	vreg_set_voltage(VREG_VSEL);  													// Set CPU voltage
 	sleep_ms(10);  																	// Let it settle for 0.01s
 	set_sys_clock_khz(DVI_TIMING.bit_clk_khz, true);  								// Set the DVI compatible clock speed

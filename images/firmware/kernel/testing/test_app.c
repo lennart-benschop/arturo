@@ -1,11 +1,11 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//      Name :      taskmanager.c
+//      Name :      test_app.c
 //      Authors :   Paul Robson (paul@robsons.org.uk)
 //      Date :      18th December 2024
 //      Reviewed :  No
-//      Purpose :   The main task.
+//      Purpose :   Test application
 //
 // ***************************************************************************************
 // ***************************************************************************************
@@ -14,12 +14,35 @@
 
 // ***************************************************************************************
 //
+//                                  USB test function
+//
+// ***************************************************************************************
+
+void TESTShowUSBRootDirectory(void) {
+    DIR di;
+    FILINFO fi;
+    FRESULT r = f_opendir(&di,"/");
+    int done = 0;
+    CONWriteString("\r");
+    while (r == FR_OK && done == 0) {
+        r = f_readdir(&di,&fi);
+        CONWriteString("%s ",fi.fname);
+        done = fi.fname[0] == 0;
+    }
+    r = f_closedir(&di);
+    CONWriteString("\r\r");
+}
+
+// ***************************************************************************************
+//
 //                      Start and run the CPU. Does not have to return.
 //
 // ***************************************************************************************
 
-void TASKManager(void) {
+void TESTApplication(void) {
     int n = 0;
+    CONWriteString("\rTest App\r");
+    TESTShowUSBRootDirectory();                                               
     while (1) {
   
         n = KBDGetKey();
@@ -28,10 +51,8 @@ void TASKManager(void) {
         if (HASTICK50_FIRED()) {
             TICK50_RESET();
             USBUpdate();
-            #ifndef HANDLE_USB_KBD_MESSAGES
             KBDCheckTimer();
             CONWrite('.');
-            #endif
         }
     }
 }

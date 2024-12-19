@@ -12,8 +12,6 @@
 
 #include "common.h"
 
-#ifndef HANDLE_USB_KBD_MESSAGES
-
 #define MAX_QUEUE_SIZE (64) 													// Max size of keyboard queue.
 
 //
@@ -225,5 +223,3 @@ static uint8_t KBDDefaultControlKeys(uint8_t keyCode,uint8_t isShift) {
 	} 
 	return 0;
 }	
-
-#endif

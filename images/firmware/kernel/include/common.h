@@ -43,8 +43,10 @@
 #include "support/keyboard.h"
 #include "support/control_codes.h"
 
-
-void TASKManager(void);
+//
+//		Note: this is a MACRO (#define) set up in config.make
+//
+void ARTURO_RUN_FUNCTION(void);
 
 
 
