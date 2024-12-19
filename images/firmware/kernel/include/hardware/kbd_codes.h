@@ -1,10 +1,10 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//      Name :      kbdcodes.h
+//      Name :      kbd_codes.h
 //      Authors :   MightyPork
 //                  Paul Robson (paul@robsons.org.uk)
-//      Date :      15th December 2024
+//      Date :      18th December 2024
 //      Reviewed :  No
 //      Purpose :   Keyboard codes we use. These are the same as the HID codes.
 //

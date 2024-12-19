@@ -1,9 +1,10 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//      Name :      usb_storage.cpp
+//      Name :      usb_storage.c
 //      Author :    Veselin Sladkov
-//      Date :      15th December 2024
+//                  Paul Robson (paul@robsons.org.uk)
+//      Date :      18th December 2024
 //      Reviewed :  No
 //      Purpose :   USB MSC Storage / FATFS link from Apple/Oric emulators.
 //
@@ -23,29 +24,18 @@ bool msc_inquiry_complete = false;
 
 // ***************************************************************************************
 //
-//                                  Storage initialise
-//
-// ***************************************************************************************
-
-void STOInitialise(void) {
-}
-
-// ***************************************************************************************
-//
 //    Wait for USB to 'settle' ; not quite sure why this is required, time to process 
 //    USB Messages ?
 //
 // ***************************************************************************************
 
 void STOSynchronise(void) {
-    CONWriteString("USB Storage\r");
-    uint16_t timeOut = 200;
-    while (!msc_inquiry_complete && timeOut > 0) {
-        KBDSync();
-        sleep_us(100*1000);
+    uint16_t timeOut = 200;                                                         // 2 seconds waiting for timeout.
+    while (!msc_inquiry_complete && timeOut > 0) {                                  // Until USB live, or time out.
+        KBDSync();                                                                  // USB Check
+        sleep_ms(100);                                                              // 0.1 second delay
         timeOut--;
     }
-    CONWriteString("USB Synchronised %d %d\r",msc_inquiry_complete,timeOut);
 }
 
 // ***************************************************************************************

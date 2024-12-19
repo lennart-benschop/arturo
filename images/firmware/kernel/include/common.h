@@ -27,7 +27,7 @@
 #include "hardware/watchdog.h"
 
 #include "hardware/dvi_common.h"
-#include "hardware/kbdcodes.h"
+#include "hardware/kbd_codes.h"
 
 #include "ff.h"
 
@@ -39,7 +39,8 @@ void __time_critical_func(TASKManager)(void);
 void KBDInitialise(void);
 void KBDSync(void);
 void STOSynchronise(void);
-void THWStart(void);
+
+void TMRStartTickInterrupt(void);
 uint32_t TMRRead(void);
 
 #endif

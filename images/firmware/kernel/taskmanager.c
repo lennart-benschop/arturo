@@ -1,11 +1,9 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//      Name :      taskmanager.cpp
-//      Authors :   Sascha Schneider
-//                  Oliver Schmidt
-//                  Rien Matthijsse
-//      Date :      15th December 2024
+//      Name :      taskmanager.c
+//      Authors :   Paul Robson (paul@robsons.org.uk)
+//      Date :      18th December 2024
 //      Reviewed :  No
 //      Purpose :   The main task.
 //
@@ -20,11 +18,11 @@
 //
 // ***************************************************************************************
 
-void __time_critical_func(TASKManager)(void) {
+void TASKManager(void) {
     int n = 0;
     while (1) {
         sleep_ms(100);
-        //CONWrite(48+n);
+        // CONWrite(48+n);
         n = (n + 1) % 7;
         KBDSync();
     }

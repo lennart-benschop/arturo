@@ -5,7 +5,7 @@
 //      Authors :   Tsvetan Usunov (Olimex)
 //                  Paul Robson (paul@robsons.org.uk)
 //                  Sascha Schneider
-//      Date :      15th December 2024
+//      Date :      18th December 2024
 //      Reviewed :  No
 //      Purpose :   USB interface and HID->Event mapper.
 //
@@ -15,19 +15,7 @@
 #include "common.h"
 #include "tusb.h"
 
-//#include <cstdint>
-
-// ***************************************************************************************
-//
-//                                  Reset the RP2040
-//
-// ***************************************************************************************
-
-void ResetSystem(void) {
-    CONWriteString("Resetting.\n");
-    watchdog_enable(1,1);                                                       // Enable the watchdog timer
-    while (true) {}                                                             // Ignore it.
-}
+static void usbResetSystem(void);
 
 // ***************************************************************************************
 //
@@ -50,7 +38,7 @@ static void usbProcessReport(uint8_t const *report) {
         // if (key == KEY_102ND) key = KEY_BACKSLASH;                           // Non US /| mapped.
 
         if ((report[0] & REBOOT_KEYS) == REBOOT_KEYS) {                         // Ctrl+Alt+AltGr
-            ResetSystem();
+            usbResetSystem();
         }
         
         if (key != 0 && key < KBD_MAX_KEYCODE) {                                // If key is down, and not too high.
@@ -131,7 +119,6 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
 //
 // ***************************************************************************************
 
-
 void KBDInitialise(void) {
 //    for (int i = 0;i < KBD_MAX_KEYCODE;i++) lastReport[i] = 0;                  // No keys currently known
     tusb_init();
@@ -146,5 +133,17 @@ void KBDInitialise(void) {
 void KBDSync(void) {
     tuh_task();
 //    KBDCheckTimer();
+}
+
+// ***************************************************************************************
+//
+//                                  Reset the RP2040
+//
+// ***************************************************************************************
+
+static void usbResetSystem(void) {
+    CONWriteString("Resetting.\n");
+    watchdog_enable(1,1);                                                       // Enable the watchdog timer
+    while (true) {}                                                             // Ignore it.
 }
 

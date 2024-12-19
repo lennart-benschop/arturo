@@ -1,9 +1,9 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//      Name :      sound.cpp
+//      Name :      sound.c
 //      Authors :   Paul Robson (paul@robsons.org.uk)
-//      Date :      15th August 2024
+//      Date :      18th August 2024
 //      Reviewed :  No
 //      Purpose :   PWM Audio support for Neo6502
 //

@@ -1,9 +1,9 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//      Name :      timing.cpp
+//      Name :      timing.c
 //      Authors :   Paul Robson (paul@robsons.org.uk)
-//      Date :      15th January 2024
+//      Date :      18th January 2024
 //      Reviewed :  No
 //      Purpose :   Timing stuff
 //
@@ -16,7 +16,7 @@ struct repeating_timer timer;
 
 // ***************************************************************************************
 //
-// 							50Hz Callback function
+// 							      50Hz Callback function
 //
 // ***************************************************************************************
 
@@ -31,8 +31,8 @@ static bool Tick50Callback(struct repeating_timer *t) {
 //
 // ***************************************************************************************
 
-void THWStart(void) {
-    add_repeating_timer_ms(20, Tick50Callback, NULL, &timer);
+void TMRStartTickInterrupt(void) {
+    add_repeating_timer_ms(20, Tick50Callback, NULL, &timer);                   // Call above function every 20ms.
 }
 
 // ***************************************************************************************

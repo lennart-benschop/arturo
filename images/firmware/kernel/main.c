@@ -42,12 +42,11 @@ void CatUSB(void) {
 int main() {
 	DVIStart();																	// Start DVI running.
 	CONInitialise();  															// Initialise the console.
-    CONWriteString("Mordred v0.0.13\r\r");
-	CONWriteString("%d DHT11 Temperature/Humidity Logging",12);
+    CONWriteString("Arturo pre-release\r\r");                                   // Prompt string.
     KBDInitialise();                                                            // Initialise keyboard & USB system.
     KBDEvent(0,0xFF,0);                                                         // Reset the keyboard manager
     STOSynchronise();                                                           // Synchronise storage
-    THWStart();
+    TMRStartTickInterrupt();
     CatUSB();
     TASKManager();
 
