@@ -15,4 +15,7 @@
 
 void TESTShowUSBRootDirectory(void);
 
+uint8_t LOCLocaleMapping(uint8_t asciiCode,uint8_t keyCode,uint8_t modifiers);
+void LOCSetLocale(char *loc);
+
 #endif

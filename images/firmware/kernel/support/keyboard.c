@@ -170,7 +170,7 @@ static uint8_t KBDMapToASCII(uint8_t keyCode,uint8_t modifiers) {
 		ascii = KBDDefaultControlKeys(keyCode,modifiers); 						
 	}
 
-	return ascii;
+	return LOCLocaleMapping(ascii,keyCode,modifiers); 							// Special mapping for locales.
 }
 
 // ***************************************************************************************

@@ -30,6 +30,7 @@ always:
 prelim:
 	mkdir -p $(BINDIR)
 	rm -f $(BINDIR)*.elf $(BINDIR)*.uf2
+	cd firmware/kernel/locale ; $(PYTHON) keymaps.py >../include/data/__locale.h
 
 # ***************************************************************************************
 #
