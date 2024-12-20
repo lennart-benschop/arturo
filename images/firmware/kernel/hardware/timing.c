@@ -18,7 +18,9 @@ bool tick50HzHasFired = false;
 
 // ***************************************************************************************
 //
-// 		   This is optimised out because gcc doesn't recognise side effects 
+//                                  Set the tick flag
+//
+// 		   This is optimised out because gcc doesn't recognise side effects on extern
 //
 // ***************************************************************************************
 
@@ -31,19 +33,18 @@ static void _tmrSetTick(void) {
 
 // ***************************************************************************************
 //
-//                                50Hz Callback function
+//                         Interrupt handler 50Hz Callback function
 //
 // ***************************************************************************************
 
 static bool Tick50Callback(struct repeating_timer *t) {
-    _tmrSetTick();
-    // Code here called at 50Hz.
+    _tmrSetTick();                                                              // Sets the flag.
     return true;
 }
 
 // ***************************************************************************************
 //
-//								Initialise callback
+//						    Start the 50Hz timer tick interrupt
 //
 // ***************************************************************************************
 

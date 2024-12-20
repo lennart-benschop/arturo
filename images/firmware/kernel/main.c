@@ -33,7 +33,7 @@ static void _showRAMAvailable(void) {
 int main() {
 	DVIStart();																	// Start DVI running.
 	CONInitialise();  															// Initialise the console.
-    CONWriteString("Arturo Hardware kernel (%s) : in development\r\r",PICO_PLATFORM_NAME);      // Prompt string.
+    CONWriteString("Arturo Kernel (%s) in development\r\r",PICO_PLATFORM_NAME); // Prompt string.
     _showRAMAvailable();                                                        // Show RAM free.
     SNDInitialise(ARTURO_MONO_SOUND != 0);                                      // Start the sound system, seperate channels according to config.
     USBInitialise();                                                            // Initialise keyboard & USB system.

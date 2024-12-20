@@ -14,7 +14,7 @@
 #define _CONSOLE_H
 
 //
-//		Standard colours
+//		Standard colours RGB format, same as the BBC Micro.
 //
 #define CON_COL_BLACK 0x0
 #define CON_COL_RED 0x1

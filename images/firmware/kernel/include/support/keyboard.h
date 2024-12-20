@@ -13,8 +13,8 @@
 #ifndef _KEYBOARD_H
 #define _KEYBOARD_H
 
-#define KBD_REPEAT_START 	(90)  												// Time for first repeat
-#define KBD_REPEAT_AFTER  	(12)  												// Time for subsequent repeats
+#define KBD_REPEAT_START 	(90)  												// Time for first repeat (100ms units)
+#define KBD_REPEAT_AFTER  	(12)  												// Time for subsequent repeats (100ms units)
 
 void KBDReceiveEvent(uint8_t isDown,uint8_t keyCode,uint8_t modifiers);
 void KBDCheckTimer(void);

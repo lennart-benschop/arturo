@@ -24,25 +24,26 @@ static bool combineSoundChannels = false;
 // ***************************************************************************************
 
 int SNDGetSampleFrequency(void) {
-    if (sampleFrequency < 0) {
-        sampleFrequency = DVI_TIMING.bit_clk_khz * 1024 / SAMPLE_DIVIDER / 255;
+    if (sampleFrequency < 0) {                                                      // Only do this once.
+        sampleFrequency = DVI_TIMING.bit_clk_khz * 1024 / SAMPLE_DIVIDER / 255;     // the 255 is the wrap interrupt count.
     }
     return sampleFrequency;
 }
 
 // ***************************************************************************************
 //
-//                                  Interrupt Handler
+//                             Interrupt Handler : output sound
 //
 // ***************************************************************************************
 
 void pwm_interrupt_handler() {
-    pwm_clear_irq(pwm_gpio_to_slice_num(AUDIO_PIN_L));    
-    uint8_t sample0 = ARTURO_SND_FUNCTION(0)+128;
+    pwm_clear_irq(pwm_gpio_to_slice_num(AUDIO_PIN_L));                           	// Acknowledge interrupt   
+    uint8_t sample0 = ARTURO_SND_FUNCTION(0)+128;  									// Get sample 1, copy to Left Pin
     pwm_set_gpio_level(AUDIO_PIN_L,sample0);
-    if (AUDIO_HARDWARE_CHANNELS == 2) {
-        uint8_t sample1 = (combineSoundChannels ? sample0 : ARTURO_SND_FUNCTION(1)+128);
-        pwm_set_gpio_level(AUDIO_PIN_R,sample1);
+    if (AUDIO_HARDWARE_CHANNELS == 2) {  											// If there are 2 channels.
+        uint8_t sample1 = (combineSoundChannels ? 									// Reuse sample 1 if combined, otherwise get sample 2
+        							sample0 : ARTURO_SND_FUNCTION(1)+128);
+        pwm_set_gpio_level(AUDIO_PIN_R,sample1); 
     }
 }
 
@@ -54,9 +55,9 @@ void pwm_interrupt_handler() {
 // ***************************************************************************************
 
 static void _SND_Initialise_Channel(int pin,bool enableInterrupt) {
-    gpio_set_function(pin, GPIO_FUNC_PWM);
+    gpio_set_function(pin, GPIO_FUNC_PWM);  
     int pin_slice = pwm_gpio_to_slice_num(pin);
-    if (enableInterrupt) {
+    if (enableInterrupt) {  														// Only enable interrupt on 1 channel.
         // Setup PWM interrupt to fire when PWM cycle is complete
         pwm_clear_irq(pin_slice);
         // set the handle function above
@@ -80,8 +81,8 @@ static void _SND_Initialise_Channel(int pin,bool enableInterrupt) {
 // ***************************************************************************************
 
 void SNDInitialise(bool _combineChannels) {
-    combineSoundChannels = _combineChannels;
-    _SND_Initialise_Channel(AUDIO_PIN_L,true);
+    combineSoundChannels = _combineChannels;  										// Record if we are supposed to add them.
+    _SND_Initialise_Channel(AUDIO_PIN_L,true); 	 									// Initialise 1 or 2 channels.
     if (AUDIO_HARDWARE_CHANNELS == 2) {
         _SND_Initialise_Channel(AUDIO_PIN_R,false);
     }    

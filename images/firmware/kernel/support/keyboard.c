@@ -63,7 +63,7 @@ void KBDReceiveEvent(uint8_t isDown,uint8_t keyCode,uint8_t modifiers) {
 				currentASCII = ascii;  											// Remember code and time.
 				currentKeyCode = keyCode;
 				KBDInsertQueue(ascii);  										// Push in the queue
-				nextRepeat = TMRRead()+KBD_REPEAT_START;
+				nextRepeat = TMRRead()+KBD_REPEAT_START;  						// Slow start and faster repeat.
 			}
 		} else {
 			keyboardState[keyCode] = 0x00; 										// Clear flag

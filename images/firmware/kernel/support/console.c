@@ -21,20 +21,19 @@
 
 // ***************************************************************************************
 //
-//										Set one pixel
+//						Set one pixel at x,y in the given colour.
 //
 // ***************************************************************************************
 
 static inline void putpixel(uint x, uint y, uint rgb) {
-	struct DVIModeInformation *dmi = DVIGetModeInformation();
+	struct DVIModeInformation *dmi = DVIGetModeInformation();  						// Identify mode data.
 
-	uint8_t mask = 1u << (x % 8);
+	uint8_t mask = 1u << (x % 8);  													// Mask from lower 8 bits.
 
-	for (uint component = 0; component < 3; ++component) {
+	for (uint component = 0; component < 3; ++component) {  						// Do each bitplane
+		uint8_t *idx = (x / 8) + y * dmi->width / 8 + dmi->bitPlane[component]; 	// Work out byte.
 
-		uint8_t *idx = (x / 8) + y * dmi->width / 8 + dmi->bitPlane[component];
-
-		if (rgb & (1u << component))
+		if (rgb & (1u << component))  												// Set or clear the bit in the plane.
 			*idx = *idx | mask;
 		else
 			*idx = *idx & (~mask);
@@ -59,7 +58,7 @@ static uint bgcol = CON_COL_RED;
 // ***************************************************************************************
 
 void CONInitialise(void) {
-	CONWrite(12);
+	CONWrite(12);																	// CHR(12) is clear screen.
 }
 
 // ***************************************************************************************
@@ -69,18 +68,20 @@ void CONInitialise(void) {
 // ***************************************************************************************
 
 void CONWrite(char c) {
+	struct DVIModeInformation *dmi = DVIGetModeInformation();  						// Identify mode data.
+
 	switch(c) {
 		case 12:  																	// Clear Screen.
-			for (uint x = 0; x < 640; ++x)
-				for (uint y = 0; y < 480; ++y)
+			for (uint x = 0; x < dmi->width; ++x)
+				for (uint y = 0; y < dmi->height; ++y)
 					putpixel(x, y, CON_COL_BLACK);
-			fgcol = CON_COL_CYAN;	  												// Reset colours.
+			fgcol = CON_COL_GREEN;	  												// Reset colours.
 			bgcol = CON_COL_BLACK;
 			x0 = y0 = 0;  															// Home cursor
 			break;
 		case 13:  																	// New line
 			x0 = 0;y0 = y0 + 8;
-			if (y0 == 480) y0 = 0;
+			if (y0 == dmi->height) y0 = 0;  										// Wrap to top scrolling.
 			break;
 
 		default:
@@ -91,7 +92,7 @@ void CONWrite(char c) {
 						putpixel(x0 + i, y, font_bits & (1u << i) ? fgcol : bgcol);
 					}
 				x0 = x0 + 8;
-				if (x0 == 640) CONWrite(13);
+				if (x0 == dmi->width) CONWrite(13);
 			}
 			break;
 	}
@@ -109,8 +110,6 @@ void CONWriteString(const char *fmt, ...) {
 	va_start(args, fmt);
 	vsnprintf(buf, 128, fmt, args);
 	char *p = buf;
-	while (*p != '\0') {
-		CONWrite(*p++);
-	}
+	while (*p != '\0') CONWrite(*p++);
 	va_end(args);
 }

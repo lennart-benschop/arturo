@@ -21,7 +21,7 @@
 
 // ***************************************************************************************
 //
-//						Frame buffer, these are 3 planar bitmaps.
+//				Frame buffer, these are 3 planar bitmaps for 640x480
 //
 // ***************************************************************************************
 
@@ -55,7 +55,7 @@ void DVISetMode(int mode) {
 	dvi_modeInfo.userMemory = NULL;   												// Common defaults.
 	dvi_modeInfo.userMemorySize = 0;		
 	switch(mode) {
-		case DVI_MODE_640_480_8:
+		case DVI_MODE_640_480_8:  													// 640x480x8 information.
 			dvi_modeInfo.width = FRAME_WIDTH;
 			dvi_modeInfo.height = FRAME_HEIGHT;
 			dvi_modeInfo.bitPlaneCount = 3;
@@ -150,3 +150,4 @@ void DVIStart(void) {
 	dvi_init(&dvi0, next_striped_spin_lock_num(), next_striped_spin_lock_num());	// Initialise DVI
 	multicore_launch_core1(dvi_core1_main);  										// Run DVI driver on core #1
 }
+

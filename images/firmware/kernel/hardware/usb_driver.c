@@ -55,6 +55,12 @@ static void usbProcessReport(uint8_t const *report) {
     }
 }
 
+// ***************************************************************************************
+//
+//                          Process USB HID Mouse Report
+//
+// ***************************************************************************************
+
 static void usbProcessMouseReport(uint8_t const *report, uint16_t len) {
     // if(len < 3) return;
     // MSEOffsetPosition(report[1], report[2]);
@@ -121,7 +127,7 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
 
 void USBInitialise(void) {
     for (int i = 0;i < KBD_MAX_KEYCODE;i++) lastReport[i] = 0;                  // No keys currently known
-    tusb_init();
+    tusb_init();                                                                // Set up tinyUSB
 }
 
 // ***************************************************************************************
@@ -132,7 +138,6 @@ void USBInitialise(void) {
 
 void USBUpdate(void) {
     tuh_task();
-//    KBDCheckTimer();
 }
 
 // ***************************************************************************************

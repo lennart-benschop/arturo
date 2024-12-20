@@ -21,13 +21,13 @@
 void TESTShowUSBRootDirectory(void) {
     DIR di;
     FILINFO fi;
-    FRESULT r = f_opendir(&di,"/");
+    FRESULT r = f_opendir(&di,"/");                                                 // Open root
     int done = 0;
     CONWriteString("\r");
-    while (r == FR_OK && done == 0) {
-        r = f_readdir(&di,&fi);
+    while (r == FR_OK && done == 0) {                                               // While more to reed (if successful)
+        r = f_readdir(&di,&fi);                                                     // Read next, dump entry
         CONWriteString("%s ",fi.fname);
-        done = fi.fname[0] == 0;
+        done = fi.fname[0] == 0;                                                    // This marks end of read of directory
     }
     r = f_closedir(&di);
     CONWriteString("\r\r");
@@ -41,18 +41,21 @@ void TESTShowUSBRootDirectory(void) {
 
 void TESTApplication(void) {
     int n = 0;
-    CONWriteString("\rTest App\r");
-    TESTShowUSBRootDirectory();                                               
+    CONWriteString("\rTest App\r");                                                 // Exciting title
+    TESTShowUSBRootDirectory();                                                     // Dump the USB key
+    //
+    //      A typical 'main'
+    //
     while (1) {
   
-        n = KBDGetKey();
+        n = KBDGetKey();                                                            // Echo any keystroke
         if (n != 0) CONWriteString("%d %c\r",n,n);
 
-        if (HASTICK50_FIRED()) {
-            TICK50_RESET();
-            USBUpdate();
-            KBDCheckTimer();
-            CONWrite('.');
+        if (HASTICK50_FIRED()) {                                                    // Time to do a 50Hz tick.
+            TICK50_RESET();                                                         // Reset the tick flag
+            USBUpdate();                                                            // Update USB
+            KBDCheckTimer();                                                        // Check for keyboard repeat
+            CONWrite('.');                                                          // So I know it's working :)
         }
     }
 }

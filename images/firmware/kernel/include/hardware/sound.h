@@ -32,6 +32,6 @@ int8_t ARTURO_SND_FUNCTION(int channel);
 #error("Unsupported hardware")
 #endif
 
-#define SAMPLE_DIVIDER (32)                 // Divider, affects the interrupts / second of the PWM sample output
+#define SAMPLE_DIVIDER (32)                 // Divider, affects the interrupts / second of the PWM sample output. More samples are better but slower.
 
 #endif
