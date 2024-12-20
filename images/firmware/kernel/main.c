@@ -41,6 +41,7 @@ int main() {
     USBSynchronise();                                                           // Synchronise storage
     TMRStartTickInterrupt();                                                    // Start the tick interrupt.
     LOCSetLocale(ARTURO_KBD_LOCALE);                                            // Default Locale
+    MSEInitialise();                                                            // Initialise the mouse
     CONWriteString("Booting...\r");
     ARTURO_RUN_FUNCTION();                                                      // Run whatever (defined in config.make)
 }

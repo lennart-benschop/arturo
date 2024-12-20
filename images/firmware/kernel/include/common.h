@@ -37,6 +37,7 @@
 #include "hardware/usb_interface.h"
 #include "hardware/miscellany.h"
 #include "hardware/sound.h"
+#include "hardware/mouse.h"
 
 #include "ff.h"
 

@@ -55,7 +55,11 @@ void TESTApplication(void) {
             TICK50_RESET();                                                         // Reset the tick flag
             USBUpdate();                                                            // Update USB
             KBDCheckTimer();                                                        // Check for keyboard repeat
-            CONWrite('.');                                                          // So I know it's working :)
+
+            uint16_t x,y;                                                           // Read the mouse state.
+            uint8_t b,w;    
+            MSEGetState(&x,&y,&b,&w);
+            //CONWriteString("Mouse:%d %d %d %d\r",x,y,b,w);
         }
     }
 }

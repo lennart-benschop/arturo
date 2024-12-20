@@ -62,12 +62,12 @@ static void usbProcessReport(uint8_t const *report) {
 // ***************************************************************************************
 
 static void usbProcessMouseReport(uint8_t const *report, uint16_t len) {
-    // if(len < 3) return;
-    // MSEOffsetPosition(report[1], report[2]);
-    // MSEUpdateButtonState(report[0]);
+    if(len < 3) return;                                                         // Some mice return three things, some four.
+    MSEOffsetPosition(report[1], report[2]);
+    MSEUpdateButtonState(report[0]);
 
-    // if(len < 4) return;
-    // MSEUpdateScrollWheel(report[3]);
+    if(len < 4) return;
+    MSEUpdateScrollWheel(report[3]);
 }
 
 // ***************************************************************************************
@@ -88,7 +88,8 @@ void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance, uint8_t const* desc_re
         break;
 
     case HID_ITF_PROTOCOL_MOUSE:
-        // MSEEnableMouse();
+        MSEEnableMouse();
+        CONWriteString("Mouse connected.\r");
         break;
 
     case HID_ITF_PROTOCOL_NONE:

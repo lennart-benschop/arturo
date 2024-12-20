@@ -115,7 +115,15 @@ tbc
 
 ## Mouse Support
 
-tbc
+Mouse support automatically converts Mouse information to a useable format. It is not possible at present to manually process the mouse USB messages.
+
+| Function        | Table                                                        |
+| --------------- | ------------------------------------------------------------ |
+| MSEGetState     | Returns the position, button state, and scroll wheel position |
+| MSEMousePresent | Returns true if the mouse is physically connected.           |
+| MSESetPosition  | Sets the mouse position.                                     |
+
+
 
 ## Gamepad Support
 
@@ -125,7 +133,7 @@ tbc
 
 tbc
 
-## 
+------
 
 *Paul Robson paul@robsons.org.uk*
 

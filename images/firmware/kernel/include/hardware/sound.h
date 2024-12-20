@@ -5,7 +5,7 @@
 //      Authors :   Paul Robson (paul@robsons.org.uk)
 //      Date :      19th December 2024
 //      Reviewed :  No
-//      Purpose :   PWM Audio support header
+//      Purpose :   Sound interface headers
 //
 // ***************************************************************************************
 // ***************************************************************************************
