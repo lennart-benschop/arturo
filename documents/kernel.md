@@ -68,6 +68,12 @@ On the demo it also writes a full stop.
 
 This is deliberately not done using interrupts as a way of avoiding any issues. I didn't write PicoDVI or tinyusb and it seems to me to be a good idea not to poke them.
 
+## Application source
+
+Your application code can go in user_code and user_code/include ; anything placed in user_code should be picked up and compiled.
+
+This includes the file testing/test_app.c ; this should be removed by the linker.
+
 ## Configuration
 
 Configuration is done using the **config.make** file, which allows you to change various settings.

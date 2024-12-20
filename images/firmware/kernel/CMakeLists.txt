@@ -16,13 +16,16 @@
 #
 # ***************************************************************************************
 
+file(GLOB_RECURSE USER_C_SOURCES "user_code/*.c")
+file(GLOB_RECURSE HARDWARE_C_SOURCES "hardware/*.c")
+file(GLOB_RECURSE SUPPORT_C_SOURCES "support/*.c")
+
 add_executable(kernel
 	main.c 
-	hardware/dvi_640x480.c hardware/dvi_pinout.c hardware/usb_storage.c hardware/usb_driver.c hardware/timing.c 
-	hardware/sound.c hardware/mouse.c
-	support/console.c support/keyboard.c support/locale.c
-	testing/test_app.c 
+	${USER_C_SOURCES} ${HARDWARE_C_SOURCES} ${SUPPORT_C_SOURCES}
 )
+
+#file(GLOB PADSOURCES "hardware/gamepads/*.cpp")
 
 # ***************************************************************************************
 #
@@ -32,6 +35,7 @@ add_executable(kernel
 
 include_directories(
 	include
+	user_code/include
 )
 
 target_compile_options(kernel PRIVATE -Wall -Wno-unused-function)
