@@ -33,8 +33,8 @@ BASICCODEDIR = $(BASICDIR)code/
 INCLUDEDIR = $(BASICCODEDIR)include/
 BASICSCRIPTDIR = $(BASICDIR)scripts/
 
-default:
-	echo "Default disabled"
+default: build
+	
 
 # *******************************************************************************************
 #

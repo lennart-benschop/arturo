@@ -76,8 +76,6 @@ static void usbProcessMouseReport(uint8_t const *report, uint16_t len) {
 //
 // ***************************************************************************************
 
-//static GamepadController gamepad_controller;
-
 void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance, uint8_t const* desc_report, uint16_t desc_len) {
     uint16_t vid, pid;
     tuh_vid_pid_get(dev_addr, &vid, &pid);
@@ -93,7 +91,7 @@ void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance, uint8_t const* desc_re
         break;
 
     case HID_ITF_PROTOCOL_NONE:
-        // gamepad_controller.add(vid, pid, dev_addr, instance, desc_report, desc_len);
+        CTLAddController(dev_addr,instance,vid,pid);
         break;
     }
     tuh_hid_receive_report(dev_addr, instance);
@@ -114,7 +112,7 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
         break;
 
     case HID_ITF_PROTOCOL_NONE:
-        // gamepad_controller.update(dev_addr, instance, report, len);
+        CTLUpdateController(dev_addr,instance,report,len);
         break;
     }
     tuh_hid_receive_report(dev_addr, instance);

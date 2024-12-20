@@ -29,6 +29,7 @@
 #include "hardware/vreg.h"
 #include "hardware/watchdog.h"
 #include "hardware/pwm.h"
+#include "hardware/gamepad.h"
 
 #include "data/__config.h"
 
