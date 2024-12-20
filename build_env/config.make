@@ -62,10 +62,13 @@ PICO_SERIAL_BAUD_RATE = 115200
 
 # *******************************************************************************************
 #
-#							Used to output the data to __config.h
+#					Used to output the data to __config.h. 
 #
 # *******************************************************************************************
 
+#
+#		DO NOT MANUALLY CHANGE THESE !
+#
 CONFIG_DATA="\
 \#define PICO_PLATFORM_NAME "$(PLATFORM)" |\
 \
