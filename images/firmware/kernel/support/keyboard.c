@@ -80,12 +80,14 @@ void KBDReceiveEvent(uint8_t isDown,uint8_t keyCode,uint8_t modifiers) {
 // ***************************************************************************************
 
 void KBDCheckTimer(void) {
+	#if ARTURO_PROCESS_KEYS != 0  												// If not processing keys this is a no-operation.
 	if (currentASCII != 0) {  													// Key pressed
 		if (TMRRead() >= nextRepeat) {  										// Time up ?
 			KBDInsertQueue(currentASCII);  										// Put in queue
 			nextRepeat = TMRRead()+KBD_REPEAT_AFTER; 							// Quicker repeat after first time.
 		}
 	}
+	#endif
 }
 
 // ***************************************************************************************
