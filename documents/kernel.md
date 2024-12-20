@@ -60,7 +60,7 @@ This should be used as the basis for time centric code, e.g. sprite moving speed
 
 In your main program, there should be a timer tick handler, this is the IF (HASTICK50_FIRED()) part of the test_app.c. This will fire at 50Hz, the speed is not guaranteed.
 
-This should always call *USBUpdate()* which processes USB messages, and if you are using the full keyboard system *KBDCheckTimer()* which is responsible for auto repeating keys. 
+This should always call *USBUpdate()* which processes USB messages, and if you are using the full keyboard system *KBDCheckTimer()* which is responsible for auto repeating keys.  If you are not using the full keyboard system this function is a no-operation.
 
 On the demo it also writes a full stop.
 
@@ -86,6 +86,10 @@ The standard keyboard manager can be disabled using *ARTURO_PROCESS_KEYS* which 
 
 The sound can be set to function as a single channel using *ARTURO_MONO_SOUND* which is 0 by default, when non-zero the RP2040PC stereo channels are combined into a single channel.
 
+### Default Locale
+
+The default locale can be set by changing *ARTURO_KBD_LOCALE*, which is "gb" by default. This can be changed at any time using the *LOCSetLocale()* function
+
 ## Console support
 
 There is a very simple debug console which is accessed via *CONWrite()* which outputs a single character, and *CONWriteString()* which works like printf (e.g. has variable arguments). These are printed out on the DVI display in a simple fashion. Note that currently \r should be used for newline.
@@ -107,7 +111,11 @@ It is also possible to access the keyboard current state allowing the keys to be
 
 tbc
 
-## Mouse and Gamepads Support
+## Mouse Support
+
+tbc
+
+## Gamepad Support
 
 tbc
 

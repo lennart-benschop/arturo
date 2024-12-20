@@ -2,7 +2,7 @@
 # *******************************************************************************************
 #
 #		Name : 		config.make
-#		Purpose :	Configuration files
+#		Purpose :	Configuration filess
 #		Date :		18th December 2024
 #		Author : 	Paul Robson (paul@robsons.org.uk)
 #
@@ -41,6 +41,10 @@ ARTURO_PROCESS_KEYS = 1
 #		If non-zero, use mono sound (e.g. combine the two RP2040PC channels into one)
 #
 ARTURO_MONO_SOUND = 0
+#
+#		Set the Locale, the list is in the locale directory
+#
+ARTURO_KBD_LOCALE = "gb"
 
 # *******************************************************************************************
 #
@@ -83,4 +87,5 @@ CONFIG_DATA="\
 \#define ARTURO_RUN_FUNCTION $(ARTURO_RUN_FUNCTION) |\
 \#define ARTURO_PROCESS_KEYS $(ARTURO_PROCESS_KEYS) |\
 \#define ARTURO_MONO_SOUND   $(ARTURO_MONO_SOUND) |\
+\#define ARTURO_KBD_LOCALE 	 $(ARTURO_KBD_LOCALE) |\
 "
