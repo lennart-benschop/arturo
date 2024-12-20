@@ -1,10 +1,11 @@
 # TODO stuff
 
 - Gamepad support
-	- Work out the messaging system
-	- Send "identify" message which prints out the result.
-	- Send "update" message which updates the 						
+	- Send "update" message which updates the internal structure.
+	- Access controller by number.
 
 - ESCAPE flag.
+
 - Make it work on Neo6502
+
 - "Emulator"

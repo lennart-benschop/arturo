@@ -1,0 +1,81 @@
+// ***************************************************************************************
+// ***************************************************************************************
+//
+//      Name :      gamepad_drivers.c
+//      Authors :   Paul Robson (paul@robsons.org.uk), based on work by Sascha Schneider
+//      Date :      20th December 2024
+//      Reviewed :  No
+//      Purpose :   Gamepad individual handlers.
+//
+// ***************************************************************************************
+// ***************************************************************************************
+
+#include "common.h"
+
+
+// ***************************************************************************************
+//
+//					Dispatch command and data to the correct handler.
+//
+// ***************************************************************************************
+
+int  CTLDispatchMessage(int command,CTLState *cs,struct _CTL_MessageData *msg) {
+	int retVal = 0;
+	//
+	//		Dispatch on hardware type.
+	//
+	switch(cs->_hardwareTypeID) {
+		//
+		//		SNES Compatible keypads. 0814:E401 is the Olimex one.
+		//
+		case CTL_DEVICE_TYPE_ID(0x081F,0xE401):
+			retVal = CTLDriverSNESType(command,cs,msg);
+			break;
+		//
+		//		Unknown Device
+		//
+		default:
+			CTLAnnounceDevice(cs,"Unknown hardware device");		
+			break;
+	}
+	return retVal;
+}
+
+// ***************************************************************************************
+//
+//						Utility function to display the status.
+//
+// ***************************************************************************************
+
+void CTLAnnounceDevice(CTLState *cs,const char *name) {
+	CONWriteString("USB Device: [%04x:%04x] %s\r",cs->_hardwareTypeID >> 16,cs->_hardwareTypeID & 0xFFFF,name);
+}
+
+// ***************************************************************************************
+//
+//						SNES USB PC compatible Game Controller
+//
+// ***************************************************************************************
+
+int  CTLDriverSNESType(int command,CTLState *cs,struct _CTL_MessageData *msg) {
+	int retVal = 0;
+	switch(command) {
+		//
+		//		This command announces the type and VID/PID
+		//
+		case CTLM_REGISTER:
+			CTLAnnounceDevice(cs,"Olimex SNES style USB Controller");
+			retVal = -1;
+			break;
+		//
+		//		This takes the message data and updates the status values.
+		//
+		case CTLM_UPDATE:
+			CONWriteString("Updated\r");
+			retVal = -1;
+			break;
+
+	}
+
+	return retVal;
+}
