@@ -16,6 +16,8 @@ Currently only a single mode is provided, which is initialised at the start, thi
 
 Information on this can be obtained from the function *DVIGetModeInformation()* which returns a pointer to a *DVIModeInformation* structure.
 
+The mode can be changed by *DVISetMode()* but at present there is only one mode supported.
+
 ### Notes
 
 There is in development a 320x240x256 byte mode, which will be selectable by a *DVISetMode()* function but this is not currently working with PicoDVI, and I'm not sure why.

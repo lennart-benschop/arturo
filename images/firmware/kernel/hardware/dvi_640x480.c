@@ -33,7 +33,6 @@ static uint8_t framebuf[3 * PLANE_SIZE_BYTES];
 
 struct dvi_inst dvi0;																// PicoDVI structure
 struct DVIModeInformation dvi_modeInfo;  											// Mode information structure.
-static int currentMode;
 
 // ***************************************************************************************
 //
@@ -42,18 +41,34 @@ static int currentMode;
 // ***************************************************************************************
 
 struct DVIModeInformation *DVIGetModeInformation(void) {
-	dvi_modeInfo.mode = currentMode;
-	dvi_modeInfo.width = FRAME_WIDTH;
-	dvi_modeInfo.height = FRAME_HEIGHT;
-	dvi_modeInfo.bitPlaneCount = 3;
-	dvi_modeInfo.bitPlaneSize = PLANE_SIZE_BYTES;
-	dvi_modeInfo.bitPlaneDepth = 1;
-	for (int i = 0;i <dvi_modeInfo.bitPlaneCount;i++)
-		dvi_modeInfo.bitPlane[i] = framebuf + PLANE_SIZE_BYTES * i;
-	dvi_modeInfo.userMemory = NULL;
-	dvi_modeInfo.userMemorySize = 0;
 	return &dvi_modeInfo;
 }
+
+// ***************************************************************************************
+//
+//									Set current mode
+//
+// ***************************************************************************************
+
+void DVISetMode(int mode) {
+	dvi_modeInfo.mode = mode;  														// Record mode
+	dvi_modeInfo.userMemory = NULL;   												// Common defaults.
+	dvi_modeInfo.userMemorySize = 0;		
+	switch(mode) {
+		case DVI_MODE_640_480_8:
+			dvi_modeInfo.width = FRAME_WIDTH;
+			dvi_modeInfo.height = FRAME_HEIGHT;
+			dvi_modeInfo.bitPlaneCount = 3;
+			dvi_modeInfo.bitPlaneSize = PLANE_SIZE_BYTES;
+			dvi_modeInfo.bitPlaneDepth = 1;
+			for (int i = 0;i <dvi_modeInfo.bitPlaneCount;i++)
+				dvi_modeInfo.bitPlane[i] = framebuf + PLANE_SIZE_BYTES * i;
+			break;
+		default:
+			dvi_modeInfo.mode = -1;  												// Failed.
+	}
+}
+
 // ***************************************************************************************
 //
 //									The main line renderer
@@ -81,7 +96,7 @@ void __not_in_flash("main") dvi_core1_main() {
 
 	while (true) {
 			y = (y + 1) % FRAME_HEIGHT;
-			switch(currentMode) {
+			switch(dvi_modeInfo.mode) {
 				//
 				//		Mode 0 is 640x480x8 colours as 3 bitplanes.
 				//
@@ -122,8 +137,8 @@ void __not_in_flash("main") dvi_core1_main() {
 // ***************************************************************************************
 
 void DVIStart(void) {
-	currentMode = DVI_MODE_640_480_8;
-	//currentMode = DVI_MODE_320_240_256;
+	DVISetMode(DVI_MODE_640_480_8);
+
 	vreg_set_voltage(VREG_VSEL);  													// Set CPU voltage
 	sleep_ms(10);  																	// Let it settle for 0.01s
 	set_sys_clock_khz(DVI_TIMING.bit_clk_khz, true);  								// Set the DVI compatible clock speed
