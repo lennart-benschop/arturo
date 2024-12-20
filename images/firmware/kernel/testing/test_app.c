@@ -67,6 +67,10 @@ static int count = 0;
 
 int8_t TESTApplication_GetSample(int channel) {
     count++;
-    if (channel == 1) return rand() & 0xFF;
-    return (count & 0x40) ? -127:127;
+    if (channel == 1) {  															// Noise channel.
+        return rand() & 0xFF;
+    } else {
+        int toggleRate = SNDGetSampleFrequency() / 440;                             // 440Hz is A
+        return ((count/toggleRate) & 1) ? -127:127;
+    }
 }
