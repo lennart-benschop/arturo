@@ -65,7 +65,7 @@ void TESTApplication(void) {
 
 static int count = 0;
 
-int8_t SNDGetNextSample(int channel) {
+int8_t TESTApplication_GetSample(int channel) {
     count++;
     if (channel == 1) return rand() & 0xFF;
     return (count & 0x40) ? -127:127;

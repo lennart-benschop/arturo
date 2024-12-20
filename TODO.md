@@ -1,7 +1,7 @@
 # TODO stuff
 
-	- Disable TestApplication sound handler/rename it.
-	- Add mode set code.
 	- Better sound sampling code.
+	- Sharpen up all the comments where appropriate.
+	- Add mode set code.
 	- Mouse support
 	- Gamepad support

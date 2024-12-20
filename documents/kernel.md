@@ -44,7 +44,9 @@ As with the Neo6502 pressing Ctrl + Alt + Alt Gr simultaneously resets the machi
 
 An RP2040PC has two sound channels at present they are separated by default, and the test_app.c shows an example of the required driver function.
 
-The concept is that *SNDGetNextSample()* is called to get the next sample at a frequency of *SNDGetSampleFrequency()* , and you can figure out what you want the output level to be. In the example in test_app.c channel 1 (right) returns white noise, channel 0 (left) a square wave beep.
+The concept is that a sampling function is called to get the next sample at a frequency of *SNDGetSampleFrequency()* , and you can figure out what you want the output level to be. In the example in test_app.c channel 1 (right) returns white noise, channel 0 (left) a square wave beep.
+
+The name of the function that is called to get the sample is related to the one described in the "Main function" section below. If *ARTURO_RUN_FUNCTION* is set to TESTApplication then the function called to get the sample will be called TESTApplication_GetSample and should be declared and used as in test_app.c
 
 ### Note
 
@@ -70,7 +72,7 @@ This is deliberately not done using interrupts as a way of avoiding any issues. 
 
 Configuration is done using the **config.make** file, which allows you to change various settings.
 
-### Running functions
+### Main function
 
 The primary function setting is the *ARTURO_RUN_FUNCTION* setting. This specifies the C function that is run to actually execute the code, and is currently set to "TestApplication" which causes the function *TestApplication()* to be called once initialisation is complete.
 

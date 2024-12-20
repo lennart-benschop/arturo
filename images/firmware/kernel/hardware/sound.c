@@ -38,10 +38,10 @@ int SNDGetSampleFrequency(void) {
 
 void pwm_interrupt_handler() {
     pwm_clear_irq(pwm_gpio_to_slice_num(AUDIO_PIN_L));    
-    uint8_t sample0 = SNDGetNextSample(0)+128;
+    uint8_t sample0 = ARTURO_SND_FUNCTION(0)+128;
     pwm_set_gpio_level(AUDIO_PIN_L,sample0);
     if (AUDIO_HARDWARE_CHANNELS == 2) {
-        uint8_t sample1 = (combineSoundChannels ? sample0 : SNDGetNextSample(1)+128);
+        uint8_t sample1 = (combineSoundChannels ? sample0 : ARTURO_SND_FUNCTION(1)+128);
         pwm_set_gpio_level(AUDIO_PIN_R,sample1);
     }
 }
