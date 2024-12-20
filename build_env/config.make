@@ -37,6 +37,10 @@ ARTURO_RUN_FUNCTION = TESTApplication
 #		handling USB Key events lies with the author.
 #
 ARTURO_PROCESS_KEYS = 1
+#
+#		If non-zero, use mono sound (e.g. combine the two RP2040PC channels into one)
+#
+ARTURO_MONO_SOUND = 0
 
 # *******************************************************************************************
 #
@@ -78,4 +82,5 @@ CONFIG_DATA="\
 \
 \#define ARTURO_RUN_FUNCTION $(ARTURO_RUN_FUNCTION) |\
 \#define ARTURO_PROCESS_KEYS $(ARTURO_PROCESS_KEYS) |\
+\#define ARTURO_MONO_SOUND   $(ARTURO_MONO_SOUND) |\
 "
