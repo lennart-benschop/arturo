@@ -79,6 +79,7 @@ void CONWrite(char c) {
 			bgcol = CON_COL_BLACK;
 			x0 = y0 = 0;  															// Home cursor
 			break;
+		case 10:
 		case 13:  																	// New line
 			x0 = 0;y0 = y0 + 8;
 			if (y0 == dmi->height) y0 = 0;  										// Wrap to top scrolling.

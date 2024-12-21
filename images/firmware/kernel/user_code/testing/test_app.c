@@ -21,6 +21,7 @@
 void TESTShowUSBRootDirectory(void) {
     DIR di;
     FILINFO fi;
+    FIL fl;
     FRESULT r = f_opendir(&di,"/");                                                 // Open root
     int done = 0;
     CONWriteString("\r");
@@ -31,6 +32,15 @@ void TESTShowUSBRootDirectory(void) {
     }
     r = f_closedir(&di);
     CONWriteString("\r\r");
+    r = f_open(&fl,"inline.bsc",FA_READ);
+    CONWriteString("Open %d\r",r);
+    while (f_eof(&fl) == 0) {
+        UINT count = 0;
+        char c = 0;
+        r = f_read(&fl,&c,1,&count);
+        CONWrite(c);
+    }
+    f_close(&fl);
 }
 
 // ***************************************************************************************
