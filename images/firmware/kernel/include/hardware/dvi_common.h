@@ -21,7 +21,7 @@
 //		Structure for mode information.
 //
 #define DVI_MODE_640_480_8 		(0)   												// Modes.
-#define DVI_MODE_320_240_256	(1)
+#define DVI_MODE_320_240_8		(1)
 
 //
 //		DVI Mode information structure

@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <ctype.h>
+#include <string.h>
 
 #include <malloc.h>
 

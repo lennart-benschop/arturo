@@ -71,6 +71,7 @@ void TESTApplication(void) {
                                             c->a ? 1:0,c->b ? 1:0,c->x ? 1:0,c->y ? 1:0);
                 }
             }
+            CONWrite('_');
         }
     }
 }

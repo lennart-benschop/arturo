@@ -56,8 +56,15 @@ void DVISetMode(int mode) {
 	dvi_modeInfo.userMemorySize = 0;		
 	switch(mode) {
 		case DVI_MODE_640_480_8:  													// 640x480x8 information.
-			dvi_modeInfo.width = FRAME_WIDTH;
-			dvi_modeInfo.height = FRAME_HEIGHT;
+			dvi_modeInfo.width = 640;dvi_modeInfo.height = 480;
+			dvi_modeInfo.bitPlaneCount = 3;
+			dvi_modeInfo.bitPlaneSize = PLANE_SIZE_BYTES;
+			dvi_modeInfo.bitPlaneDepth = 1;
+			for (int i = 0;i <dvi_modeInfo.bitPlaneCount;i++)
+				dvi_modeInfo.bitPlane[i] = framebuf + PLANE_SIZE_BYTES * i;
+			break;
+		case DVI_MODE_320_240_8:  													// 320x240x8 information.
+			dvi_modeInfo.width = 320;dvi_modeInfo.height = 240;
 			dvi_modeInfo.bitPlaneCount = 3;
 			dvi_modeInfo.bitPlaneSize = PLANE_SIZE_BYTES;
 			dvi_modeInfo.bitPlaneDepth = 1;
@@ -75,24 +82,25 @@ void DVISetMode(int mode) {
 //
 // ***************************************************************************************
 
-	uint8_t buffer[640];
-	
-void __not_in_flash("main") dvi_core1_main() {
-	const uint red_msb   = 7;
-	const uint red_lsb   = 5;
-	const uint green_msb = 4;
-	const uint green_lsb = 2;
-	const uint blue_msb  = 1;
-	const uint blue_lsb  = 0;
+static uint8_t _buffer[640];
+static uint16_t _mapping[256];
 
-	uint pixwidth = dvi0.timing->h_active_pixels;
+void __not_in_flash("main") dvi_core1_main() {
 
 	uint32_t *tmdsbuf;
 	dvi_register_irqs_this_core(&dvi0, DMA_IRQ_0);
 	dvi_start(&dvi0);
 	uint y = -1;
 
-
+	//
+	//		This table maps an 8 bit bit pattern into a 'double width' 16 bit pattern.
+	//
+	for (int i = 0;i < 256;i++) {
+		_mapping[i] = 0;
+		for (int b = 0;b < 8;b++) {
+			if (i & (1 << b)) _mapping[i] |= (3 << (b*2));
+		}
+	}
 
 	while (true) {
 			y = (y + 1) % FRAME_HEIGHT;
@@ -104,23 +112,33 @@ void __not_in_flash("main") dvi_core1_main() {
 					queue_remove_blocking_u32(&dvi0.q_tmds_free, &tmdsbuf);
 					for (uint component = 0; component < 3; ++component) {
 						tmds_encode_1bpp(
-							(const uint32_t*)&framebuf[y * FRAME_WIDTH / 8 + component * PLANE_SIZE_BYTES],
+							(const uint32_t*)(framebuf+y*640/8 + component * PLANE_SIZE_BYTES),
 							tmdsbuf + (2-component) * FRAME_WIDTH / DVI_SYMBOLS_PER_WORD,  	// The (2-x) here makes it BGR Acordn standard
 							FRAME_WIDTH
 						);
 					}
 					queue_add_blocking_u32(&dvi0.q_tmds_valid, &tmdsbuf);
 					break;
+
 				//
-				//		Mode 1 is 340x240x256 colours in byte format.
+				//		Mode 1 is 320x240x8 colours as 3 bitplanes.
 				//
-				case DVI_MODE_320_240_256:					
+				case DVI_MODE_320_240_8:
 					queue_remove_blocking_u32(&dvi0.q_tmds_free, &tmdsbuf);
-					// NB the scanline buffers are half-resolution!
-					for (int i = 0;i < 640;i++) buffer[i] = y;
-					tmds_encode_data_channel_8bpp((const uint32_t *)buffer, tmdsbuf, pixwidth / 2, blue_msb, blue_lsb);
-					tmds_encode_data_channel_8bpp((const uint32_t *)buffer, tmdsbuf + pixwidth, pixwidth / 2, green_msb, green_lsb);
-					tmds_encode_data_channel_8bpp((const uint32_t *)buffer, tmdsbuf + 2 * pixwidth, pixwidth / 2, red_msb, red_lsb);
+					for (uint component = 0; component < 3; ++component) {
+						uint8_t *_source = framebuf+(y/2)*320/8 + component * PLANE_SIZE_BYTES;
+						uint16_t *_target = (uint16_t *)_buffer;
+
+						for (int i = 0;i < 320/8;i++) {
+							*_target++ = _mapping[*_source++];
+						}
+
+						tmds_encode_1bpp(
+							(const uint32_t*)_buffer,
+							tmdsbuf + (2-component) * FRAME_WIDTH / DVI_SYMBOLS_PER_WORD,  	// The (2-x) here makes it BGR Acordn standard
+							FRAME_WIDTH
+						);
+					}
 					queue_add_blocking_u32(&dvi0.q_tmds_valid, &tmdsbuf);
 					break;
 
@@ -138,6 +156,7 @@ void __not_in_flash("main") dvi_core1_main() {
 
 void DVIStart(void) {
 	DVISetMode(DVI_MODE_640_480_8);
+	//DVISetMode(DVI_MODE_320_240_8);
 
 	vreg_set_voltage(VREG_VSEL);  													// Set CPU voltage
 	sleep_ms(10);  																	// Let it settle for 0.01s
