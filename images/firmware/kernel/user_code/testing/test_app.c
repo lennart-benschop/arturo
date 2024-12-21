@@ -42,7 +42,6 @@ void TESTShowUSBRootDirectory(void) {
 void TESTApplication(void) {
     int n = 0;
     CONWriteString("\rTest App\r");                                                 // Exciting title
-    TESTShowUSBRootDirectory();                                                     // Dump the USB key
     //
     //      A typical 'main'
     //
@@ -50,6 +49,7 @@ void TESTApplication(void) {
   
         n = KBDGetKey();                                                            // Echo any keystroke
         if (n != 0) CONWriteString("%d %c\r",n,n);
+        if (n == ' ') TESTShowUSBRootDirectory();                                  // Dump the USB key on space
 
         if (KBDEscapePressed(true)) {                                               // Escaped ?
             CONWriteString("Escape !\r");

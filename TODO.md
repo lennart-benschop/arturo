@@ -1,4 +1,4 @@
 # TODO stuff
 
-- Make it work on Neo6502
+- Timeout unless USB key as well.
 - "Emulator"

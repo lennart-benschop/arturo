@@ -87,7 +87,7 @@ void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance, uint8_t const* desc_re
 
     case HID_ITF_PROTOCOL_MOUSE:
         MSEEnableMouse();
-        CONWriteString("Mouse connected.\r");
+        CONWriteString("USB Mouse found [%04x:%04x]\r",vid,pid);
         break;
 
     case HID_ITF_PROTOCOL_NONE:
