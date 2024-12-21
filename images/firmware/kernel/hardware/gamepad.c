@@ -39,6 +39,16 @@ int  CTLControllerCount(void) {
 
 // ***************************************************************************************
 //
+//						Read a specified controller, NULL if not found.
+//
+// ***************************************************************************************
+
+CTLState *CTLReadController(int n) {
+	return (n < controllerCount) ? &controllers[n] : NULL;
+}
+
+// ***************************************************************************************
+//
 //					Add a specific controller device to the device lists
 //
 // ***************************************************************************************
@@ -64,7 +74,7 @@ void CTLAddController(uint8_t dev_addr,uint8_t instance,uint16_t vid,uint16_t pi
 // ***************************************************************************************
 
 void CTLUpdateController(uint8_t dev_addr,uint8_t instance,uint8_t const *report,uint8_t len) {
-	if (true) {  																	// "true" here allows you to know exactly what data is being sent.
+	if (false) {  																	// "true" here allows you to know exactly what data is being sent.
 		CONWriteString("%d : ",len);
 		for (int i = 0;i < len;i++) CONWriteString("%d:%02x ",i,report[i]);
 		CONWriteString("\r");

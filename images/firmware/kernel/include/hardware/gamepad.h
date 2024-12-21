@@ -49,7 +49,6 @@ int  CTLSendMessage(int command,uint16_t hwid,struct _CTL_MessageData *msg);
 int  CTLDispatchMessage(int command,CTLState *cs,struct _CTL_MessageData *msg);
 int  CTLControllerCount(void);
 void CTLAnnounceDevice(CTLState *cs,const char *name);
-
-int  CTLDriverSNESType(int command,CTLState *cs,struct _CTL_MessageData *msg);
+CTLState *CTLReadController(int n);
 
 #endif

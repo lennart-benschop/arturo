@@ -51,31 +51,3 @@ void CTLAnnounceDevice(CTLState *cs,const char *name) {
 	CONWriteString("USB Device: [%04x:%04x] %s\r",cs->_hardwareTypeID >> 16,cs->_hardwareTypeID & 0xFFFF,name);
 }
 
-// ***************************************************************************************
-//
-//						SNES USB PC compatible Game Controller
-//
-// ***************************************************************************************
-
-int  CTLDriverSNESType(int command,CTLState *cs,struct _CTL_MessageData *msg) {
-	int retVal = 0;
-	switch(command) {
-		//
-		//		This command announces the type and VID/PID
-		//
-		case CTLM_REGISTER:
-			CTLAnnounceDevice(cs,"Olimex SNES style USB Controller");
-			retVal = -1;
-			break;
-		//
-		//		This takes the message data and updates the status values.
-		//
-		case CTLM_UPDATE:
-			CONWriteString("Updated\r");
-			retVal = -1;
-			break;
-
-	}
-
-	return retVal;
-}

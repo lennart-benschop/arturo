@@ -59,7 +59,14 @@ void TESTApplication(void) {
             uint16_t x,y;                                                           // Read the mouse state.
             uint8_t b,w;    
             MSEGetState(&x,&y,&b,&w);
-            //CONWriteString("Mouse:%d %d %d %d\r",x,y,b,w);
+            //CONWriteString("Mouse:%d %d %d %d\r",x,y,b,w);                        // Uncomment to show it
+            if (CTLControllerCount() != 0) {                                        // Show controller state if anything pressed.
+                CTLState *c = CTLReadController(0);
+                if (c->dx != 0 || c->dy != 0 || c->a || c->b || c->x || c->y) {
+                    CONWriteString("DX:%3d DY:%3d A:%d B:%d X:%d Y:%d\r",c->dx,c->dy,
+                                            c->a ? 1:0,c->b ? 1:0,c->x ? 1:0,c->y ? 1:0);
+                }
+            }
         }
     }
 }

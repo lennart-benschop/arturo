@@ -123,17 +123,54 @@ tbc
 
 Mouse support automatically converts Mouse information to a useable format. It is not possible at present to manually process the mouse USB messages.
 
-| Function        | Table                                                        |
+| Function        | Purpose                                                      |
 | --------------- | ------------------------------------------------------------ |
 | MSEGetState     | Returns the position, button state, and scroll wheel position |
 | MSEMousePresent | Returns true if the mouse is physically connected.           |
 | MSESetPosition  | Sets the mouse position.                                     |
 
-
-
 ## Gamepad Support
 
-tbc
+Gamepad support converts the gamepad information to a simple process.  Up to four gamepads can be supported. USB messages cannot be processed directly. The following functions are used to access GamePad status.
+
+| Function           | Purpose                                                      |
+| ------------------ | ------------------------------------------------------------ |
+| CTLControllerCount | Returns the number of controllers plugged in.                |
+| CTLReadController  | Reads the state of a specific controller by number (0..n-1). Returns a CTLState pointer, which has members dx and dy (for directional control) and booleans a,b,x,y representing the buttons in the SNES arrangement. |
+
+### Gamepad Drivers
+
+There is a huge plethora of joystick designs and types. This is why support is limited to a directional pad and A,B,X,Y, which allows pretty much any post-Atari joystick to be used if it can be plugged in. 
+
+In the USB system keyboards and mice are standard devices and they behave in the same way. They may have additional information, and layouts and buttons, but they can be handled with the same code and localisation of the keyboard.
+
+Gamepads come in the 'other devices' class and have to be handled individually. It is recommended to use the Olimex SNES style PC joypads, (081F:E401) but if you have another device it can be added.
+
+Similar types of device with different VID:PID values may work if those values are simply added to the dispatcher in gamepad_drivers.c ; but anything else will require a new driver.
+
+This involves adding a new section to gamepad_drivers like this:
+
+		case CTL_DEVICE_TYPE_ID(0x081F,0xE401):
+			retVal = CTLDriverSNESType(command,cs,msg);
+			break;
+
+with a new driver function (e.g. CTLDriverXBoxUSBPad say) and one or more VID/PID pairings in the case line. The declaration for the driver goes in gamepad_drivers.h with the same signature as CTLDriverSNESType. 
+
+VID/PID of unknown devices are displayed at boot time, they may be something else, so you can check against online lists, in Linux you can use *lsusb* to determine what they are, it's probably possible in Windows in one of the thirteen variations of the Control Panel that's been there since Windows ran on an x86.
+
+The driver itself can go in a file in the hardware/gamepad_drivers subdirectory (which cmake will pick up automatically). The sample one (*snes_usb.c*) is well commented to explain what is going on. It has to respond to two messages. CTLM_REGISTER simply announces its presence and type.
+
+CTLM_UPDATE handles the contents of the received USB report and updates dx,dy,a,b,x and y in the provided CTLState structure. This is (in this example) done with the bits from the report.
+
+The six million dollar question is, what are those bits ? Most of this you have to discover experimentally. In *CTLUpdateController* in *gamepad.c* there is an if (false) command, which will look something like this:
+
+	if (false) {  																	
+		CONWriteString("%d : ",len);
+		for (int i = 0;i < len;i++) CONWriteString("%d:%02x ",i,report[i]);
+		CONWriteString("\r");
+	}
+
+If this is set to true, then reports from unknown devices are dumped on the console. From this it should be possible to figure out which bits in the report correspond to which buttons. 
 
 ## Sound Support
 
@@ -143,6 +180,6 @@ tbc
 
 *Paul Robson paul@robsons.org.uk*
 
-*Last revised 20 December 2024*
+*Last revised 21st December 2024*
 
 ## I
