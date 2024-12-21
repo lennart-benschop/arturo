@@ -51,6 +51,10 @@ void TESTApplication(void) {
         n = KBDGetKey();                                                            // Echo any keystroke
         if (n != 0) CONWriteString("%d %c\r",n,n);
 
+        if (KBDEscapePressed(true)) {                                               // Escaped ?
+            CONWriteString("Escape !\r");
+        }
+
         if (HASTICK50_FIRED()) {                                                    // Time to do a 50Hz tick.
             TICK50_RESET();                                                         // Reset the tick flag
             USBUpdate();                                                            // Update USB

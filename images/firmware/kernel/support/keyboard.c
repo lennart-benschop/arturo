@@ -29,6 +29,7 @@ static uint8_t queueSize = 0;
 
 static uint8_t currentASCII = 0,currentKeyCode = 0; 							// Current key pressed.
 static uint32_t nextRepeat = 9999;  											// Time of next repeat.
+static bool    escapeFlag = false;   											// Set when escape pressed.
 
 static uint8_t KBDMapToASCII(uint8_t keyCode,uint8_t modifiers);
 static uint8_t KBDDefaultASCIIKeys(uint8_t keyCode,uint8_t isShift);
@@ -43,13 +44,14 @@ static uint8_t KBDDefaultControlKeys(uint8_t keyCode,uint8_t isShift);
 void KBDReceiveEvent(uint8_t isDown,uint8_t keyCode,uint8_t modifiers) {
 
 	if (isDown && keyCode == KEY_ESC) {   										// Pressed ESC
-		// TODO: Might want to notify ESC pressed.
+		escapeFlag = true;
 	}
 
 	if (keyCode == 0xFF) { 														// Reset request
 		queueSize = 0; 															// Empty keyboard queue
 		for (unsigned int i = 0;i < sizeof(keyboardState);i++) {   				// No keys down.
 			keyboardState[i] = 0; 
+		escapeFlag = false;  													// Reset escape.
 		}
 		return;
 	}
@@ -103,6 +105,18 @@ uint8_t *KBDGetStateArray(void) {
 uint8_t KBDGetModifiers(void) {
 	return keyboardModifiers;
 };
+
+// ***************************************************************************************
+//
+//						Check if escape pressed, with optional reset
+//
+// ***************************************************************************************
+
+bool KBDEscapePressed(bool resetEscape) {
+	bool state = escapeFlag;
+	if (resetEscape) escapeFlag = false;
+	return state;
+}
 
 // ***************************************************************************************
 //

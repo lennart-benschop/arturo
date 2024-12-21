@@ -22,6 +22,7 @@ uint8_t KBDGetModifiers(void);
 void KBDInsertQueue(uint8_t ascii);
 bool KBDIsKeyAvailable(void);
 uint8_t KBDGetKey(void);
+bool KBDEscapePressed(bool resetEscape);
 
 //
 //		If this constant is set to non-zero, the full keyboard decoding is used. Otherwise

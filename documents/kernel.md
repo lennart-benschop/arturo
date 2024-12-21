@@ -114,6 +114,7 @@ It is also possible to access the keyboard current state allowing the keys to be
 | KBDGetModifiers   | Returns a byte showing the current state of the modifiers (Shift, Alt etc.) |
 | KBDIsKeyAvailable | Returns true if there is a key in the keyboard queue.        |
 | KBDGetKey         | Returns and removes the next key in the keyboard queue, returns 0 if the queue is empty. Control constants are in control_codes.h. This value should be standard ASCII. |
+| KBDEscapePressed  | Returns true when the escape key has been pressed, optionally can reset it on reading this. |
 
 ## Graphics Support
 
@@ -144,7 +145,7 @@ There is a huge plethora of joystick designs and types. This is why support is l
 
 In the USB system keyboards and mice are standard devices and they behave in the same way. They may have additional information, and layouts and buttons, but they can be handled with the same code and localisation of the keyboard.
 
-Gamepads come in the 'other devices' class and have to be handled individually. It is recommended to use the Olimex SNES style PC joypads, (081F:E401) but if you have another device it can be added.
+Gamepads come in the 'other devices' class and have to be handled individually. It is recommended to use the Olimex SNES style PC joypads, (081F:E401) https://www.olimex.com/Products/Retro-Computers/USB-GAMEPAD/ but if you have another device it can be added, and some Chinese SNES pad clones from Amazon may work, or may be made to work.
 
 Similar types of device with different VID:PID values may work if those values are simply added to the dispatcher in gamepad_drivers.c ; but anything else will require a new driver.
 
