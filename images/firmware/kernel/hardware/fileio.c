@@ -11,7 +11,6 @@
 // ***************************************************************************************
 
 #include "common.h"
-
 #include "ff.h"
 
 // ***************************************************************************************
@@ -51,3 +50,83 @@ void FIOInitialise(void) {
 	for (int i = 0;i < FIO_MAX_HANDLES;i++) file[i].isInUse = false; 				// Clear all files to no longer in use.
 }
 
+// ***************************************************************************************
+//
+//							Handle errors, remapped and simplified.
+//
+// ***************************************************************************************
+
+static void _FIOError(int h,FRESULT r) {
+	file[h].error = FIO_OK;  														// Set to ok, save fatfs result 
+	file[h].fatfsError = r; 
+	if (r != FR_OK) {  																// Error occurred, remap
+		switch(r) {
+			case FR_NO_FILE:  														// File/Path not found
+			case FR_NO_PATH:
+				file[h].error = FIO_ERR_NOTFOUND;break;
+			case FR_INVALID_NAME:  													// Input is wrong.
+			case FR_INVALID_OBJECT:
+			case FR_INVALID_PARAMETER:
+				file[h].error = FIO_ERR_COMMAND;break;
+			default:  																// Everything else, mostly tech failings.
+				file[h].error = FIO_ERR_SYSTEM;break;
+		}
+	}
+}
+
+// ***************************************************************************************
+//
+//							Open File/Directory
+//
+// ***************************************************************************************
+
+static int _FIOOpenGeneral(const char *name,FIORef *fr,char mode,bool isDirectory);
+
+int FIOOpenFileRead(const char *fileName,FIORef *fr) {
+	return _FIOOpenGeneral(fileName,fr,'R',false);
+}
+int FIOOpenFileWrite(const char *fileName,FIORef *fr) {
+	return _FIOOpenGeneral(fileName,fr,'W',false);
+}
+int FIOOpenDirectory(const char *dirName,FIORef *fr) {
+	return _FIOOpenGeneral(dirName,fr,'R',true);
+}
+
+static int _FIOOpenGeneral(const char *name,FIORef *fr,char mode,bool isDirectory) {
+	int h = -1;  																	// Identify a file structure to use.
+	for (int i = 0;i < FIO_MAX_HANDLES;i++) {
+		if (!file[i].isInUse) h = i;
+	}
+	if (h < 0) return FIO_ERR_MAXFILES;  											// Too many files open.
+
+	if (isDirectory) {  															// Open directory
+		file[h].isDir = true;  														// It's a directory.
+		_FIOError(h,f_opendir(&file[h].dirHandle,name)); 							// Try to open directory, process the error		
+	} else {
+		file[h].isDir = false;  													// It's a file.
+		_FIOError(h,f_open(&file[h].fileHandle,name,(mode == 'R') ? 				// Try to open file, process the error.
+											FA_READ: FA_CREATE_ALWAYS | FA_WRITE));
+
+	}
+	if (file[h].error == FIO_OK) file[h].isInUse = true;  							// Mark as in use if open went okay.
+	return file[h].error; 															// Return the error state.
+}
+
+// ***************************************************************************************
+//
+//									Close file object
+//
+// ***************************************************************************************
+
+int FIOClose(FIORef fr) {
+	// TODO: Handle check
+	if (file[fr].isInUse) {  														// File in use.		
+		if (file[fr].isDir) {  														// Close directory/file.
+			f_closedir(&file[fr].dirHandle);
+		} else {
+			f_close(&file[fr].fileHandle);
+		}
+		file[fr].isInUse = false;   												// No longer in use
+	}
+	return FIO_OK;
+}

@@ -23,6 +23,7 @@
 #define FIO_ERR_SYSTEM 		(0x100) 	/* Internal system error 1,2,3,7,8,10,11,12,13,14,15,16,17,18 */
 #define FIO_ERR_NOTFOUND 	(0x101) 	/* Directory or File not found 4,5 */
 #define FIO_ERR_COMMAND		(0x102) 	/* Bad input of some sort 6,9,19 */
+#define FIO_ERR_MAXFILES 	(0x103) 	/* Too many files open */
 
 typedef int FIORef;
 
