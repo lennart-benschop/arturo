@@ -41,7 +41,6 @@ struct DVIModeInformation {
 
 void DVIStart(void);
 void DVISetMode(int mode);
-struct dvi_serialiser_cfg *DVIGetHDMIConfig(void);
 struct DVIModeInformation *DVIGetModeInformation(void);
 
 #endif

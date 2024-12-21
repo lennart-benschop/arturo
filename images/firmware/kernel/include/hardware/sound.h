@@ -15,7 +15,6 @@
 
 int SNDGetSampleFrequency(void);
 void SNDInitialise(bool _combineChannels);
-int8_t ARTURO_SND_FUNCTION(int channel);
 
 //
 //		Sound hardware setup.

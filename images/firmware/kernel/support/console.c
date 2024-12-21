@@ -12,7 +12,7 @@
 
 #include "common.h"
 
-#include "font_8x8.h"
+#include "support/font_8x8.h"
 
 #define FONT_CHAR_WIDTH 8
 #define FONT_CHAR_HEIGHT 8

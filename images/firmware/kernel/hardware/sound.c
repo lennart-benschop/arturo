@@ -17,6 +17,8 @@
 static int sampleFrequency = -1;
 static bool combineSoundChannels = false;
 
+int8_t ARTURO_SND_FUNCTION(int channel);
+
 // ***************************************************************************************
 //
 //      Function that returns the sample rate in Hz of the implementeing hardware

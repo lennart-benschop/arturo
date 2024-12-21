@@ -41,19 +41,14 @@
 #include "hardware/miscellany.h"
 #include "hardware/sound.h"
 #include "hardware/mouse.h"
+#include "hardware/fileio.h"
 
-#include "ff.h"
+#include "support.h"
 
-#include "support/console.h"
-#include "support/miscellany.h"
-#include "support/keyboard.h"
-#include "support/control_codes.h"
 
 //
 //		Note: this is a MACRO (#define) set up in config.make
 //
 void ARTURO_RUN_FUNCTION(void);
-
-
 
 #endif

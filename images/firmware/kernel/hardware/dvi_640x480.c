@@ -19,6 +19,8 @@
 
 #include "hardware/dvi_common.h"
 
+struct dvi_serialiser_cfg *DVIGetHDMIConfig(void);
+
 // ***************************************************************************************
 //
 //				Frame buffer, these are 3 planar bitmaps for 640x480
