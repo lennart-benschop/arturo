@@ -28,11 +28,26 @@ Other modes should be theoretically possible.
 
 A USB key plugged into the board (RP2040PC) or external hub (Neo6502) is exposed as a FAT32 storage device. The keys ID is displayed during the bootup sequence.
 
-The key is accessed via the fatfs library documented [here](http://elm-chan.org/fsw/ff/00index_e.html) , an example of usage can be found in the function *TESTShowUSBRootDirectory* in test_app.c which dumps the root directory.  The functions have close mapping to the standard C library equivalents.
+The key can be accessed via the fatfs library documented [here](http://elm-chan.org/fsw/ff/00index_e.html) , but a set of wrappers are available, and should be used where possible. Examples are in the file *test_app.c*
 
-Note that findfirst/next are not enabled, directory read should be done using open and close (as in the example)
+All error values are negative, apart from non terminal ones (e.g. EndOfFile returns 1 if true, 0 if false, -x on error)
 
-It is not required to have a USB key, however this will slow the boot down. When the hardware starts, there is a delay loop which is waiting for the USB system to stabilise, which takes about a second. This will time out after a couple of seconds.
+| Function           | Purpose                                                      |
+| ------------------ | ------------------------------------------------------------ |
+| FIOOpen            | Opens a file in read/write mode, creating it if it does not exist |
+| FIOOpenRead        | Opens a file in read only mode                               |
+| FIOOpenCreate      | Creates a new empty file and opens it in read/write mode, replacing any existing file. |
+| FIOOpenDirectory   | Opens a directory                                            |
+| FIOClose           | Close file or directory                                      |
+| FIORead            | Read from a file or directory                                |
+| FIOReadDirectory   | Helper function for reading directories, wrapper for FIORead |
+| FIOGetPosition     | Read current offset in file                                  |
+| FIOSetPosition     | Set current offset in file                                   |
+| FIOCreateDirectory | Create directory if it does not exist                        |
+| FIODelete          | Delete a file or directory (directory must be empty)         |
+| FIOChangeDirectory | Change the current directory.                                |
+
+It is not required to have a USB key, however this will slow the boot down. When the hardware starts, there is a delay loop which is waiting for the USB system to stabilise, which takes about a second. This will time out after a few seconds.
 
 ## Keyboard
 

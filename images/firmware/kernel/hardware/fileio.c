@@ -94,7 +94,7 @@ static void _FIOError(int h,FRESULT r) {
 
 // ***************************************************************************************
 //
-//							Open File/Directory
+//				Open File/Directory, returns a handle (>= 0) or error (<0)
 //
 // ***************************************************************************************
 
@@ -135,7 +135,7 @@ static int _FIOOpenGeneral(const char *name,char mode,bool isDirectory) {
 
 // ***************************************************************************************
 //
-//									Close file object
+//						Close file object, returns error or FIO_OK (0)
 //
 // ***************************************************************************************
 
@@ -156,6 +156,9 @@ int FIOClose(int h) {
 //
 //		Read Object to location, size bytes. For directories the last two parameters
 //		are ignored and data must point to a FIOInfo structure.
+//
+//		The bytes read will be put into *pReadCount if it is not NULL. Returns
+//		0 or a negative error code.
 //
 // ***************************************************************************************
 
@@ -186,7 +189,7 @@ int FIORead(int h,void *data,int size,int *pReadCount) {
 
 // ***************************************************************************************
 //
-//								Write data to file.
+//				Write data to file. Returns 0 or a negative error code
 //
 // ***************************************************************************************
 
@@ -204,7 +207,7 @@ int FIOWrite(int h,void *data,int size) {
 
 // ***************************************************************************************
 //
-//							Check if file is at the end
+//			Check if file is at the end, returns FIO_EOF/FIO_OK or negative error
 //
 // ***************************************************************************************
 
@@ -216,7 +219,7 @@ int FIOEndOfFile(int h) {
 
 // ***************************************************************************************
 //
-//					Create directory, ignore already exists
+//			Create directory, ignore already exists, returns 0 or negative error
 //
 // ***************************************************************************************
 
@@ -228,7 +231,16 @@ int FIOCreateDirectory(const char *dirName) {
 
 // ***************************************************************************************
 //
-//						Check file or directory exists
+//						Change Directory, returns 0 or negative error
+//
+// ***************************************************************************************
+
+int FIOChangeDirectory(const char *dirName) {
+	return _FIO_MapError(f_chdir(dirName));  												// Try to create directory
+}
+// ***************************************************************************************
+//
+//				Check file or directory exists, returns 0 or negative error
 //
 // ***************************************************************************************
 
@@ -240,7 +252,8 @@ int FIOExists(const char *name) {
 
 // ***************************************************************************************
 //
-//					 Delete file or directory, if it exists
+//			Delete file or directory, if it exists, , returns 0 or negative error
+//				  Note: non existent files/directories is *not* an error.
 //
 // ***************************************************************************************
 
@@ -252,7 +265,7 @@ int FIODelete(const char *name) {
 
 // ***************************************************************************************
 //
-//					 			Set the file position
+//					 Set the file position, returns 0 or negative error
 //
 // ***************************************************************************************
 
@@ -266,7 +279,7 @@ int FIOSetPosition(int h,int pos) {
 
 // ***************************************************************************************
 //
-//					 			Get the file position
+//					 Get the file position, returns it or negative error
 //
 // ***************************************************************************************
 

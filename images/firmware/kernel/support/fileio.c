@@ -14,7 +14,8 @@
 
 // ***************************************************************************************
 //
-//			A simple wrapper round FIORead() which gives some checking
+//			A simple wrapper round FIORead() which gives some checking, returns
+//			0 or a negative error code.
 //
 // ***************************************************************************************
 
@@ -24,7 +25,8 @@ int FIOReadDirectory(int h,FIOInfo *info) {  										// Simple wrapper functio
 
 // ***************************************************************************************
 //
-//								Create and open
+//			Create an empty new file and opening it. Overwrites any existing file
+//								Returns 0 or negative error
 //
 // ***************************************************************************************
 
@@ -33,3 +35,4 @@ int FIOOpenCreate(const char *fileName) {
 	if (e != FIO_OK) return e; 														// Some sort of error.
 	return FIOOpen(fileName);
 }
+

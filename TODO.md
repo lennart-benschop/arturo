@@ -1,6 +1,4 @@
 # TODO stuff
 
-- File System
-		Directory Functions ChangeDirectory()
-				
+- Add Yield functionality.				
 - "Emulator"

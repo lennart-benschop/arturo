@@ -39,9 +39,7 @@ typedef struct _FIO_Information {
 
 void FIOInitialise(void);
 
-int FIOExists(const char *name);
-int FIOCreateDirectory(const char *dirName);
-int FIODelete(const char *fileName);
+
 int FIOOpen(const char *fileName);
 int FIOOpenRead(const char *fileName);
 int FIOOpenDirectory(const char *dirName);
@@ -51,7 +49,11 @@ int FIOGetPosition(int h);
 int FIOSetPosition(int h,int pos);
 int FIOEndOfFile(int h);
 int FIOClose(int h);
+
 int FIOChangeDirectory(const char *dirName);
+int FIOExists(const char *name);
+int FIOCreateDirectory(const char *dirName);
+int FIODelete(const char *fileName);
 
 int FIOReadDirectory(int h,FIOInfo *info);
 int FIOOpenCreate(const char *fileName);
