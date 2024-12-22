@@ -2,8 +2,8 @@
 
 
 - File System
-		Check handle code.
-		Check Open/Close file works.
-		Do read/write.
-		
+		Write , Seek, Tell
+		Directory Functions
+		Existence function.
+				
 - "Emulator"

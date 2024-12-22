@@ -25,7 +25,6 @@ struct _FIO_Object {
 	bool isDir;  																	// true if this is a directory.
 
 	FRESULT fatfsError;  															// Recorded fatFS error, debugging purposes only.
-	FILINFO fileInfo;  																// file information (for reading directories)
 	DIR dirHandle;   																// directory handle
 	FIL fileHandle;  																// file handle
 };
@@ -39,6 +38,9 @@ struct _FIO_Object {
 #define FIO_MAX_HANDLES 	(8) 													// Maximum number of supported files.
 
 static struct _FIO_Object file[FIO_MAX_HANDLES]; 
+
+#define HANDLE_VALID(h) ((h) >= 0 && (h) < FIO_MAX_HANDLES)  						// Handle is a valid one (doesn't check in use)
+#define HANDLE_VALID_OPEN(h) (HANDLE_VALID(h) && file[h].isInUse) 					// Handle is valid *and* open.
 
 // ***************************************************************************************
 //
@@ -82,10 +84,10 @@ static void _FIOError(int h,FRESULT r) {
 
 static int _FIOOpenGeneral(const char *name,char mode,bool isDirectory);
 
-int FIOOpenFileRead(const char *fileName) {
+int FIOOpenRead(const char *fileName) {
 	return _FIOOpenGeneral(fileName,'R',false);
 }
-int FIOOpenFileWrite(const char *fileName) {
+int FIOOpenWrite(const char *fileName) {
 	return _FIOOpenGeneral(fileName,'W',false);
 }
 int FIOOpenDirectory(const char *dirName) {
@@ -119,7 +121,7 @@ static int _FIOOpenGeneral(const char *name,char mode,bool isDirectory) {
 // ***************************************************************************************
 
 int FIOClose(int h) {
-	// TODO: Handle check
+	if (!HANDLE_VALID(h)) return FIO_ERR_HANDLE;  									// Check handle legal
 	if (file[h].isInUse) {  														// File in use.		
 		if (file[h].isDir) {  														// Close directory/file.
 			f_closedir(&file[h].dirHandle);
@@ -129,4 +131,52 @@ int FIOClose(int h) {
 		file[h].isInUse = false;   													// No longer in use
 	}
 	return FIO_OK;
+}
+
+// ***************************************************************************************
+//
+//		Read Object to location, size bytes. For directories the last two parameters
+//		are ignored and data must point to a FIOInfo structure.
+//
+// ***************************************************************************************
+
+int FIOReadDirectory(int h,FIOInfo *info) {  										// Simple wrapper function.
+	return FIORead(h,info,0,NULL);
+}
+
+int FIORead(int h,void *data,int size,int *pReadCount) {
+
+	if (!HANDLE_VALID_OPEN(h)) return FIO_ERR_HANDLE;  								// Check handle legal
+
+	if (file[h].isDir) {  															// Directory reading code.
+		FILINFO fInfo;  															// Internal FATFS structure.
+		_FIOError(h,f_readdir(&file[h].dirHandle,&fInfo));  						// Read next and error check.
+		if (file[h].error != FIO_OK) return file[h].error;   						// The read directory failed.
+		if (fInfo.fname[0] == 0) return FIO_EOF;  									// Read all the directory, return EOF.
+		
+		FIOInfo *fOut = (FIOInfo *)data;  											// Where it goes.
+		fInfo.fname[FIO_MAX_NAME_SIZE] = '\0';  									// Truncate the name to the max length allowed.
+		strcpy(fOut->name,fInfo.fname);
+		fOut->length = fInfo.fsize;  												// Set length, directory 
+		fOut->isDirectory = (fInfo.fattrib & AM_DIR) != 0;
+	} else {  																		// File reading code.
+		UINT bytesRead;
+		if (pReadCount != 0) *pReadCount = 0;  										// Zero bytes read in case of error.
+		_FIOError(h,f_read(&file[h].fileHandle,data,size,&bytesRead));  			// Do the actual read.
+		if (file[h].error != FIO_OK) return file[h].error;  						// Read failed.
+		if (pReadCount != NULL) *pReadCount = bytesRead;   							// If read count provided, update that value.
+	}
+	return FIO_OK;
+}
+
+// ***************************************************************************************
+//
+//							Check if file is at the end
+//
+// ***************************************************************************************
+
+int FIOEndOfFile(int h) {
+	if (!HANDLE_VALID_OPEN(h)) return FIO_ERR_HANDLE;  								// Check handle legal
+	if (file[h].isDir) return FIO_ERR_COMMAND;  									// Files only.
+	return (f_eof(&file[h].fileHandle) ? FIO_EOF : FIO_OK);  						// Return EOF or OK accordingly.
 }

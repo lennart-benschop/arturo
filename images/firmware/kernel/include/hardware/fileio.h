@@ -24,20 +24,28 @@
 #define FIO_ERR_NOTFOUND 	(-2) 													// Directory or File not found
 #define FIO_ERR_COMMAND		(-3) 													// Bad input of some sort
 #define FIO_ERR_MAXFILES 	(-4) 													// Too many files open
+#define FIO_ERR_HANDLE 		(-5)  													// Bad handle / not open
+#define FIO_EOF  			(1)  													// End of directory list/file value.
+
+#define FIO_MAX_NAME_SIZE 	(32) 													// Is arbitrarily truncated to this length.
+
+typedef struct _FIO_Information {
+	char name[FIO_MAX_NAME_SIZE+1];  												// File name
+	int  length;  																	// Byte size
+	bool isDirectory;  																// True if directory	
+} FIOInfo;
 
 void FIOInitialise(void);
 
-int FIOReadError(int fr);
+int FIOReadError(int h);
 
-int FIOOpenFileRead(const char *fileName);
-int FIOOpenFileWrite(const char *fileName);
+int FIOOpenRead(const char *fileName);
+int FIOOpenWrite(const char *fileName);
 int FIOOpenDirectory(const char *dirName);
-
-int FIORead(int fr,void *data,int *pSize,int *pReadCount);
-int FIOWrite(int fr,void *data,int *pSize);
-
-int FIOEndOfFile(int fr);
-
-int FIOClose(int fr);
+int FIORead(int h,void *data,int size,int *pReadCount);
+int FIOWrite(int h,void *data,int size);
+int FIOReadDirectory(int h,FIOInfo *info);
+int FIOEndOfFile(int h);
+int FIOClose(int h);
 
 #endif

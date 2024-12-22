@@ -19,28 +19,30 @@
 // ***************************************************************************************
 
 void TESTShowUSBRootDirectory(void) {
-    DIR di;
-    FILINFO fi;
-    FIL fl;
-    FRESULT r = f_opendir(&di,"/");                                                 // Open root
-    int done = 0;
-    CONWriteString("\r");
-    while (r == FR_OK && done == 0) {                                               // While more to reed (if successful)
-        r = f_readdir(&di,&fi);                                                     // Read next, dump entry
-        CONWriteString("%s ",fi.fname);
-        done = fi.fname[0] == 0;                                                    // This marks end of read of directory
+    int h,e;
+    FIOInfo info;
+    h = FIOOpenDirectory("/");
+    CONWriteString("Open Dir %d\r",h);
+
+    while (e = FIORead(h,&info,0,NULL),e == 0) {
+        CONWriteString("[%s %d %d] ",info.name,info.length,info.isDirectory ? 1 : 0);
     }
-    r = f_closedir(&di);
-    CONWriteString("\r\r");
-    r = f_open(&fl,"inline.bsc",FA_READ);
-    CONWriteString("Open %d\r",r);
-    while (f_eof(&fl) == 0) {
-        UINT count = 0;
+    CONWriteString("\rRead Dir ended %d\r",e);
+    e = FIOClose(h);
+    CONWriteString("\rClose Dir %d\r",e);
+
+
+    h = FIOOpenRead("inline.bsc");
+    
+    CONWriteString("Open %d\r",h);
+    while (FIOEndOfFile(h) == 0) {
+        int count = -1;
         char c = 0;
-        r = f_read(&fl,&c,1,&count);
+        e = FIORead(h,&c,1,&count);
         CONWrite(c);
     }
-    f_close(&fl);
+    e = FIOClose(h);
+    CONWriteString("Close %d\r",e);
 }
 
 // ***************************************************************************************
@@ -52,6 +54,7 @@ void TESTShowUSBRootDirectory(void) {
 void TESTApplication(void) {
     int n = 0;
     CONWriteString("\rTest App\r");                                                 // Exciting title
+    TESTShowUSBRootDirectory();
     //
     //      A typical 'main'
     //

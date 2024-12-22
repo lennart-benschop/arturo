@@ -38,7 +38,7 @@ include_directories(
 	user_code/include
 )
 
-target_compile_options(kernel PRIVATE -Wall -Wno-unused-function)
+target_compile_options(kernel PRIVATE -Wall -Wno-unused-function -Wno-unused-variable)
 
 target_compile_definitions(kernel PRIVATE
 	DVI_DEFAULT_SERIAL_CONFIG=${DVI_DEFAULT_SERIAL_CONFIG}
