@@ -1,8 +1,8 @@
 # TODO stuff
 
-
 - File System
-		Write , Seek, Tell
+		Delete (File/Directory), Create, Write
+		Seek, Tell
 		Directory Functions
 		Existence function.
 				

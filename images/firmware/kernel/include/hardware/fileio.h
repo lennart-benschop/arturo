@@ -37,15 +37,18 @@ typedef struct _FIO_Information {
 
 void FIOInitialise(void);
 
-int FIOReadError(int h);
 
+int FIOCreateDirectory(const char *dirName);
+int FIODelete(const char *fileName);
 int FIOOpenRead(const char *fileName);
 int FIOOpenWrite(const char *fileName);
 int FIOOpenDirectory(const char *dirName);
 int FIORead(int h,void *data,int size,int *pReadCount);
 int FIOWrite(int h,void *data,int size);
-int FIOReadDirectory(int h,FIOInfo *info);
 int FIOEndOfFile(int h);
 int FIOClose(int h);
+
+int FIOReadDirectory(int h,FIOInfo *info);
+int FIOOpenCreate(const char *fileName);
 
 #endif

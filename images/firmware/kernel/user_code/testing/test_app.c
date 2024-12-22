@@ -21,6 +21,10 @@
 void TESTShowUSBRootDirectory(void) {
     int h,e;
     FIOInfo info;
+
+    e = FIOCreateDirectory("aadir");
+    CONWriteString("Create Dir %d\r",e);
+
     h = FIOOpenDirectory("/");
     CONWriteString("Open Dir %d\r",h);
 

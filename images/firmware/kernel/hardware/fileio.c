@@ -11,7 +11,6 @@
 // ***************************************************************************************
 
 #include "common.h"
-#include "ff.h"
 
 // ***************************************************************************************
 //
@@ -54,6 +53,32 @@ void FIOInitialise(void) {
 
 // ***************************************************************************************
 //
+//							Map FATFS error onto FIO error
+//
+// ***************************************************************************************
+
+static int _FIO_MapError(FRESULT r) {
+	int err;
+
+	switch(r) {
+		case FR_OK:  															// No error.
+			err = FIO_OK;break;
+		case FR_NO_FILE:  														// File/Path not found
+		case FR_NO_PATH:
+			err = FIO_ERR_NOTFOUND;break;
+		case FR_INVALID_NAME:  													// Input is wrong.
+		case FR_INVALID_OBJECT:
+		case FR_INVALID_PARAMETER:
+			err = FIO_ERR_COMMAND;break;
+		default: 																// Everything else.
+			err = FIO_ERR_SYSTEM;break;
+			break;
+	}
+	return err;
+}
+
+// ***************************************************************************************
+//
 //							Handle errors, remapped and simplified.
 //
 // ***************************************************************************************
@@ -62,17 +87,7 @@ static void _FIOError(int h,FRESULT r) {
 	file[h].error = FIO_OK;  														// Set to ok, save fatfs result 
 	file[h].fatfsError = r; 
 	if (r != FR_OK) {  																// Error occurred, remap
-		switch(r) {
-			case FR_NO_FILE:  														// File/Path not found
-			case FR_NO_PATH:
-				file[h].error = FIO_ERR_NOTFOUND;break;
-			case FR_INVALID_NAME:  													// Input is wrong.
-			case FR_INVALID_OBJECT:
-			case FR_INVALID_PARAMETER:
-				file[h].error = FIO_ERR_COMMAND;break;
-			default:  																// Everything else, mostly tech failings.
-				file[h].error = FIO_ERR_SYSTEM;break;
-		}
+		file[h].error = _FIO_MapError(r);
 	}
 }
 
@@ -140,10 +155,6 @@ int FIOClose(int h) {
 //
 // ***************************************************************************************
 
-int FIOReadDirectory(int h,FIOInfo *info) {  										// Simple wrapper function.
-	return FIORead(h,info,0,NULL);
-}
-
 int FIORead(int h,void *data,int size,int *pReadCount) {
 
 	if (!HANDLE_VALID_OPEN(h)) return FIO_ERR_HANDLE;  								// Check handle legal
@@ -179,4 +190,16 @@ int FIOEndOfFile(int h) {
 	if (!HANDLE_VALID_OPEN(h)) return FIO_ERR_HANDLE;  								// Check handle legal
 	if (file[h].isDir) return FIO_ERR_COMMAND;  									// Files only.
 	return (f_eof(&file[h].fileHandle) ? FIO_EOF : FIO_OK);  						// Return EOF or OK accordingly.
+}
+
+// ***************************************************************************************
+//
+//					Create directory, ignore already exists
+//
+// ***************************************************************************************
+
+int FIOCreateDirectory(const char *dirName) {
+	FRESULT err = f_mkdir(dirName);  												// Try to create directory
+	if (err == FR_EXIST) err = FR_OK;  												// Ignore already exist errors.
+	return _FIO_MapError(err);
 }
