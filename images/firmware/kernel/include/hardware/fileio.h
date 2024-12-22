@@ -14,32 +14,30 @@
 #ifndef _FILEIO_H
 #define _FILEIO_H
 
-#include "ff.h"
+#include "ff.h" // TODO:Remove
 
 //
 //		New errors. The numbers refer to FatFS errors, these are combined.
 //
-#define FIO_OK 				(0)  		/* No error 0 */
-#define FIO_ERR_SYSTEM 		(0x100) 	/* Internal system error 1,2,3,7,8,10,11,12,13,14,15,16,17,18 */
-#define FIO_ERR_NOTFOUND 	(0x101) 	/* Directory or File not found 4,5 */
-#define FIO_ERR_COMMAND		(0x102) 	/* Bad input of some sort 6,9,19 */
-#define FIO_ERR_MAXFILES 	(0x103) 	/* Too many files open */
-
-typedef int FIORef;
+#define FIO_OK 				(0)  													// No error
+#define FIO_ERR_SYSTEM 		(-1) 													// Internal system error
+#define FIO_ERR_NOTFOUND 	(-2) 													// Directory or File not found
+#define FIO_ERR_COMMAND		(-3) 													// Bad input of some sort
+#define FIO_ERR_MAXFILES 	(-4) 													// Too many files open
 
 void FIOInitialise(void);
 
-int FIOReadError(FIORef fr);
+int FIOReadError(int fr);
 
-int FIOOpenFileRead(const char *fileName,FIORef *fr);
-int FIOOpenFileWrite(const char *fileName,FIORef *fr);
-int FIOOpenDirectory(const char *dirName,FIORef *fr);
+int FIOOpenFileRead(const char *fileName);
+int FIOOpenFileWrite(const char *fileName);
+int FIOOpenDirectory(const char *dirName);
 
-int FIORead(FIORef fr,void *data,int *pSize,int *pReadCount);
-int FIOWrite(FIORef fr,void *data,int *pSize);
+int FIORead(int fr,void *data,int *pSize,int *pReadCount);
+int FIOWrite(int fr,void *data,int *pSize);
 
-int FIOEndOfFile(FIORef fr);
+int FIOEndOfFile(int fr);
 
-int FIOClose(FIORef fr);
+int FIOClose(int fr);
 
 #endif

@@ -80,19 +80,19 @@ static void _FIOError(int h,FRESULT r) {
 //
 // ***************************************************************************************
 
-static int _FIOOpenGeneral(const char *name,FIORef *fr,char mode,bool isDirectory);
+static int _FIOOpenGeneral(const char *name,char mode,bool isDirectory);
 
-int FIOOpenFileRead(const char *fileName,FIORef *fr) {
-	return _FIOOpenGeneral(fileName,fr,'R',false);
+int FIOOpenFileRead(const char *fileName) {
+	return _FIOOpenGeneral(fileName,'R',false);
 }
-int FIOOpenFileWrite(const char *fileName,FIORef *fr) {
-	return _FIOOpenGeneral(fileName,fr,'W',false);
+int FIOOpenFileWrite(const char *fileName) {
+	return _FIOOpenGeneral(fileName,'W',false);
 }
-int FIOOpenDirectory(const char *dirName,FIORef *fr) {
-	return _FIOOpenGeneral(dirName,fr,'R',true);
+int FIOOpenDirectory(const char *dirName) {
+	return _FIOOpenGeneral(dirName,'R',true);
 }
 
-static int _FIOOpenGeneral(const char *name,FIORef *fr,char mode,bool isDirectory) {
+static int _FIOOpenGeneral(const char *name,char mode,bool isDirectory) {
 	int h = -1;  																	// Identify a file structure to use.
 	for (int i = 0;i < FIO_MAX_HANDLES;i++) {
 		if (!file[i].isInUse) h = i;
@@ -105,11 +105,11 @@ static int _FIOOpenGeneral(const char *name,FIORef *fr,char mode,bool isDirector
 	} else {
 		file[h].isDir = false;  													// It's a file.
 		_FIOError(h,f_open(&file[h].fileHandle,name,(mode == 'R') ? 				// Try to open file, process the error.
-											FA_READ: FA_CREATE_ALWAYS | FA_WRITE));
+											FA_READ: FA_CREATE_ALWAYS | FA_READ | FA_WRITE));
 
 	}
 	if (file[h].error == FIO_OK) file[h].isInUse = true;  							// Mark as in use if open went okay.
-	return file[h].error; 															// Return the error state.
+	return file[h].error < 0 ? file[h].error : h; 									// Return the error state or the handle.
 }
 
 // ***************************************************************************************
@@ -118,15 +118,15 @@ static int _FIOOpenGeneral(const char *name,FIORef *fr,char mode,bool isDirector
 //
 // ***************************************************************************************
 
-int FIOClose(FIORef fr) {
+int FIOClose(int h) {
 	// TODO: Handle check
-	if (file[fr].isInUse) {  														// File in use.		
-		if (file[fr].isDir) {  														// Close directory/file.
-			f_closedir(&file[fr].dirHandle);
+	if (file[h].isInUse) {  														// File in use.		
+		if (file[h].isDir) {  														// Close directory/file.
+			f_closedir(&file[h].dirHandle);
 		} else {
-			f_close(&file[fr].fileHandle);
+			f_close(&file[h].fileHandle);
 		}
-		file[fr].isInUse = false;   												// No longer in use
+		file[h].isInUse = false;   													// No longer in use
 	}
 	return FIO_OK;
 }
