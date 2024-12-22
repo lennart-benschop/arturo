@@ -43,10 +43,13 @@ void TESTShowUSBRootDirectory(void) {
 
     h = FIOOpenRead("inline.bsc");
     CONWriteString("Open %d\r",h);
+    FIOSetPosition(h,2);
+    count = FIOGetPosition(h);
+    CONWriteString("Position : %d\r",count);
     while (FIOEndOfFile(h) == 0) {
         char c = 0;
         e = FIORead(h,&c,1,&count);
-        CONWriteString("%d %c",c,c);
+        CONWriteString("%d.%c ",c,c);
     }
     e = FIOClose(h);
     CONWriteString("Close %d\r",e);

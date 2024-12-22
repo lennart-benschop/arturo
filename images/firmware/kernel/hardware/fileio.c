@@ -249,3 +249,30 @@ int FIODelete(const char *name) {
 	if (fr == FR_NO_FILE || fr == FR_NO_PATH) return FIO_OK;  						// Doesn't matter if it doesn't exist
 	return _FIO_MapError(fr);  														// Return mapped error.
 }
+
+// ***************************************************************************************
+//
+//					 			Set the file position
+//
+// ***************************************************************************************
+
+int FIOSetPosition(int h,int pos) {
+	if (!HANDLE_VALID_OPEN(h)) return FIO_ERR_HANDLE;  								// Check handle legal
+	if (file[h].isDir) return FIO_ERR_COMMAND;  									// Files only.
+	_FIOError(h,f_lseek(&file[h].fileHandle,pos));  								// Move the position.
+	if (file[h].error != FIO_OK) return file[h].error;  							// Failed
+	return 0;
+}
+
+// ***************************************************************************************
+//
+//					 			Get the file position
+//
+// ***************************************************************************************
+
+int FIOGetPosition(int h) {
+	if (!HANDLE_VALID_OPEN(h)) return FIO_ERR_HANDLE;  								// Check handle legal
+	if (file[h].isDir) return FIO_ERR_COMMAND;  									// Files only.
+	return f_tell(&file[h].fileHandle);												// Read the position.
+}
+
