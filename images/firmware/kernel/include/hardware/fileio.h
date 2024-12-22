@@ -25,6 +25,8 @@
 #define FIO_ERR_COMMAND		(-3) 													// Bad input of some sort
 #define FIO_ERR_MAXFILES 	(-4) 													// Too many files open
 #define FIO_ERR_HANDLE 		(-5)  													// Bad handle / not open
+#define FIO_ERR_READONLY 	(-6)  													// Writing to read opened file.
+
 #define FIO_EOF  			(1)  													// End of directory list/file value.
 
 #define FIO_MAX_NAME_SIZE 	(32) 													// Is arbitrarily truncated to this length.
@@ -37,11 +39,11 @@ typedef struct _FIO_Information {
 
 void FIOInitialise(void);
 
-
+int FIOExists(const char *name);
 int FIOCreateDirectory(const char *dirName);
 int FIODelete(const char *fileName);
+int FIOOpen(const char *fileName);
 int FIOOpenRead(const char *fileName);
-int FIOOpenWrite(const char *fileName);
 int FIOOpenDirectory(const char *dirName);
 int FIORead(int h,void *data,int size,int *pReadCount);
 int FIOWrite(int h,void *data,int size);
@@ -50,5 +52,4 @@ int FIOClose(int h);
 
 int FIOReadDirectory(int h,FIOInfo *info);
 int FIOOpenCreate(const char *fileName);
-
 #endif

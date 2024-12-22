@@ -1,9 +1,7 @@
 # TODO stuff
 
 - File System
-		Delete (File/Directory), Create, Write
-		Seek, Tell
+		Seek, Tell (Size ?)
 		Directory Functions
-		Existence function.
 				
 - "Emulator"

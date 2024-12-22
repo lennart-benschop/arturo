@@ -22,3 +22,14 @@ int FIOReadDirectory(int h,FIOInfo *info) {  										// Simple wrapper functio
 	return FIORead(h,info,0,NULL);
 }
 
+// ***************************************************************************************
+//
+//								Create and open
+//
+// ***************************************************************************************
+
+int FIOOpenCreate(const char *fileName) {
+	int e = FIODelete(fileName);  													// Delete if it exists
+	if (e != FIO_OK) return e; 														// Some sort of error.
+	return FIOOpen(fileName);
+}

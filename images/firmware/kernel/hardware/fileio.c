@@ -22,6 +22,7 @@ struct _FIO_Object {
 	bool isInUse;  																	// true if currently in use
 	int error;  																	// current error, if any,0 is none.
 	bool isDir;  																	// true if this is a directory.
+	bool isReadOnly;  																// true if read only
 
 	FRESULT fatfsError;  															// Recorded fatFS error, debugging purposes only.
 	DIR dirHandle;   																// directory handle
@@ -99,11 +100,11 @@ static void _FIOError(int h,FRESULT r) {
 
 static int _FIOOpenGeneral(const char *name,char mode,bool isDirectory);
 
+int FIOOpen(const char *fileName) {
+	return _FIOOpenGeneral(fileName,'W',false);
+}
 int FIOOpenRead(const char *fileName) {
 	return _FIOOpenGeneral(fileName,'R',false);
-}
-int FIOOpenWrite(const char *fileName) {
-	return _FIOOpenGeneral(fileName,'W',false);
 }
 int FIOOpenDirectory(const char *dirName) {
 	return _FIOOpenGeneral(dirName,'R',true);
@@ -116,9 +117,12 @@ static int _FIOOpenGeneral(const char *name,char mode,bool isDirectory) {
 	}
 	if (h < 0) return FIO_ERR_MAXFILES;  											// Too many files open.
 
+	file[h].isReadOnly = (mode == 'R');  											// Set read-only flag.
+
 	if (isDirectory) {  															// Open directory
 		file[h].isDir = true;  														// It's a directory.
-		_FIOError(h,f_opendir(&file[h].dirHandle,name)); 							// Try to open directory, process the error		
+		_FIOError(h,f_opendir(&file[h].dirHandle,name)); 							// Try to open directory, process the error	
+		CONWriteString("Trying to open %s returned %d\r",name,file[h].fatfsError);	
 	} else {
 		file[h].isDir = false;  													// It's a file.
 		_FIOError(h,f_open(&file[h].fileHandle,name,(mode == 'R') ? 				// Try to open file, process the error.
@@ -182,6 +186,24 @@ int FIORead(int h,void *data,int size,int *pReadCount) {
 
 // ***************************************************************************************
 //
+//								Write data to file.
+//
+// ***************************************************************************************
+
+int FIOWrite(int h,void *data,int size) {
+	if (!HANDLE_VALID_OPEN(h)) return FIO_ERR_HANDLE;  								// Check handle legal
+	if (file[h].isDir) return FIO_ERR_COMMAND;  									// Files only.
+	if (file[h].isReadOnly) return FIO_ERR_READONLY;  								// Opened in read mode.
+
+	UINT bytesWritten;	
+	_FIOError(h,f_write(&file[h].fileHandle,data,size,&bytesWritten));  			// Do the actual write
+	if (file[h].error != FIO_OK) return file[h].error;  							// Write failed.	
+	if (bytesWritten != size) return FIO_ERR_SYSTEM;  								// Wrote insufficient data out.
+	return FIO_OK;
+}
+
+// ***************************************************************************************
+//
 //							Check if file is at the end
 //
 // ***************************************************************************************
@@ -202,4 +224,28 @@ int FIOCreateDirectory(const char *dirName) {
 	FRESULT err = f_mkdir(dirName);  												// Try to create directory
 	if (err == FR_EXIST) err = FR_OK;  												// Ignore already exist errors.
 	return _FIO_MapError(err);
+}
+
+// ***************************************************************************************
+//
+//						Check file or directory exists
+//
+// ***************************************************************************************
+
+int FIOExists(const char *name) {
+	FILINFO fInfo;  																// Get the object status.
+	FRESULT fr = f_stat(name,&fInfo); 
+	return _FIO_MapError(fr);  														// Return mapped error.
+}
+
+// ***************************************************************************************
+//
+//					 Delete file or directory, if it exists
+//
+// ***************************************************************************************
+
+int FIODelete(const char *name) {
+	FRESULT fr = f_unlink(name);  													// Try to delete it.
+	if (fr == FR_NO_FILE || fr == FR_NO_PATH) return FIO_OK;  						// Doesn't matter if it doesn't exist
+	return _FIO_MapError(fr);  														// Return mapped error.
 }

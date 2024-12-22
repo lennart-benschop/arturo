@@ -19,8 +19,9 @@
 // ***************************************************************************************
 
 void TESTShowUSBRootDirectory(void) {
-    int h,e;
+    int h,e,count;
     FIOInfo info;
+    char *s;
 
     e = FIOCreateDirectory("aadir");
     CONWriteString("Create Dir %d\r",e);
@@ -35,18 +36,32 @@ void TESTShowUSBRootDirectory(void) {
     e = FIOClose(h);
     CONWriteString("\rClose Dir %d\r",e);
 
+    h = FIOOpenCreate("inline.bsc");
+    e = FIOWrite(h,"Hello World",5); 
+    CONWriteString("\rWriting %d\r",e);    
+    FIOClose(h);
 
     h = FIOOpenRead("inline.bsc");
-    
     CONWriteString("Open %d\r",h);
     while (FIOEndOfFile(h) == 0) {
-        int count = -1;
         char c = 0;
         e = FIORead(h,&c,1,&count);
-        CONWrite(c);
+        CONWriteString("%d %c",c,c);
     }
     e = FIOClose(h);
     CONWriteString("Close %d\r",e);
+
+    char buffer[12];
+    h = FIOOpen("inline.bsc");
+    e = FIORead(h,buffer,10,&count);
+    CONWriteString("Read 10 %d Read %d\r",e,count);
+    e = FIOClose(h);
+    for (int i = 0;i < 10;i++) CONWriteString("%d ",buffer[i]);
+    CONWriteString("\n");
+
+    s = "aadir";CONWriteString("%s %d\r",s,FIOExists(s));
+    s = "abdir";CONWriteString("%s %d\r",s,FIOExists(s));
+    s = "binary.bas";CONWriteString("%s %d\r",s,FIOExists(s));
 }
 
 // ***************************************************************************************
@@ -88,7 +103,7 @@ void TESTApplication(void) {
                                             c->a ? 1:0,c->b ? 1:0,c->x ? 1:0,c->y ? 1:0);
                 }
             }
-            CONWrite('_');
+            //CONWrite('_');
         }
     }
 }
