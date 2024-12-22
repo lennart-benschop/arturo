@@ -30,8 +30,8 @@ static inline void putpixel(uint x, uint y, uint rgb) {
 
 	uint8_t mask = 1u << (x % 8);  													// Mask from lower 8 bits.
 
-	for (uint component = 0; component < 3; ++component) {  						// Do each bitplane
-		uint8_t *idx = (x / 8) + y * dmi->width / 8 + dmi->bitPlane[component]; 	// Work out byte.
+	for (uint component = 0; component < dmi->bitPlaneCount; ++component) {  		// Do each bitplane
+		uint8_t *idx = (x / 8) + y * dmi->bytesPerLine + dmi->bitPlane[component]; 	// Work out byte.
 
 		if (rgb & (1u << component))  												// Set or clear the bit in the plane.
 			*idx = *idx | mask;
@@ -74,7 +74,7 @@ void CONWrite(char c) {
 		case 12:  																	// Clear Screen.
 			for (uint x = 0; x < dmi->width; ++x)
 				for (uint y = 0; y < dmi->height; ++y)
-					putpixel(x, y, CON_COL_BLACK);
+					putpixel(x, y, CON_COL_BLACK);			
 			fgcol = CON_COL_GREEN;	  												// Reset colours.
 			bgcol = CON_COL_BLACK;
 			x0 = y0 = 0;  															// Home cursor
@@ -82,7 +82,14 @@ void CONWrite(char c) {
 		case 10:
 		case 13:  																	// New line
 			x0 = 0;y0 = y0 + 8;
-			if (y0 == dmi->height) y0 = 0;  										// Wrap to top scrolling.
+			if (y0 == dmi->height) {  												// Scrolling.
+				y0 = y0 - 8;  										
+				for (int i = 0;i < dmi->bitPlaneCount;i++) {
+					uint8_t *s = dmi->bitPlane[i];
+					memcpy(s,s+8*dmi->bytesPerLine,dmi->bytesPerLine*(dmi->height-8));
+					memset(s+dmi->bytesPerLine*(dmi->height-8),0,8*dmi->bytesPerLine);
+				}
+			}
 			break;
 
 		default:

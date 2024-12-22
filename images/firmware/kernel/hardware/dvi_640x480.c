@@ -76,6 +76,7 @@ void DVISetMode(int mode) {
 		default:
 			dvi_modeInfo.mode = -1;  												// Failed.
 	}
+	dvi_modeInfo.bytesPerLine = dvi_modeInfo.width / 8;  							// Calculate bytes per line.
 }
 
 // ***************************************************************************************
