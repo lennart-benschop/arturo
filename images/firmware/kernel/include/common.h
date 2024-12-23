@@ -49,6 +49,7 @@
 #include "interface/sound.h"
 #include "interface/mouse.h"
 #include "interface/fileio.h"
+#include "interface/usb_interface.h"
 
 #ifdef PICO
 #include "internal.h"

@@ -10,10 +10,9 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _USB_INTERFACEI_H
-#define _USB_INTERFACEI_H
+#ifndef _USB_INTERFACE_H
+#define _USB_INTERFACE_H
 
-void USBInitialise(void);
-void USBSynchronise(void);
+void USBUpdate(void);
 
 #endif

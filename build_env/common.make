@@ -15,9 +15,11 @@
 #
 # *******************************************************************************************
 
+CC = gcc
 PYTHON = python3
 MAKEFLAGS = --no-print-directory
-CFLAGS = -Wall -Werror -O2 
+CFLAGS = -Wall -Werror -O2 -fmax-errors=5 
+LDFLAGS = fmax-errors=5
 
 # *******************************************************************************************
 #
