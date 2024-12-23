@@ -14,8 +14,7 @@
 #define _MOUSE_H
 
 bool MSEMousePresent(void);
-void MSESetPosition(uint16_t x, uint16_t y);
-void MSEOffsetPosition(int8_t dx, int8_t dy);
-void MSEGetState(uint16_t *pX, uint16_t *pY, uint8_t *pButtonState, uint8_t *pScrollWheelState);
+void MSESetPosition(int x, int y);
+void MSEGetState(int *pX, int *pY, int *pButtonState, int *pScrollWheelState);
 
 #endif

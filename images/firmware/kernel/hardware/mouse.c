@@ -50,7 +50,7 @@ bool MSEMousePresent(void) {
 //
 // ***************************************************************************************
 
-void MSESetPosition(uint16_t x, uint16_t y) {
+void MSESetPosition(int x,int y) {
     xCursor = x;
     yCursor = y;
 }
@@ -97,7 +97,7 @@ void MSEUpdateButtonState(uint8_t bs) {
 //
 // ***************************************************************************************
 
-void MSEGetState(uint16_t *pX, uint16_t *pY, uint8_t *pButtonState, uint8_t *pScrollWheelState) {
+void MSEGetState(int *pX, int *pY, int *pButtonState, int *pScrollWheelState) {
     if (hasMouse) {
         *pX = xCursor;
         *pY = yCursor;

@@ -23,8 +23,8 @@
 // ***************************************************************************************
 
 typedef struct _controller_status {
-	uint16_t	_hardwareID;   														// 16 bit hardware ID built from dev_addr & instance	
-	uint32_t 	_hardwareTypeID;  													// Combined VID & PID of the device.
+	int			_hardwareID;   														// 16 bit hardware ID built from dev_addr & instance	
+	int 		_hardwareTypeID;  													// Combined VID & PID of the device.
 
 	int  		dx,dy;   															// Direction of the main controller
 	bool 		a,b,x,y;  															// Buttons. These should map with the SNES controller

@@ -94,9 +94,9 @@ void TESTApplication(void) {
             TICK50_RESET();                                                         // Reset the tick flag
             USBUpdate();                                                            // Update USB
             KBDCheckTimer();                                                        // Check for keyboard repeat
-
-            uint16_t x,y;                                                           // Read the mouse state.
-            uint8_t b,w;    
+            SYNC();                                                                 // External Sync
+            
+            int x,y,b,w;
             MSEGetState(&x,&y,&b,&w);
             //CONWriteString("Mouse:%d %d %d %d\r",x,y,b,w);                        // Uncomment to show it
             if (CTLControllerCount() != 0) {                                        // Show controller state if anything pressed.

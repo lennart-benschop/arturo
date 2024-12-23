@@ -58,7 +58,7 @@ void TMRStartTickInterrupt(void) {
 //
 // ***************************************************************************************
 
-uint32_t TMRRead(void) {
+int TMRRead(void) {
     uint32_t time32 = (uint32_t)(time_us_64() >> 10);                           // divide by 1024
     return (time32 * 210) >> 11;                                                // Error of about 0.07%
 }

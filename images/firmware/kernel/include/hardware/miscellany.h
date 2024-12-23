@@ -16,7 +16,7 @@
 //
 //		Timer/Interrupt functions.
 //
-uint32_t TMRRead(void);
+int TMRRead(void);
 //
 //		Set every 20ms
 //

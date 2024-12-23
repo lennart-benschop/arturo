@@ -3,7 +3,7 @@
 //
 //		Name : 		miscellany.h
 //		Author :	Paul Robson (paul@robsons.org.uk)
-//		Date : 		18th December 2024
+//		Date : 		23rd December 2024
 //		Reviewed :	No
 //		Purpose :	Odds and sods (internal)
 //
@@ -17,5 +17,8 @@
 //		Timer/Interrupt functions.
 //
 void TMRStartTickInterrupt(void);
-
+//
+//		Synchronisation method.
+//
+#define SYNC() 		{}
 #endif

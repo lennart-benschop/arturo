@@ -3,7 +3,7 @@
 //
 //      Name :      sound.h
 //      Authors :   Paul Robson (paul@robsons.org.uk)
-//      Date :      19th December 2024
+//      Date :      23rd December 2024
 //      Reviewed :  No
 //      Purpose :   Sound interface headers (internal)
 //

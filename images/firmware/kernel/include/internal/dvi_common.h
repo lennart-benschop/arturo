@@ -3,7 +3,7 @@
 //
 //		Name : 		dvi_common.h
 //		Author :	Paul Robson (paul@robsons.org.uk)
-//		Date : 		18th December 2024
+//		Date : 		23rd December 2024
 //		Reviewed :	No
 //		Purpose :	Common values, DVI driver (internal)
 //

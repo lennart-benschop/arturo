@@ -89,6 +89,10 @@ Your application code can go in user_code and user_code/include ; anything place
 
 This includes the file testing/test_app.c ; this should be removed by the linker.
 
+## What is "SYNC()" ?
+
+I wanted the ability to be able to run the code externally, almost as an emulator but without any of the CPU emulation, just the hardware, so the externally called methods had an associated library. I wanted this to be based on SDL2, but this, like many other things requires yielding periodically, as I wanted to avoid the complexities of multi tasking. So when use this "emulator" SYNC is something like "Yield and update stuff" - primarily processing the message pump and the display. In the real hardware, which doesn't need this, this is a no-operation.
+
 ## Configuration
 
 Configuration is done using the **config.make** file, which allows you to change various settings.
