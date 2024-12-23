@@ -7,14 +7,14 @@
 *.lbl
 *.elf
 *.uf2
+*.o
+*.obj
 
 __pycache__/*
 __pycache__
 build/*
 images/build/*
 memory.dump
-*.o
-*.obj
 bin/*
 __*
 CMakeCache.txt
