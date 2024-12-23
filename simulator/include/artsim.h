@@ -25,6 +25,6 @@ void SYSOpen(void);
 int SYSPollUpdate(void);
 void SYSClose(void);
 void SYSRectangle(SDL_Rect *rc,int colour);
-
+int TMRRead(void);
 
 #endif

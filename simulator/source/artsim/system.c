@@ -15,6 +15,7 @@
 static SDL_Window *mainWindow = NULL;
 static SDL_Surface *mainSurface = NULL;
 
+static int startTime = 0,endTime = 0,frameCount = 0;
 #define RED(x) ((((x) >> 8) & 0xF) * 17)
 #define GREEN(x) ((((x) >> 4) & 0xF) * 17)
 #define BLUE(x) ((((x) >> 0) & 0xF) * 17)
@@ -44,6 +45,7 @@ void SYSOpen(void) {
 	// SOUNDPlay();
 
 	SDL_ShowCursor(SDL_DISABLE);                                                    // Hide mouse cursor
+	startTime = TMRRead();
 }
 
 // *******************************************************************************************************************************
@@ -53,7 +55,6 @@ void SYSOpen(void) {
 // *******************************************************************************************************************************
 
 static int isRunning = -1;															// Is app running
-static int frameCount = 0;  														// Number of frames.
 
 int SYSPollUpdate(void) {
 	SDL_Event event;
@@ -83,6 +84,7 @@ int SYSPollUpdate(void) {
 	static int n = 0xF70;
 	SDL_Rect rc;rc.x = rc.y = 5;rc.w = 630*2;rc.h = 470*2;
 	SYSRectangle(&rc,(n++) & 0xFFF);
+	frameCount++;
 
 	// int render = GFXXRender(mainSurface);											// Ask app to render state
 	if (/*render||*/true) SDL_UpdateWindowSurface(mainWindow);								// And update the main window.	
@@ -96,11 +98,12 @@ int SYSPollUpdate(void) {
 // *******************************************************************************************************************************
 
 void SYSClose(void) {
+	endTime = TMRRead();
 	SDL_DestroyWindow(mainWindow);													// Destroy working window
 	//SOUNDStop();
 	SDL_CloseAudio();  																// Shut audio up.
 	SDL_Quit();																		// Exit SDL.
-	printf("Frames %d\n",frameCount);
+	printf("Frame Rate %.2f\n",frameCount/((endTime-startTime)/100.0));
 }
 
 // *******************************************************************************************************************************
