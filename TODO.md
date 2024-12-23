@@ -1,7 +1,7 @@
 # TODO stuff
 
 - "Emulator"
-	- Move keyboard, joystick to other files for now.
-	- Tidy everything up
 	- Implement the display part.
 	- Get the console stuff working.
+	- Check the speed
+	- Override the HASTICKS() stuff so it's always reset, and make the simulator responsible for the timer, e.g. only do 25fps or whatever.

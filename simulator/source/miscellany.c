@@ -1,30 +1,23 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//      Name :      artsim.h
+//      Name :      miscellany.c
 //      Authors :   Paul Robson (paul@robsons.org.uk)
 //      Date :      23rd December 2024
 //      Reviewed :  No
-//      Purpose :   Artsim specific includes.
+//      Purpose :   Miscellaneous stuff.
 //
 // ***************************************************************************************
 // ***************************************************************************************
 
+#include <artsim.h>
 
-#ifndef _ARTSIM_H
-#define _ARTSIM_H
+// *******************************************************************************************************************************
+//
+//												Get elapsed time in 100Hz ticks.
+//
+// *******************************************************************************************************************************
 
-#include <common.h>
-#include <SDL.h>
-
-#define AS_SCALE 	(2)
-
-void TESTApplication(void);
-
-void SYSOpen(void);
-int SYSPollUpdate(void);
-void SYSClose(void);
-void SYSRectangle(SDL_Rect *rc,int colour);
-
-
-#endif
+int TMRTimer(void) {
+	return SDL_GetTicks()/10;
+}

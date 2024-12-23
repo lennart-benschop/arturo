@@ -1,0 +1,80 @@
+#include <common.h>
+#include <artsim.h>
+
+#define MAX_CONTROLLERS (4)
+
+static void GFXFindControllers(void);
+
+static int controllerCount = 0;
+static SDL_Joystick *controllers[MAX_CONTROLLERS];
+
+// // *******************************************************************************************************************************
+// //
+// //													Return stick status (Button Right Left Down Up)
+// //
+// // *******************************************************************************************************************************
+
+// int GFXReadJoystick0(void) {
+// 	int joystickStatus = 0;
+// 	if (GFXIsKeyPressed('K')) joystickStatus |= 1;
+// 	if (GFXIsKeyPressed('M')) joystickStatus |= 2;
+// 	if (GFXIsKeyPressed('Z')) joystickStatus |= 4;
+// 	if (GFXIsKeyPressed('X')) joystickStatus |= 8;
+// 	if (GFXIsKeyPressed('L')) joystickStatus |= 16;
+// 	return joystickStatus;
+// }
+
+// // *******************************************************************************************************************************
+// //
+// //												    Get controller count
+// //
+// // *******************************************************************************************************************************
+
+// int GFXControllerCount(void) {
+// 	return controllerCount;
+// }
+
+// // *******************************************************************************************************************************
+// //
+// //										Read controller, format compatible with Firmware
+// //
+// // *******************************************************************************************************************************
+
+// unsigned int GFXReadController(int id) {
+// 	int bitPattern = 0;
+// 	Sint16 dx = SDL_JoystickGetAxis(controllers[id],0);
+// 	if (abs(dx) >= 1024) {
+// 		bitPattern |= (dx < 0) ? 0x01:0x02;
+// 	}
+// 	Sint16 dy = SDL_JoystickGetAxis(controllers[id],1);
+// 	if (abs(dy) >= 1024) {
+// 		bitPattern |= (dy < 0) ? 0x04:0x08;
+// 	}
+// 	int buttons = SDL_JoystickNumButtons(controllers[id]);
+// 	buttons = (buttons >= 4) ? 4 : buttons;
+// 	for (int b = 0;b < buttons;b++) {
+// 		if (SDL_JoystickGetButton(controllers[id],b)) {
+// 			bitPattern |= (0x10 << b);
+// 		}
+// 	}
+// 	return bitPattern;
+// }
+
+// // *******************************************************************************************************************************
+// //
+// //												    Search for controllers
+// //
+// // *******************************************************************************************************************************
+
+// static void GFXFindControllers(void) {
+//  	controllerCount = 0;  															// Discover controllers. 
+// 	for (int i = 0; i < SDL_NumJoysticks(); i++) {
+// 		if (controllerCount < MAX_CONTROLLERS) {
+//     		controllers[controllerCount] = SDL_JoystickOpen(i);
+//     		if (controllers[controllerCount] == NULL) {
+//     			exit(printf("Failed to open controller %d\n",i));
+//     		}
+//     		controllerCount++;
+// 		}
+// 	}
+// }
