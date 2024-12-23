@@ -12,6 +12,8 @@
 
 #include "artsim.h"
 
+bool tick50HzHasFired = true;
+
 // ***************************************************************************************
 //
 //		Co-opt the USB updating routine, which doesn't happen in the simulator, to 
@@ -21,6 +23,7 @@
 // ***************************************************************************************
 
 int USBUpdate(void) {
+	tick50HzHasFired = true;
 	return SYSPollUpdate();
 }
 

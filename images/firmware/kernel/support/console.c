@@ -27,7 +27,7 @@
 
 static inline void putpixel(uint x, uint y, uint rgb) {
 	struct DVIModeInformation *dmi = DVIGetModeInformation();  						// Identify mode data.
-
+	if (dmi == NULL) return;
 	uint8_t mask = 1u << (x % 8);  													// Mask from lower 8 bits.
 
 	for (uint component = 0; component < dmi->bitPlaneCount; ++component) {  		// Do each bitplane
@@ -69,14 +69,15 @@ void CONInitialise(void) {
 
 void CONWrite(char c) {
 	struct DVIModeInformation *dmi = DVIGetModeInformation();  						// Identify mode data.
+	if (dmi == NULL) return;
 
 	switch(c) {
 		case 12:  																	// Clear Screen.
 			for (uint x = 0; x < dmi->width; ++x)
 				for (uint y = 0; y < dmi->height; ++y)
 					putpixel(x, y, CON_COL_BLACK);			
-			fgcol = CON_COL_GREEN;	  												// Reset colours.
-			bgcol = CON_COL_BLACK;
+			//fgcol = CON_COL_GREEN;	  												// Reset colours.
+			//bgcol = CON_COL_BLACK;
 			x0 = y0 = 0;  															// Home cursor
 			break;
 		case 10:

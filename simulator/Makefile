@@ -62,3 +62,6 @@ prebuild:
 
 	rm -f source/__usercode
 	ln -s $(KERNELDIR)user_code source/__usercode
+
+	rm -f source/__support
+	ln -s $(KERNELDIR)support source/__support
