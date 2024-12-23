@@ -13,7 +13,7 @@ include ../build_env/common.make
 
 APPNAME = artsim
 
-SOURCE1 = $(shell find source -name "*.c")
+SOURCE1 = $(shell find -L source -name "*.c")
 
 SOURCES = $(SOURCE1)
 OBJECTS = $(subst .c,.o,$(SOURCES))
@@ -61,3 +61,6 @@ clean:
 prebuild:
 	rm -f __include_x
 	ln -s $(KERNELDIR)include __include_x
+
+	rm -f source/__usercode
+	ln -s $(KERNELDIR)user_code source/__usercode

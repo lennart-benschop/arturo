@@ -20,5 +20,4 @@ void TMRStartTickInterrupt(void);
 //
 //		Synchronisation method.
 //
-#define SYNC() 		{}
 #endif

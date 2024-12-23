@@ -94,7 +94,6 @@ void TESTApplication(void) {
             TICK50_RESET();                                                         // Reset the tick flag
             USBUpdate();                                                            // Update USB
             KBDCheckTimer();                                                        // Check for keyboard repeat
-            SYNC();                                                                 // External Sync
             
             int x,y,b,w;
             MSEGetState(&x,&y,&b,&w);
