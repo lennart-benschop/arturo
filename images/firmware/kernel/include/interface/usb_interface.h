@@ -13,6 +13,6 @@
 #ifndef _USB_INTERFACE_H
 #define _USB_INTERFACE_H
 
-void USBUpdate(void);
+int USBUpdate(void);
 
 #endif

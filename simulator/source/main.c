@@ -10,11 +10,16 @@
 // *******************************************************************************************************************************
 
 #include "common.h"
+#include "artsim.h"
+
+int USBUpdate(void) {
+	return GFXRunMainLoop();
+}
 
 int main(int argc,char *argv[]) {
-//	GFXOpenWindow(WIN_TITLE,WIN_WIDTH,WIN_HEIGHT,WIN_BACKCOLOUR);
-//	GFXStart();
-//	GFXCloseWindow();
+	GFXOpenWindow();
+	TESTApplication();
+	GFXCloseWindow();
 	printf("Building.\n");
 	return(0);
 }
