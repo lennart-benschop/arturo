@@ -10,7 +10,6 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-
 #ifndef _ARTSIM_H
 #define _ARTSIM_H
 
@@ -25,6 +24,8 @@ void SYSOpen(void);
 int SYSPollUpdate(void);
 void SYSClose(void);
 void SYSRectangle(SDL_Rect *rc,int colour);
+
+void RNDRender(SDL_Surface *surface);
 int TMRRead(void);
 
 #endif

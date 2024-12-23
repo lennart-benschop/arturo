@@ -80,14 +80,9 @@ int SYSPollUpdate(void) {
 			isRunning = 0;
 		}
 	}
-	// Joke Rendering.
-	static int n = 0xF70;
-	SDL_Rect rc;rc.x = rc.y = 5;rc.w = 630*2;rc.h = 470*2;
-	SYSRectangle(&rc,(n++) & 0xFFF);
 	frameCount++;
-
-	// int render = GFXXRender(mainSurface);											// Ask app to render state
-	if (/*render||*/true) SDL_UpdateWindowSurface(mainWindow);								// And update the main window.	
+	RNDRender(mainSurface);
+	SDL_UpdateWindowSurface(mainWindow);											// And update the main window.	
 	return isRunning;
 }
 
