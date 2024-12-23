@@ -1,18 +1,23 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//      Name :      sound.h
-//      Authors :   Paul Robson (paul@robsons.org.uk)
-//      Date :      19th December 2024
-//      Reviewed :  No
-//      Purpose :   Sound interface headers
+//		Name : 		dvi_common.h
+//		Author :	Paul Robson (paul@robsons.org.uk)
+//		Date : 		18th December 2024
+//		Reviewed :	No
+//		Purpose :	Common values, DVI driver (internal)
 //
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _SOUND_H
-#define _SOUND_H
+#ifndef _DVI_COMMONI_H
+#define _DVI_COMMONI_H
+//
+//		PicoDVI Configuration
+//
+#define VREG_VSEL VREG_VOLTAGE_1_20
+#define DVI_TIMING dvi_timing_640x480p_60hz
 
-int SNDGetSampleFrequency(void);
+void DVIStart(void);
 
 #endif

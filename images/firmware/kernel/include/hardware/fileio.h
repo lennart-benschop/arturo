@@ -37,9 +37,6 @@ typedef struct _FIO_Information {
 	bool isDirectory;  																// True if directory	
 } FIOInfo;
 
-void FIOInitialise(void);
-
-
 int FIOOpen(const char *fileName);
 int FIOOpenRead(const char *fileName);
 int FIOOpenDirectory(const char *dirName);

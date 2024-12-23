@@ -1,18 +1,21 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//      Name :      sound.h
+//      Name :      mouse.h
 //      Authors :   Paul Robson (paul@robsons.org.uk)
-//      Date :      19th December 2024
+//      Date :      20th December 2024
 //      Reviewed :  No
-//      Purpose :   Sound interface headers
+//      Purpose :   Mouse interface header (internal)
 //
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _SOUND_H
-#define _SOUND_H
+#ifndef _MOUSEI_H
+#define _MOUSEI_H
 
-int SNDGetSampleFrequency(void);
+void MSEInitialise(void);
+void MSEEnableMouse(void);
+void MSEUpdateScrollWheel(int8_t ds);
+void MSEUpdateButtonState(uint8_t bs);
 
 #endif

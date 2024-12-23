@@ -1,18 +1,21 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//      Name :      sound.h
-//      Authors :   Paul Robson (paul@robsons.org.uk)
-//      Date :      19th December 2024
-//      Reviewed :  No
-//      Purpose :   Sound interface headers
+//		Name : 		miscellany.h
+//		Author :	Paul Robson (paul@robsons.org.uk)
+//		Date : 		18th December 2024
+//		Reviewed :	No
+//		Purpose :	Odds and sods (internal)
 //
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _SOUND_H
-#define _SOUND_H
+#ifndef _MISCELLANYI_H
+#define _MISCELLANYI_H
 
-int SNDGetSampleFrequency(void);
+//
+//		Timer/Interrupt functions.
+//
+void TMRStartTickInterrupt(void);
 
 #endif

@@ -1,30 +1,24 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//		Name : 		miscellany.h
+//		Name : 		keyboard.h
 //		Author :	Paul Robson (paul@robsons.org.uk)
 //		Date : 		18th December 2024
 //		Reviewed :	No
-//		Purpose :	Odds and sods
+//		Purpose :	Keyboard full driver, decoding, autorepeat (internal)
 //
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _MISCELLANY_H
-#define _MISCELLANY_H
+#ifndef _KEYBOARDI_H
+#define _KEYBOARDI_H
 
 //
-//		Timer/Interrupt functions.
+//		If this constant is set to non-zero, the full keyboard decoding is used. Otherwise
+//		the user can handle the Keyboard events from the usb driver themselves.
 //
-uint32_t TMRRead(void);
-//
-//		Set every 20ms
-//
-extern bool tick50HzHasFired;
-//
-//		Macros for detecting the tick and resetting it.
-//
-#define HASTICK50_FIRED()	(tick50HzHasFired)
-#define TICK50_RESET() 		{ tick50HzHasFired = false; }
+#if  	ARTURO_PROCESS_KEYS != 0
+#define USBKeyboardEvent(x,y,z) KBDReceiveEvent(x,y,z)
+#endif
 
 #endif

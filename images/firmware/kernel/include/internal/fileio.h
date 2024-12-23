@@ -1,18 +1,19 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//      Name :      sound.h
-//      Authors :   Paul Robson (paul@robsons.org.uk)
-//      Date :      19th December 2024
-//      Reviewed :  No
-//      Purpose :   Sound interface headers
+//		Name : 		fileio.h
+//		Author :	Paul Robson (paul@robsons.org.uk)
+//		Date : 		21st December 2024
+//		Reviewed :	No
+//		Purpose :	File I/O Header (internal)
 //
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _SOUND_H
-#define _SOUND_H
 
-int SNDGetSampleFrequency(void);
+#ifndef _FILEIOI_H
+#define _FILEIOI_H
+
+void FIOInitialise(void);
 
 #endif

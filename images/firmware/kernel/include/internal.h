@@ -1,30 +1,26 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//		Name : 		miscellany.h
+//		Name : 		internal.h
 //		Author :	Paul Robson (paul@robsons.org.uk)
-//		Date : 		18th December 2024
+//		Date : 		23rd December 2024
 //		Reviewed :	No
-//		Purpose :	Odds and sods
+//		Purpose :	Internal header file.
 //
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _MISCELLANY_H
-#define _MISCELLANY_H
+#ifndef _INTERNAL_H
+#define _INTERNAL_H
 
-//
-//		Timer/Interrupt functions.
-//
-uint32_t TMRRead(void);
-//
-//		Set every 20ms
-//
-extern bool tick50HzHasFired;
-//
-//		Macros for detecting the tick and resetting it.
-//
-#define HASTICK50_FIRED()	(tick50HzHasFired)
-#define TICK50_RESET() 		{ tick50HzHasFired = false; }
+#include "internal/mouse.h"
+#include "internal/sound.h"
+#include "internal/dvi_common.h"
+#include "internal/fileio.h"
+#include "internal/gamepad.h"
+#include "internal/gamepad_drivers.h"
+#include "internal/miscellany.h"
+#include "internal/usb_interface.h"
+#include "internal/keyboard.h"
 
 #endif

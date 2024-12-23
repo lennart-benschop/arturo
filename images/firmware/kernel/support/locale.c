@@ -21,7 +21,7 @@ static bool _LOCMatchModifiers(uint8_t modState,uint8_t modRequired);
 // ***************************************************************************************
 
 static const uint8_t _KBDLocaleData[] = {
-	#include "data/__locale.h"
+	#include "support/__locale.h"
 };
 
 static const uint8_t *_KBDLocaleCurrent = NULL;

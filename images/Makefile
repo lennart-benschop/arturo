@@ -28,7 +28,7 @@ always:
 # ***************************************************************************************
 
 CONFIG_OUT_FILE = firmware/kernel/include/data/__config.h
-LOCALE_OUT_FILE = ../include/data/__locale.h
+LOCALE_OUT_FILE = ../include/support/__locale.h
 
 prelim: $(CONFIG_OUT_FILE)
 	mkdir -p $(BINDIR)

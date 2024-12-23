@@ -13,15 +13,18 @@
 #ifndef _COMMON_H
 #define _COMMON_H
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <ctype.h>
 #include <string.h>
-
 #include <malloc.h>
 
 #include "pico/stdlib.h"
+
+#include "support.h"
+
 #include "pico/multicore.h"
 #include "hardware/clocks.h"
 #include "hardware/irq.h"
@@ -31,20 +34,16 @@
 #include "hardware/watchdog.h"
 #include "hardware/pwm.h"
 #include "hardware/gamepad.h"
-#include "hardware/gamepad_drivers.h"
 
 #include "data/__config.h"
 
 #include "hardware/dvi_common.h"
-#include "hardware/kbd_codes.h"
-#include "hardware/usb_interface.h"
 #include "hardware/miscellany.h"
 #include "hardware/sound.h"
 #include "hardware/mouse.h"
 #include "hardware/fileio.h"
 
-#include "support.h"
-
+#include "internal.h"
 
 //
 //		Note: this is a MACRO (#define) set up in config.make

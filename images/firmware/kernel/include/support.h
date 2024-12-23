@@ -13,6 +13,14 @@
 #ifndef _SUPPORT_H
 #define _SUPPORT_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <ctype.h>
+#include <string.h>
+#include <malloc.h>
+
+#include "support/kbd_codes.h"
 #include "support/console.h"
 #include "support/miscellany.h"
 #include "support/keyboard.h"

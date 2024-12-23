@@ -13,11 +13,6 @@
 #ifndef _DVI_COMMON_H
 #define _DVI_COMMON_H
 //
-//		PicoDVI Configuration
-//
-#define VREG_VSEL VREG_VOLTAGE_1_20
-#define DVI_TIMING dvi_timing_640x480p_60hz
-//
 //		Structure for mode information.
 //
 #define DVI_MODE_640_480_8 		(0)   												// Modes.
@@ -40,7 +35,6 @@ struct DVIModeInformation {
 	int userMemorySize; 															// Byts of user memory.
 };
 
-void DVIStart(void);
 void DVISetMode(int mode);
 struct DVIModeInformation *DVIGetModeInformation(void);
 
