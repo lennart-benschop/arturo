@@ -17,4 +17,5 @@ images/build/*
 memory.dump
 bin/*
 __*
+__*/
 CMakeCache.txt

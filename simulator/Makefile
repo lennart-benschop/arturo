@@ -13,11 +13,14 @@ include ../build_env/common.make
 
 APPNAME = artsim
 
-SOURCES = source/main.o
+SOURCE1 = $(shell find source -name "*.c")
 
-INCLUDES = -I include
+SOURCES = $(SOURCE1)
+OBJECTS = $(subst .c,.o,$(SOURCES))
+INCLUDES = -I include -I __include_x
 
 TGTBIN = $(BINDIR)$(APPNAME)
+KERNELDIR = $(ROOTDIR)images/firmware/kernel/
 
 CC = gcc
 SDL_CFLAGS = $(shell sdl2-config --cflags)
@@ -35,8 +38,8 @@ build : prebuild $(TGTBIN)
 run : build
 	$(TGTBIN)
 
-$(TGTBIN): $(SOURCES)
-	$(CC) $(SOURCES) $(LDFLAGS) $(SDL_LDFLAGS) -o $@
+$(TGTBIN): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) $(SDL_LDFLAGS) -o $@
 
 %.o:%.c
 	$(CC) $(CADDRESSES) $(CFLAGS) $(SDL_CFLAGS) $(INCLUDES) -c -o $@ $<
@@ -56,3 +59,5 @@ clean:
 # ***************************************************************************************
 
 prebuild:
+	rm -f __include_x
+	ln -s $(KERNELDIR)include __include_x

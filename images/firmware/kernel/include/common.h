@@ -20,10 +20,13 @@
 #include <string.h>
 #include <malloc.h>
 
+//
+//		Used building for the PICO
+//
+#ifdef PICO
+#include "ff.h"
+#include "data/__config.h"
 #include "pico/stdlib.h"
-
-#include "support.h"
-
 #include "pico/multicore.h"
 #include "hardware/clocks.h"
 #include "hardware/irq.h"
@@ -32,17 +35,25 @@
 #include "hardware/vreg.h"
 #include "hardware/watchdog.h"
 #include "hardware/pwm.h"
-#include "hardware/gamepad.h"
+#else
+//
+//		Outside that we use standard libraries.
+//
+#include <stdint.h>
+#include <stdbool.h>
+#endif
 
-#include "data/__config.h"
+#include "interface/gamepad.h"
+#include "interface/dvi_common.h"
+#include "interface/miscellany.h"
+#include "interface/sound.h"
+#include "interface/mouse.h"
+#include "interface/fileio.h"
 
-#include "hardware/dvi_common.h"
-#include "hardware/miscellany.h"
-#include "hardware/sound.h"
-#include "hardware/mouse.h"
-#include "hardware/fileio.h"
-
+#ifdef PICO
 #include "internal.h"
+#endif
+#include "support.h"
 
 //
 //		Note: this is a MACRO (#define) set up in config.make

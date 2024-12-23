@@ -17,8 +17,6 @@
 #include "common_dvi_pin_configs.h"
 #include "tmds_encode.h"
 
-#include "hardware/dvi_common.h"
-
 struct dvi_serialiser_cfg *DVIGetHDMIConfig(void);
 
 // ***************************************************************************************

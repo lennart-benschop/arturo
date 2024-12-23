@@ -16,9 +16,6 @@
 #include "dvi_serialiser.h"
 #include "common_dvi_pin_configs.h"
 
-#include "hardware/dvi_common.h"
-
-
 // ***************************************************************************************
 //
 //					Neo6502 / RP2040PC Serialiser & Access function
