@@ -109,6 +109,7 @@ void __not_in_flash("main") dvi_core1_main() {
 		for (int b = 0;b < 8;b++) {
 			if (i & (1 << b)) _mapping[i] |= (3 << (b*2));
 		}
+		_mapping[i] = (_mapping[i] >> 8) | (_mapping[i] << 8);
 	}
 
 	while (true) {
