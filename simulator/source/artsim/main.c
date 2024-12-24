@@ -28,6 +28,7 @@ int USBUpdate(void) {
 }
 
 int main(int argc,char *argv[]) {
+	CONInitialise();
 	SYSOpen();
 	TESTApplication();
 	SYSClose();

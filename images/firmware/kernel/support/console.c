@@ -28,7 +28,7 @@
 static inline void putpixel(uint x, uint y, uint rgb) {
 	struct DVIModeInformation *dmi = DVIGetModeInformation();  						// Identify mode data.
 	if (dmi == NULL) return;
-	uint8_t mask = 1u << (x % 8);  													// Mask from lower 8 bits.
+	uint8_t mask = 0x80 >> (x % 8);  												// Mask from lower 8 bits.
 
 	for (uint component = 0; component < dmi->bitPlaneCount; ++component) {  		// Do each bitplane
 		uint8_t *idx = (x / 8) + y * dmi->bytesPerLine + dmi->bitPlane[component]; 	// Work out byte.
@@ -79,6 +79,7 @@ void CONWrite(char c) {
 			fgcol = CON_COL_WHITE;													// Reset colours.
 			bgcol = CON_COL_BLACK;
 			x0 = y0 = 0;  															// Home cursor
+			for (int i = 0;i < 240;i++) putpixel(i,i,i & 7);
 			break;
 		case 10:
 		case 13:  																	// New line
@@ -98,8 +99,9 @@ void CONWrite(char c) {
 			if (c >= FONT_FIRST_ASCII && c < FONT_FIRST_ASCII+FONT_N_CHARS) {  		// ASCII character set.
 				for (int y = y0; y < y0 + 8; ++y) {
 					uint8_t font_bits = font_8x8[(c - FONT_FIRST_ASCII) * FONT_CHAR_HEIGHT+y-y0];
-					for (int i = 0; i < 8; ++i)
-						putpixel(x0 + i, y, font_bits & (1u << i) ? fgcol : bgcol);
+					for (int i = 0; i < 8; ++i) {
+						putpixel(x0 + i, y, font_bits & (1 << i) ? fgcol : bgcol);
+						}						
 					}
 				x0 = x0 + 8;
 				if (x0 == dmi->width) CONWrite(13);

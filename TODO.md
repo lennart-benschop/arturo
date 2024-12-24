@@ -1,5 +1,7 @@
 # TODO stuff
 
+- Reverse the main display.
+
 - "Emulator"
 	- Implement the display part.
 	- Check the speed
