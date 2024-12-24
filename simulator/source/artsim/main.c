@@ -28,6 +28,7 @@ int USBUpdate(void) {
 }
 
 int main(int argc,char *argv[]) {
+	DVISetMode(DVI_MODE_640_240_8);
 	CONInitialise();
 	KBDReceiveEvent(0,0xFF,0);
 	SYSOpen();
