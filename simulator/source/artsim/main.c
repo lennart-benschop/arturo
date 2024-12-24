@@ -29,6 +29,7 @@ int USBUpdate(void) {
 
 int main(int argc,char *argv[]) {
 	CONInitialise();
+	KBDReceiveEvent(0,0xFF,0);
 	SYSOpen();
 	TESTApplication();
 	SYSClose();

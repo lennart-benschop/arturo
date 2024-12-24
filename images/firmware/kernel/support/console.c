@@ -94,8 +94,7 @@ void CONWrite(char c) {
 			}
 			break;
 
-		default:
-			fgcol = c % 7 + 1;  													// A hack to show the colours :)
+		default:			
 			if (c >= FONT_FIRST_ASCII && c < FONT_FIRST_ASCII+FONT_N_CHARS) {  		// ASCII character set.
 				for (int y = y0; y < y0 + 8; ++y) {
 					uint8_t font_bits = font_8x8[(c - FONT_FIRST_ASCII) * FONT_CHAR_HEIGHT+y-y0];

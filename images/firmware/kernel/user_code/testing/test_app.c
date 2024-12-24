@@ -94,9 +94,9 @@ void TESTApplication(void) {
             CONWriteString("Escape !\r");
         }
 
-        if (HASTICK50_FIRED()) {                                                    // Time to do a 50Hz tick.
+        if (HASTICK50_FIRED()) {                                                    // Time to do a 50Hz tick (Don't use this for timing !)
             TICK50_RESET();                                                         // Reset the tick flag
-            if (USBUpdate() == 0) return;                                              // Update USB
+            if (USBUpdate() == 0) return;                                           // Update USB
             KBDCheckTimer();                                                        // Check for keyboard repeat
             
          int x,y,b,w;
