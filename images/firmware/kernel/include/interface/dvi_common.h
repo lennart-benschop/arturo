@@ -15,8 +15,9 @@
 //
 //		Structure for mode information.
 //
-#define DVI_MODE_640_480_8 		(0)   												// Modes.
+#define DVI_MODE_640_240_8 		(0)   												// Modes.
 #define DVI_MODE_320_240_8		(1)
+#define DVI_MODE_320_480_8		(2)
 
 //
 //		DVI Mode information structure
@@ -31,11 +32,9 @@ struct DVIModeInformation {
 	int bytesPerLine;  																// Bytes per line of display.
 	uint8_t *bitPlane[DVI_MAX_BITPLANES]; 											// Up to 8 bitplanes	
 	int bitPlaneSize;  																// Byte size of each bitplane.
-	void *userMemory;  																// Any available RAM, NULL if none.
-	int userMemorySize; 															// Byts of user memory.
 };
 
-void DVISetMode(int mode);
+bool DVISetMode(int mode);
 struct DVIModeInformation *DVIGetModeInformation(void);
 
 #endif

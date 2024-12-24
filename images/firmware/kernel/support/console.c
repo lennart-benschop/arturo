@@ -48,8 +48,8 @@ static inline void putpixel(uint x, uint y, uint rgb) {
 
 static uint x0 = 0;  																// Posiiton in pixels
 static uint y0 = 0;
-static uint fgcol = CON_COL_YELLOW;  												// Text colour
-static uint bgcol = CON_COL_RED;
+static uint fgcol = CON_COL_WHITE;  												// Text colour
+static uint bgcol = CON_COL_BLACK;
 
 // ***************************************************************************************
 //
@@ -76,8 +76,8 @@ void CONWrite(char c) {
 			for (uint x = 0; x < dmi->width; ++x)
 				for (uint y = 0; y < dmi->height; ++y)
 					putpixel(x, y, CON_COL_BLACK);			
-			//fgcol = CON_COL_GREEN;	  												// Reset colours.
-			//bgcol = CON_COL_BLACK;
+			fgcol = CON_COL_WHITE;													// Reset colours.
+			bgcol = CON_COL_BLACK;
 			x0 = y0 = 0;  															// Home cursor
 			break;
 		case 10:
@@ -94,6 +94,7 @@ void CONWrite(char c) {
 			break;
 
 		default:
+			fgcol = c % 7 + 1;  													// A hack to show the colours :)
 			if (c >= FONT_FIRST_ASCII && c < FONT_FIRST_ASCII+FONT_N_CHARS) {  		// ASCII character set.
 				for (int y = y0; y < y0 + 8; ++y) {
 					uint8_t font_bits = font_8x8[(c - FONT_FIRST_ASCII) * FONT_CHAR_HEIGHT+y-y0];
