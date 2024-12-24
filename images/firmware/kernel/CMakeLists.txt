@@ -44,6 +44,7 @@ target_compile_definitions(kernel PRIVATE
 	DVI_DEFAULT_SERIAL_CONFIG=${DVI_DEFAULT_SERIAL_CONFIG}
 	DVI_VERTICAL_REPEAT=1
 	DVI_N_TMDS_BUFFERS=3
+	DVI_1BPP_BIT_REVERSE=1
 	)
 
 target_link_libraries(kernel
