@@ -58,13 +58,22 @@ bool DVISetMode(int mode) {
 
 	switch(mode) {
 
-		case DVI_MODE_640_240_8: 													// 640x240x8 information.
+		case DVI_MODE_640_240_8: 													// 640x240x8 information.			
 			dvi_modeInfo.width = 640;dvi_modeInfo.height = 240;
 			dvi_modeInfo.bitPlaneCount = 3;
 			dvi_modeInfo.bitPlaneSize = PLANE_SIZE_BYTES;
 			dvi_modeInfo.bitPlaneDepth = 1;
 			for (int i = 0;i <dvi_modeInfo.bitPlaneCount;i++)
 				dvi_modeInfo.bitPlane[i] = framebuf + PLANE_SIZE_BYTES * i;
+			dvi_modeInfo.bytesPerLine = dvi_modeInfo.width / 8;  					// Calculate bytes per line.
+			break;
+
+		case DVI_MODE_640_480_2: 													// 640x480x2 information.			
+			dvi_modeInfo.width = 640;dvi_modeInfo.height = 480;
+			dvi_modeInfo.bitPlaneCount = 1;
+			dvi_modeInfo.bitPlaneSize = PLANE_SIZE_BYTES;
+			dvi_modeInfo.bitPlaneDepth = 1;
+			dvi_modeInfo.bitPlane[0] = framebuf;
 			dvi_modeInfo.bytesPerLine = dvi_modeInfo.width / 8;  					// Calculate bytes per line.
 			break;
 
@@ -152,6 +161,21 @@ void __not_in_flash("main") dvi_core1_main() {
 					queue_add_blocking_u32(&dvi0.q_tmds_valid, &tmdsbuf);
 					break;
 
+				//
+				//		Mode 2 is 640x480x1 colour as 1 bitplanes.
+				//
+				case DVI_MODE_640_480_2:
+					queue_remove_blocking_u32(&dvi0.q_tmds_free, &tmdsbuf);
+					for (uint component = 0; component < 3; ++component) {
+						tmds_encode_1bpp(
+							(const uint32_t*)(framebuf+y*640/8),
+							tmdsbuf + (2-component) * FRAME_WIDTH / DVI_SYMBOLS_PER_WORD,  	// The (2-x) here makes it BGR Acordn standard
+							FRAME_WIDTH
+						);
+					}
+					queue_add_blocking_u32(&dvi0.q_tmds_valid, &tmdsbuf);
+					break;
+
 				default:
 					break;
 			}
@@ -167,6 +191,7 @@ void __not_in_flash("main") dvi_core1_main() {
 void DVIStart(void) {
 	DVISetMode(DVI_MODE_640_240_8);
 	//DVISetMode(DVI_MODE_320_240_8);
+	//DVISetMode(DVI_MODE_640_480_1);
 
 	vreg_set_voltage(VREG_VSEL);  													// Set CPU voltage
 	sleep_ms(10);  																	// Let it settle for 0.01s

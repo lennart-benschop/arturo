@@ -40,9 +40,9 @@ ARTURO_PROCESS_KEYS = 1
 #
 #		If non-zero, use mono sound (e.g. combine the two RP2040PC channels into one)
 #
-ARTURO_MONO_SOUND = 0
+ARTURO_MONO_SOUND = 1
 #
-#		Set the Locale, the list is in the locale directory
+#		Set the default locale, the list is in the locale directory
 #
 ARTURO_KBD_LOCALE = "gb"
 

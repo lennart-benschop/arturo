@@ -55,6 +55,11 @@ struct DVIModeInformation *DVIGetModeInformation(void) {
 			dvi_modeInfo.width = 320;dvi_modeInfo.height = 240;
 			dvi_modeInfo.bitPlaneSize = sizeof(redPlane);
 			break;
+		case DVI_MODE_640_480_2:  													// 640x480x2 information.
+			dvi_modeInfo.width = 640;dvi_modeInfo.height = 480;
+			dvi_modeInfo.bitPlaneSize = sizeof(redPlane);
+			dvi_modeInfo.bitPlaneCount = 2;
+			break;
 		default:
 			dvi_modeInfo.mode = -1;  												// Failed.
 	}
@@ -84,7 +89,9 @@ void RNDRender(SDL_Surface *surface) {
 			rc.x = x*rc.w;
 			r = *pr++;g = *pg++;b = *pb++;
 			for (int bt = 0;bt < 8;bt++) {
-				SYSRectangle(&rc,palette[((r & 0x80) >> 7)+((g & 0x80) >> 6)+((b & 0x80) >> 5)]);
+				uint8_t c = ((r & 0x80) >> 7)+((g & 0x80) >> 6)+((b & 0x80) >> 5);
+				if (dm->bitPlaneCount == 1) c = (r & 0x80) ? 7 : 0;
+				SYSRectangle(&rc,palette[c]);
 				r <<= 1;g <<= 1;b <<= 1;
 				rc.x += rc.w;
 			}

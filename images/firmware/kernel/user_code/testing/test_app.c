@@ -123,11 +123,13 @@ void TESTApplication(void) {
 static int count = 0;
 
 int8_t TESTApplication_GetSample(int channel) {
-//     count++;
-//     if (channel == 1) {  															// Noise channel.
+    count++;
+    if (channel == 0) {                                                             // Square wave on left channel.
+        int toggleRate = SNDGetSampleFrequency() / (440*2);                         // 440Hz is A
+        return ((count/toggleRate) & 1) ? -127:127;
+    }
+    if (channel == 1) {  															// Noise on right channel if supported
          return rand() & 0xFF;
-//     } else {
-//         int toggleRate = SNDGetSampleFrequency() / 440;                             // 440Hz is A
-//         return ((count/toggleRate) & 1) ? -127:127;
-//     }
+    } 
+    return 0; 
 }

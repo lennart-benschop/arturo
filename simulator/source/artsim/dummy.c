@@ -20,3 +20,6 @@ int  CTLControllerCount(void) {
 	return 0;
 }
 
+int SNDGetSampleFrequency(void) {
+	return 22000;
+}
