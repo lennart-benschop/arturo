@@ -100,8 +100,9 @@ void TESTApplication(void) {
             KBDCheckTimer();                                                        // Check for keyboard repeat
             
              int x,y,b,w;
-             //MSEGetState(&x,&y,&b,&w);
-             //CONWriteString("Mouse:%d %d %d %d\r",x,y,b,w);                        // Uncomment to show it
+             MSEGetState(&x,&y,&b,&w);
+             if (b != 0) CONWriteString("Mouse:%d %d %d %d\r",x,y,b,w);              // Show mouse if button pressed
+             
              if (CTLControllerCount() != 0) {                                        // Show controller state if anything pressed.
                 CTLState *c = CTLReadController(0);
                 if (c->dx != 0 || c->dy != 0 || c->a || c->b || c->x || c->y) {
