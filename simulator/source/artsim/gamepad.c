@@ -35,22 +35,28 @@ int CTLControllerCount(void) {
 // *******************************************************************************************************************************
 
 CTLState *CTLReadController(int n) {
+	static CTLState state;
+	bool butState[4];
+	state.dx = state.dy = 0;
+	state.a = state.b = state.x = state.y = false;
+
 	Sint16 dx = SDL_JoystickGetAxis(controllers[n],0);
 	if (abs(dx) >= 1024) {
-//		bitPattern |= (dx < 0) ? 0x01:0x02;
+		state.dx = (dx < 0) ? -1 : 1;
 	}
 	Sint16 dy = SDL_JoystickGetAxis(controllers[n],1);
 	if (abs(dy) >= 1024) {
-//		bitPattern |= (dy < 0) ? 0x04:0x08;
+		state.dy = (dy < 0) ? -1 : 1;
+	}	
+	int buttons = SDL_JoystickNumButtons(controllers[n]);
+	for (int b = 0;b < 4;b++) {
+	 	butState[b] = (b >= buttons) ? false:SDL_JoystickGetButton(controllers[n],b);
 	}
-	// int buttons = SDL_JoystickNumButtons(controllers[n]);
-	// buttons = (buttons >= 4) ? 4 : buttons;
-	// for (int b = 0;b < buttons;b++) {
-	// 	if (SDL_JoystickGetButton(controllers[n],b)) {
-	// 		bitPattern |= (0x10 << b);
-	// 	}
-	// }
-	return NULL;
+	state.a = butState[1];
+	state.b = butState[2];
+	state.x = butState[0];
+	state.y = butState[3];
+	return &state;
 }
 
 // *******************************************************************************************************************************
@@ -68,7 +74,6 @@ void CTLFindControllers(void) {
     			exit(printf("Failed to open controller %d\n",i));
     		}
     		controllerCount++;
-    		printf("Found controller\n");
 		}
 	}
 	printf("%d controllers\n",controllerCount);

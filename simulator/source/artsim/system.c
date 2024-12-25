@@ -39,7 +39,7 @@ void SYSOpen(void) {
 
 	mainSurface = SDL_GetWindowSurface(mainWindow);									// Get a surface to draw on.
 
-	//GFXFindControllers();
+	CTLFindControllers();
 	//_GFXInitialiseKeyRecord();													// Set up key system.
 	// SOUNDOpen();
 	// SOUNDPlay();

@@ -26,9 +26,10 @@ int  CTLDispatchMessage(int command,CTLState *cs,struct _CTL_MessageData *msg) {
 	//
 	switch(cs->_hardwareTypeID) {
 		//
-		//		SNES Compatible keypads. 0814:E401 is the Olimex one.
+		//		SNES Compatible keypads. 0814:E401 is the Olimex one. 0810:E501 is a "Personal Comms System Inc" gamepad.
 		//
 		case CTL_DEVICE_TYPE_ID(0x081F,0xE401):
+		case CTL_DEVICE_TYPE_ID(0x0810,0xE501):
 			retVal = CTLDriverSNESType(command,cs,msg);
 			break;
 		//
