@@ -60,7 +60,6 @@ void CTLAddController(uint8_t dev_addr,uint8_t instance,uint16_t vid,uint16_t pi
 		cs->_hardwareID = CTL_HARDWARE_ID(dev_addr,instance);  						// Store the hardware ID, and the type ID.
 		cs->_hardwareTypeID = CTL_DEVICE_TYPE_ID(vid,pid);
 		cs->dx = cs->dy = 0;cs->a = cs->b = cs->x = cs->y = false;   				// Reset the rest
-
 		if (CTLSendMessage(CTLM_REGISTER,cs->_hardwareID,NULL) == 0) { 				// Identify it, if failed remove from list.
 			controllerCount--;
 		}

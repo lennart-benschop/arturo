@@ -80,7 +80,7 @@ void TESTShowUSBRootDirectory(void) {
 void TESTApplication(void) {
     int n = 0;
     CONWriteString("\rTest App\r");                                                 // Exciting title
-    TESTShowUSBRootDirectory();
+    //TESTShowUSBRootDirectory();
     //
     //      A typical 'main'
     //
@@ -99,17 +99,16 @@ void TESTApplication(void) {
             if (USBUpdate() == 0) return;                                           // Update USB
             KBDCheckTimer();                                                        // Check for keyboard repeat
             
-         int x,y,b,w;
-         //MSEGetState(&x,&y,&b,&w);
-         //CONWriteString("Mouse:%d %d %d %d\r",x,y,b,w);                        // Uncomment to show it
-         if (CTLControllerCount() != 0) {                                        // Show controller state if anything pressed.
-            CTLState *c = CTLReadController(0);
-            if (c->dx != 0 || c->dy != 0 || c->a || c->b || c->x || c->y) {
-                CONWriteString("DX:%3d DY:%3d A:%d B:%d X:%d Y:%d\r",c->dx,c->dy,
-                                         c->a ? 1:0,c->b ? 1:0,c->x ? 1:0,c->y ? 1:0);
+             int x,y,b,w;
+             //MSEGetState(&x,&y,&b,&w);
+             //CONWriteString("Mouse:%d %d %d %d\r",x,y,b,w);                        // Uncomment to show it
+             if (CTLControllerCount() != 0) {                                        // Show controller state if anything pressed.
+                CTLState *c = CTLReadController(0);
+                if (c->dx != 0 || c->dy != 0 || c->a || c->b || c->x || c->y) {
+                    CONWriteString("DX:%3d DY:%3d A:%d B:%d X:%d Y:%d\r",c->dx,c->dy,
+                                             c->a ? 1:0,c->b ? 1:0,c->x ? 1:0,c->y ? 1:0);
+                    }
                 }
-            }
-            //CONWrite('_');
         }
     }
 }

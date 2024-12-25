@@ -36,13 +36,13 @@ int main() {
     CONWriteString("Arturo Kernel 0.0.1 in development\r\r",PICO_PLATFORM_NAME);// Prompt string.
     _showRAMAvailable();                                                        // Show RAM free.
     SNDInitialise(ARTURO_MONO_SOUND != 0);                                      // Start the sound system, seperate channels according to config.
+    MSEInitialise();                                                            // Initialise the mouse system
+    CTLInitialise();                                                            // Initialise the gamepad system
     USBInitialise();                                                            // Initialise keyboard & USB system.
     USBKeyboardEvent(0,0xFF,0);                                                 // Announce keyboard has been reset
     USBSynchronise();                                                           // Synchronise storage
     TMRStartTickInterrupt();                                                    // Start the tick interrupt.
     LOCSetLocale(ARTURO_KBD_LOCALE);                                            // Default Locale
-    MSEInitialise();                                                            // Initialise the mouse system
-    CTLInitialise();                                                            // Initialise the gamepad system
     FIOInitialise();                                                            // Initialise the file system.
     CONWriteString("Booting...\r");
     ARTURO_RUN_FUNCTION();                                                      // Run whatever (defined in config.make)
