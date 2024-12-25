@@ -15,6 +15,9 @@
 
 #include <common.h>
 #include <SDL.h>
+#include <unistd.h> 
+#include <sys/stat.h>
+#include <errno.h>
 
 #define AS_SCALE 	(2)
 

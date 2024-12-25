@@ -126,6 +126,7 @@ static int _FIOOpenGeneral(const char *name,char mode,bool isDirectory) {
 		file[h].isDir = false;  													// It's a file.
 		_FIOError(h,f_open(&file[h].fileHandle,name,(mode == 'R') ? 				// Try to open file, process the error.
 											FA_READ: FA_CREATE_ALWAYS | FA_READ | FA_WRITE));
+		if (file[h].error == FIO_OK) f_lseek(&file[h].fileHandle,0);
 
 	}
 	if (file[h].error == FIO_OK) file[h].isInUse = true;  							// Mark as in use if open went okay.

@@ -11,7 +11,6 @@
 // ***************************************************************************************
 
 #include "artsim.h"
-#include <errno.h>
 
 // ***************************************************************************************
 //
@@ -42,6 +41,13 @@ static struct _FIO_Object file[FIO_MAX_HANDLES];
 
 #define HANDLE_VALID(h) ((h) >= 0 && (h) < FIO_MAX_HANDLES)  						// Handle is a valid one (doesn't check in use)
 #define HANDLE_VALID_OPEN(h) (HANDLE_VALID(h) && file[h].isInUse) 					// Handle is valid *and* open.
+
+static char *_FIOMapName(const char *name) {
+	static char buffer[280];
+	strcpy(buffer,"storage/");
+	strcat(buffer,name);
+	return buffer;
+}
 
 // ***************************************************************************************
 //
@@ -116,17 +122,21 @@ static int _FIOOpenGeneral(const char *name,char mode,bool isDirectory) {
 	}
 	if (h < 0) return FIO_ERR_MAXFILES;  											// Too many files open.
 
+	char *mapname = _FIOMapName(name);  											// Actual name.
 	file[h].isReadOnly = (mode == 'R');  											// Set read-only flag.
 
 	if (isDirectory) {  															// Open directory
 		file[h].isDir = true;  														// It's a directory.
 		// _FIOError(h,f_opendir(&file[h].dirHandle,name)); 							// Try to open directory, process the error	
-		CONWriteString("Trying to open %s returned %d\r",name,file[h].fatfsError);	
 	} else {
 		file[h].isDir = false;  													// It's a file.
-		file[h].fileHandle = fopen(name,"w+"); 										// Try to open file, process the error.
+		struct stat fInfo;  														// Get the object status.
+		int err = stat(mapname,&fInfo); 
+		if (err != 0 && errno == ENOENT) {  										// Create file if doesn't exist.
+			FILE *f = fopen(mapname,"w");fclose(f);
+		}
+		file[h].fileHandle = fopen(mapname,"r+"); 									// Try to open file, process the error.
 		_FIOError(h,file[h].fileHandle == NULL);
-
 	}
 	if (file[h].error == FIO_OK) file[h].isInUse = true;  							// Mark as in use if open went okay.
 	return file[h].error < 0 ? file[h].error : h; 									// Return the error state or the handle.
@@ -177,9 +187,10 @@ int FIORead(int h,void *data,int size,int *pReadCount) {
 		// fOut->length = fInfo.fsize;  												// Set length, directory 
 		// fOut->isDirectory = (fInfo.fattrib & AM_DIR) != 0;
 	} else {  																		// File reading code.
-		UINT bytesRead;
+		int bytesRead;
 		if (pReadCount != 0) *pReadCount = 0;  										// Zero bytes read in case of error.
-		_FIOError(h,f_read(&file[h].fileHandle,data,size,&bytesRead));  			// Do the actual read.
+		bytesRead = fread(data,1,size,file[h].fileHandle);  						// Do the actual read.
+		_FIOError(h,bytesRead < 0);
 		if (file[h].error != FIO_OK) return file[h].error;  						// Read failed.
 		if (pReadCount != NULL) *pReadCount = bytesRead;   							// If read count provided, update that value.
 	}
@@ -197,8 +208,9 @@ int FIOWrite(int h,void *data,int size) {
 	if (file[h].isDir) return FIO_ERR_COMMAND;  									// Files only.
 	if (file[h].isReadOnly) return FIO_ERR_READONLY;  								// Opened in read mode.
 
-	UINT bytesWritten;	
-	_FIOError(h,f_write(&file[h].fileHandle,data,size,&bytesWritten));  			// Do the actual write
+	int bytesWritten;	
+	bytesWritten = fwrite(data,1,size,file[h].fileHandle);  						// Do the actual read.
+	_FIOError(h,bytesWritten != size);
 	if (file[h].error != FIO_OK) return file[h].error;  							// Write failed.	
 	if (bytesWritten != size) return FIO_ERR_SYSTEM;  								// Wrote insufficient data out.
 	return FIO_OK;
@@ -213,7 +225,7 @@ int FIOWrite(int h,void *data,int size) {
 int FIOEndOfFile(int h) {
 	if (!HANDLE_VALID_OPEN(h)) return FIO_ERR_HANDLE;  								// Check handle legal
 	if (file[h].isDir) return FIO_ERR_COMMAND;  									// Files only.
-	return (f_eof(&file[h].fileHandle) ? FIO_EOF : FIO_OK);  						// Return EOF or OK accordingly.
+	return (feof(file[h].fileHandle) ? FIO_EOF : FIO_OK);  							// Return EOF or OK accordingly.
 }
 
 // ***************************************************************************************
@@ -223,8 +235,9 @@ int FIOEndOfFile(int h) {
 // ***************************************************************************************
 
 int FIOCreateDirectory(const char *dirName) {
-	FRESULT err = f_mkdir(dirName);  												// Try to create directory
-	if (err == FR_EXIST) err = FR_OK;  												// Ignore already exist errors.
+	char *mapName = _FIOMapName(dirName);
+	int err = mkdir(mapName,0777); 													// Try to create directory
+	if (err != 0 && errno == EEXIST) return FIO_OK; 								// Ignore already exist errors.
 	return _FIO_MapError(err);
 }
 
@@ -235,7 +248,8 @@ int FIOCreateDirectory(const char *dirName) {
 // ***************************************************************************************
 
 int FIOChangeDirectory(const char *dirName) {
-	return _FIO_MapError(f_chdir(dirName));  												// Try to create directory
+	char *mapName = _FIOMapName(dirName);
+	return _FIO_MapError(chdir(mapName));  											// Try to create directory
 }
 // ***************************************************************************************
 //
@@ -244,9 +258,11 @@ int FIOChangeDirectory(const char *dirName) {
 // ***************************************************************************************
 
 int FIOExists(const char *name) {
-	FILINFO fInfo;  																// Get the object status.
-	FRESULT fr = f_stat(name,&fInfo); 
-	return _FIO_MapError(fr);  														// Return mapped error.
+	char *mapname = _FIOMapName(name);  											// Actual name.
+	struct stat fInfo;  															// Get the object status.
+	int err = stat(mapname,&fInfo); 
+	if (err != 0 && errno == ENOENT) return 0;  									// Return -1 if exists.
+	return -1;
 }
 
 // ***************************************************************************************
@@ -257,9 +273,10 @@ int FIOExists(const char *name) {
 // ***************************************************************************************
 
 int FIODelete(const char *name) {
-	FRESULT fr = f_unlink(name);  													// Try to delete it.
-	if (fr == FR_NO_FILE || fr == FR_NO_PATH) return FIO_OK;  						// Doesn't matter if it doesn't exist
-	return _FIO_MapError(fr);  														// Return mapped error.
+	char *mapname = _FIOMapName(name);  											// Actual name.
+	int err = unlink(mapname);  													// Try to delete it.
+	if (err != 0 && errno == ENOENT) return FIO_OK;  								// Doesn't matter if it doesn't exist
+	return _FIO_MapError(err); 														// Return mapped error.
 }
 
 // ***************************************************************************************
@@ -271,7 +288,8 @@ int FIODelete(const char *name) {
 int FIOSetPosition(int h,int pos) {
 	if (!HANDLE_VALID_OPEN(h)) return FIO_ERR_HANDLE;  								// Check handle legal
 	if (file[h].isDir) return FIO_ERR_COMMAND;  									// Files only.
-	_FIOError(h,f_lseek(&file[h].fileHandle,pos));  								// Move the position.
+	int e = fseek(file[h].fileHandle,pos,SEEK_SET); 								// Move the position.
+	_FIOError(h,e != 0);
 	if (file[h].error != FIO_OK) return file[h].error;  							// Failed
 	return 0;
 }
@@ -285,6 +303,6 @@ int FIOSetPosition(int h,int pos) {
 int FIOGetPosition(int h) {
 	if (!HANDLE_VALID_OPEN(h)) return FIO_ERR_HANDLE;  								// Check handle legal
 	if (file[h].isDir) return FIO_ERR_COMMAND;  									// Files only.
-	return f_tell(&file[h].fileHandle);												// Read the position.
+	return ftell(file[h].fileHandle);												// Read the position.
 }
 

@@ -19,7 +19,6 @@
 // ***************************************************************************************
 
 void TESTShowUSBRootDirectory(void) {
-    #ifdef PICO
 
     int h,e,count;
     FIOInfo info;
@@ -51,7 +50,7 @@ void TESTShowUSBRootDirectory(void) {
     while (FIOEndOfFile(h) == 0) {
         char c = 0;
         e = FIORead(h,&c,1,&count);
-        CONWriteString("%d.%c ",c,c);
+        CONWriteString("Char %d.%c\r",c,c);
     }
     e = FIOClose(h);
     CONWriteString("Close %d\r",e);
@@ -64,11 +63,11 @@ void TESTShowUSBRootDirectory(void) {
     for (int i = 0;i < 10;i++) CONWriteString("%d ",buffer[i]);
     CONWriteString("\n");
 
+    s = "binary.bas";CONWriteString("%s %d\r",s,FIOExists(s));
     s = "aadir";CONWriteString("%s %d\r",s,FIOExists(s));
     s = "abdir";CONWriteString("%s %d\r",s,FIOExists(s));
-    s = "binary.bas";CONWriteString("%s %d\r",s,FIOExists(s));
+    s = "inline.bsc";CONWriteString("%s %d\r",s,FIOExists(s));
 
-    #endif
 }
 
 // ***************************************************************************************
@@ -80,7 +79,7 @@ void TESTShowUSBRootDirectory(void) {
 void TESTApplication(void) {
     int n = 0;
     CONWriteString("\rTest App\r");                                                 // Exciting title
-    //TESTShowUSBRootDirectory();
+    TESTShowUSBRootDirectory();
     //
     //      A typical 'main'
     //
@@ -123,6 +122,7 @@ void TESTApplication(void) {
 static int count = 0;
 
 int8_t TESTApplication_GetSample(int channel) {
+    return 0;
     count++;
     if (channel == 0) {                                                             // Square wave on left channel.
         int toggleRate = SNDGetSampleFrequency() / (440*2);                         // 440Hz is A

@@ -9,7 +9,6 @@
 *.uf2
 *.o
 *.obj
-
 __pycache__/*
 __pycache__
 build/*
@@ -19,3 +18,4 @@ bin/*
 __*
 __*/
 CMakeCache.txt
+simulator/storage/*
