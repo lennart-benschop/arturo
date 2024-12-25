@@ -43,7 +43,7 @@ int main() {
     USBSynchronise();                                                           // Synchronise storage
     TMRStartTickInterrupt();                                                    // Start the tick interrupt.
     LOCSetLocale(ARTURO_KBD_LOCALE);                                            // Default Locale
-    FIOInitialise();                                                            // Initialise the file system.
+    FSYSInitialise();                                                           // Initialise the file system (core)
     CONWriteString("Booting...\r");
     ARTURO_RUN_FUNCTION();                                                      // Run whatever (defined in config.make)
 }

@@ -25,5 +25,6 @@
 #include "support/miscellany.h"
 #include "support/keyboard.h"
 #include "support/control_codes.h"
+#include "support/fileio.h"
 
 #endif

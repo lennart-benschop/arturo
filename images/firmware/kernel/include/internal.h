@@ -15,7 +15,6 @@
 
 #include "internal/sound.h"
 #include "internal/dvi_common.h"
-#include "internal/fileio.h"
 #include "internal/gamepad.h"
 #include "internal/gamepad_drivers.h"
 #include "internal/miscellany.h"
