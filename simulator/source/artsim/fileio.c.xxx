@@ -3,14 +3,15 @@
 //
 //		Name : 		fileio.c
 //		Author :	Paul Robson (paul@robsons.org.uk)
-//		Date : 		21st December 2024
+//		Date : 		25th December 2024
 //		Reviewed :	No
-//		Purpose :	File I/O mapping.
+//		Purpose :	File I/O mapping (heavily based on fileio.c in hardware)
 //
 // ***************************************************************************************
 // ***************************************************************************************
 
-#include "common.h"
+#include "artsim.h"
+#include <errno.h>
 
 // ***************************************************************************************
 //
@@ -24,9 +25,9 @@ struct _FIO_Object {
 	bool isDir;  																	// true if this is a directory.
 	bool isReadOnly;  																// true if read only
 
-	FRESULT fatfsError;  															// Recorded fatFS error, debugging purposes only.
-	DIR dirHandle;   																// directory handle
-	FIL fileHandle;  																// file handle
+	int fatfsError;  																// Recorded fatFS error, debugging purposes only.
+	//DIR dirHandle;   																// directory handle
+	FILE *fileHandle;  																// file handle
 };
 
 // ***************************************************************************************
@@ -58,18 +59,16 @@ void FIOInitialise(void) {
 //
 // ***************************************************************************************
 
-static int _FIO_MapError(FRESULT r) {
+static int _FIO_MapError(int e) {
 	int err;
 
-	switch(r) {
-		case FR_OK:  															// No error.
+	switch(e) {
+		case 0:  																// No error.
 			err = FIO_OK;break;
-		case FR_NO_FILE:  														// File/Path not found
-		case FR_NO_PATH:
+		case ENOENT:  															// File/Path not found
 			err = FIO_ERR_NOTFOUND;break;
-		case FR_INVALID_NAME:  													// Input is wrong.
-		case FR_INVALID_OBJECT:
-		case FR_INVALID_PARAMETER:
+		case EBADF:  															// Input is wrong.
+		case EINVAL:
 			err = FIO_ERR_COMMAND;break;
 		default: 																// Everything else.
 			err = FIO_ERR_SYSTEM;break;
@@ -84,11 +83,11 @@ static int _FIO_MapError(FRESULT r) {
 //
 // ***************************************************************************************
 
-static void _FIOError(int h,FRESULT r) {
+static void _FIOError(int h,bool isError) {
 	file[h].error = FIO_OK;  														// Set to ok, save fatfs result 
-	file[h].fatfsError = r; 
-	if (r != FR_OK) {  																// Error occurred, remap
-		file[h].error = _FIO_MapError(r);
+	file[h].fatfsError = errno; 
+	if (isError) {  																// Error occurred, remap
+		file[h].error = _FIO_MapError(errno);
 	}
 }
 
@@ -121,11 +120,12 @@ static int _FIOOpenGeneral(const char *name,char mode,bool isDirectory) {
 
 	if (isDirectory) {  															// Open directory
 		file[h].isDir = true;  														// It's a directory.
-		_FIOError(h,f_opendir(&file[h].dirHandle,name)); 							// Try to open directory, process the error	
+		// _FIOError(h,f_opendir(&file[h].dirHandle,name)); 							// Try to open directory, process the error	
+		CONWriteString("Trying to open %s returned %d\r",name,file[h].fatfsError);	
 	} else {
 		file[h].isDir = false;  													// It's a file.
-		_FIOError(h,f_open(&file[h].fileHandle,name,(mode == 'R') ? 				// Try to open file, process the error.
-											FA_READ: FA_CREATE_ALWAYS | FA_READ | FA_WRITE));
+		file[h].fileHandle = fopen(name,"w+"); 										// Try to open file, process the error.
+		_FIOError(h,file[h].fileHandle == NULL);
 
 	}
 	if (file[h].error == FIO_OK) file[h].isInUse = true;  							// Mark as in use if open went okay.
@@ -142,9 +142,9 @@ int FIOClose(int h) {
 	if (!HANDLE_VALID(h)) return FIO_ERR_HANDLE;  									// Check handle legal
 	if (file[h].isInUse) {  														// File in use.		
 		if (file[h].isDir) {  														// Close directory/file.
-			f_closedir(&file[h].dirHandle);
+			//f_closedir(&file[h].dirHandle);
 		} else {
-			f_close(&file[h].fileHandle);
+			fclose(file[h].fileHandle);
 		}
 		file[h].isInUse = false;   													// No longer in use
 	}
@@ -166,16 +166,16 @@ int FIORead(int h,void *data,int size,int *pReadCount) {
 	if (!HANDLE_VALID_OPEN(h)) return FIO_ERR_HANDLE;  								// Check handle legal
 
 	if (file[h].isDir) {  															// Directory reading code.
-		FILINFO fInfo;  															// Internal FATFS structure.
-		_FIOError(h,f_readdir(&file[h].dirHandle,&fInfo));  						// Read next and error check.
-		if (file[h].error != FIO_OK) return file[h].error;   						// The read directory failed.
-		if (fInfo.fname[0] == 0) return FIO_EOF;  									// Read all the directory, return EOF.
+		// FILINFO fInfo;  															// Internal FATFS structure.
+		// _FIOError(h,f_readdir(&file[h].dirHandle,&fInfo));  						// Read next and error check.
+		// if (file[h].error != FIO_OK) return file[h].error;   						// The read directory failed.
+		// if (fInfo.fname[0] == 0) return FIO_EOF;  									// Read all the directory, return EOF.
 		
-		FIOInfo *fOut = (FIOInfo *)data;  											// Where it goes.
-		fInfo.fname[FIO_MAX_NAME_SIZE] = '\0';  									// Truncate the name to the max length allowed.
-		strcpy(fOut->name,fInfo.fname);
-		fOut->length = fInfo.fsize;  												// Set length, directory 
-		fOut->isDirectory = (fInfo.fattrib & AM_DIR) != 0;
+		// FIOInfo *fOut = (FIOInfo *)data;  											// Where it goes.
+		// fInfo.fname[FIO_MAX_NAME_SIZE] = '\0';  									// Truncate the name to the max length allowed.
+		// strcpy(fOut->name,fInfo.fname);
+		// fOut->length = fInfo.fsize;  												// Set length, directory 
+		// fOut->isDirectory = (fInfo.fattrib & AM_DIR) != 0;
 	} else {  																		// File reading code.
 		UINT bytesRead;
 		if (pReadCount != 0) *pReadCount = 0;  										// Zero bytes read in case of error.
