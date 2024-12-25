@@ -3,7 +3,7 @@
 - Low level simulator
 
 	- Override the HASTICKS() stuff so it's always reset, and make the simulator responsible for the timer, e.g. only do 25fps or whatever.
-	- Mouse
+	- Mouse (sim implementation)
 	- Sound
 	- File I/O
 

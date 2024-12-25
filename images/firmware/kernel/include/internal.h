@@ -13,7 +13,6 @@
 #ifndef _INTERNAL_H
 #define _INTERNAL_H
 
-#include "internal/mouse.h"
 #include "internal/sound.h"
 #include "internal/dvi_common.h"
 #include "internal/fileio.h"
