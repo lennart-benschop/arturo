@@ -16,7 +16,7 @@
 #
 # ***************************************************************************************
 
-file(GLOB_RECURSE USER_C_SOURCES "user_code/*.c")
+file(GLOB_RECURSE USER_C_SOURCES FOLLOW_SYMLINKS "user_code/*.c")
 file(GLOB_RECURSE HARDWARE_C_SOURCES "hardware/*.c")
 file(GLOB_RECURSE SUPPORT_C_SOURCES "support/*.c")
 
@@ -24,8 +24,6 @@ add_executable(kernel
 	main.c 
 	${USER_C_SOURCES} ${HARDWARE_C_SOURCES} ${SUPPORT_C_SOURCES}
 )
-
-#file(GLOB PADSOURCES "hardware/gamepads/*.cpp")
 
 # ***************************************************************************************
 #
