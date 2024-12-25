@@ -29,4 +29,6 @@ void RNDRender(SDL_Surface *surface);
 int TMRRead(void);
 void KBDProcessEvent(int scanCode,int modifiers,bool isDown);
 
+void CTLFindControllers(void);
+
 #endif
