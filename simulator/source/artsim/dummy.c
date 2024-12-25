@@ -11,7 +11,3 @@ int FIORead(int h,void *data,int size,int *pReadCount) {
 int FIODelete(const char *fileName) {
 	return 0;
 }
-
-int SNDGetSampleFrequency(void) {
-	return 22000;
-}

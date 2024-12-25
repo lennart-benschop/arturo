@@ -1,31 +1,19 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//		Name:		beeper.cpp
+//		Name:		sound.cpp
 //		Purpose:	SoundSupport library for SDL.
-//		Created:	12th February 2024.
+//		Created:	25th December 2024.
 //		Author:		qxxxb (https://github.com/qxxxb/sdl2-beeper)
 //					Paul Robson (paul@robsons.org.uk)
 //
 // ***************************************************************************************
 // ***************************************************************************************
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <memory.h>
-#include <ctype.h>
-#include "gfx.h"
-#include <queue>
-#include <cmath>
-#include "sys_processor.h"
-#include <hardware.h>
-#include <common.h>
+#include <artsim.h>
 
-#include <iostream>
-#include <string>
-
-static SDL_AudioDeviceID m_audioDevice;
-static SDL_AudioSpec m_obtainedSpec;
+static SDL_AudioDeviceID audioDevice;
+static SDL_AudioSpec audioSpec;
 
 void (*m_writeData)(uint8_t* ptr, double data);
 int (*m_calculateOffset)(int sample, int channel);
@@ -41,13 +29,13 @@ int (*m_calculateOffset)(int sample, int channel);
 
 static int calculateOffset_s16(int sample, int channel) {
 	return
-		(sample * sizeof(int16_t) * m_obtainedSpec.channels) +
+		(sample * sizeof(int16_t) * audioSpec.channels) +
 		(channel * sizeof(int16_t));
 }
 
 static int calculateOffset_f32(int sample, int channel) {
 	return
-		(sample * sizeof(float) * m_obtainedSpec.channels) +
+		(sample * sizeof(float) * audioSpec.channels) +
 		(channel * sizeof(float));
 }
 
@@ -83,11 +71,10 @@ static void audioCallback(void* userdata,uint8_t* stream,int len) {
 
 	// Write data to the entire buffer by iterating through all samples and
 	// channels.
-	for (int sample = 0; sample < m_obtainedSpec.samples; ++sample) {
-		double data = SNDGetNextSample()/128.0;
-
+	for (int sample = 0; sample < audioSpec.samples; ++sample) {
+		double data = ((double)SNDGetNextSample(0))/128.0;
 		// Write the same data to all channels
-		for (int channel = 0; channel < m_obtainedSpec.channels; ++channel) {
+		for (int channel = 0; channel < audioSpec.channels; ++channel) {
 			int offset = m_calculateOffset(sample, channel);
 			uint8_t* ptrData = stream + offset;
 			m_writeData(ptrData, data);
@@ -101,7 +88,9 @@ static void audioCallback(void* userdata,uint8_t* stream,int len) {
 //
 // ***************************************************************************************
 
-void SOUNDOpen() {
+void SOUNDOpen(void) {
+	char *formatName = "<unknown>";
+
 	// First define the specifications we want for the audio device
 	SDL_AudioSpec desiredSpec;
 	SDL_zero(desiredSpec);
@@ -141,22 +130,21 @@ void SOUNDOpen() {
 	// device, but sometimes the audio device does not support some of our
 	// desired specifications. In that case, we have to be flexible and adapt
 	// to what the audio device supports. The obtained specifications that the
-	// audio device supports will be stored in `m_obtainedSpec`
+	// audio device supports will be stored in `audioSpec`
 
-	m_audioDevice = SDL_OpenAudioDevice(
+	audioDevice = SDL_OpenAudioDevice(
 		NULL, // device (name of the device, which we don't care about)
 		0, // iscapture (we are not recording sound)
 		&desiredSpec, // desired
-		&m_obtainedSpec, // obtained
+		&audioSpec, // obtained
 		0 // allowed_changes (allow any changes between desired and obtained)
 	);
 
-	if (m_audioDevice == 0) {
+	if (audioDevice == 0) {
 		SDL_Log("Failed to open audio: %s", SDL_GetError());
 		// TODO: throw exception
 	} else {
-		std::string formatName;
-		switch (m_obtainedSpec.format) {
+		switch (audioSpec.format) {
 			case AUDIO_S16:
 				m_writeData = writeData_s16;
 				m_calculateOffset = calculateOffset_s16;
@@ -168,21 +156,22 @@ void SOUNDOpen() {
 				formatName = "AUDIO_F32";
 				break;
 			default:
-				SDL_Log("Unsupported audio format: %i", m_obtainedSpec.format);
+				SDL_Log("Unsupported audio format: %i", audioSpec.format);
 				// TODO: throw exception
 		}
+		printf("Format %s %dHz\n",formatName,audioSpec.freq);
 
-		// std::cout << "[Beeper] frequency: " << m_obtainedSpec.freq << std::endl;
+		// std::cout << "[Beeper] frequency: " << audioSpec.freq << std::endl;
 		// std::cout << "[Beeper] format: " << formatName << std::endl;
 
 		// std::cout
 		// 	<< "[Beeper] channels: "
-		// 	<< (int)(m_obtainedSpec.channels)
+		// 	<< (int)(audioSpec.channels)
 		// 	<< std::endl;
 
-		// std::cout << "[Beeper] samples: " << m_obtainedSpec.samples << std::endl;
-		// std::cout << "[Beeper] padding: " << m_obtainedSpec.padding << std::endl;
-		// std::cout << "[Beeper] size: " << m_obtainedSpec.size << std::endl;
+		// std::cout << "[Beeper] samples: " << audioSpec.samples << std::endl;
+		// std::cout << "[Beeper] padding: " << audioSpec.padding << std::endl;
+		// std::cout << "[Beeper] size: " << audioSpec.size << std::endl;
 	}
 }
 
@@ -192,8 +181,8 @@ void SOUNDOpen() {
 //
 // ***************************************************************************************
 
-void SOUNDClose() {
-	SDL_CloseAudioDevice(m_audioDevice);
+void SOUNDClose(void) {
+	SDL_CloseAudioDevice(audioDevice);
 }
 
 // ***************************************************************************************
@@ -202,8 +191,8 @@ void SOUNDClose() {
 //
 // ***************************************************************************************
 
-void SOUNDPlay() {
-	SDL_PauseAudioDevice(m_audioDevice, 0);
+void SOUNDPlay(void) {
+	SDL_PauseAudioDevice(audioDevice, 0);
 }
 
 // ***************************************************************************************
@@ -212,8 +201,8 @@ void SOUNDPlay() {
 //
 // ***************************************************************************************
 
-void SOUNDStop() {
-	SDL_PauseAudioDevice(m_audioDevice, 1);
+void SOUNDStop(void) {
+	SDL_PauseAudioDevice(audioDevice, 1);
 }
 
 // ***************************************************************************************
@@ -223,5 +212,5 @@ void SOUNDStop() {
 // ***************************************************************************************
 
 int SNDGetSampleFrequency(void) {
-    return m_obtainedSpec.freq;
+    return audioSpec.freq;
 }

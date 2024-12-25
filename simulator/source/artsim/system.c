@@ -44,8 +44,8 @@ void SYSOpen(void) {
 
 	CTLFindControllers();
 	MSEInitialise();
-	// SOUNDOpen();
-	// SOUNDPlay();
+	SOUNDOpen();
+	SOUNDPlay();
 
 	SDL_ShowCursor(SDL_DISABLE);                                                    // Hide mouse cursor
 	startTime = TMRRead();
@@ -98,7 +98,7 @@ int SYSPollUpdate(void) {
 void SYSClose(void) {
 	endTime = TMRRead();
 	SDL_DestroyWindow(mainWindow);													// Destroy working window
-	//SOUNDStop();
+	SOUNDStop();
 	SDL_CloseAudio();  																// Shut audio up.
 	SDL_Quit();																		// Exit SDL.
 	printf("Frame Rate %.2f\n",frameCount/((endTime-startTime)/100.0));
