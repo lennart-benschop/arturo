@@ -86,7 +86,7 @@ int8_t TESTApplication_GetSample(int channel) {
 
 void TESTShowUSBRootDirectory(void) {
     FIOInfo fi;int e;char *s;
-    char buffer[10];
+    char buffer[42];
 
     CONWriteString("\rFSYSFileInformation\r");
     s = "inline.bas";e = FSYSFileInformation(s,&fi);CONWriteString("(%d) %s %d %d ",e,s,fi.length,fi.isDirectory);
@@ -119,4 +119,10 @@ void TESTShowUSBRootDirectory(void) {
     e = FSYSGetSetPosition(0,1);CONWriteString(" %d",e);
     e = FSYSRead(0,buffer+7,1);CONWriteString(" %d %s",e,buffer);
     e = FSYSClose(0);CONWriteString(" %d\n",e);
+
+    CONWriteString("\rFSYSOpenDirectory\r");
+    e = FSYSOpenDirectory("/");CONWriteString(" %d",e);
+    while (e = FSYSReadDirectory(buffer),e == 0) CONWriteString(" %s",buffer);
+    CONWriteString(" %d",e);
+    e = FSYSCloseDirectory();CONWriteString(" %d",e);
 }

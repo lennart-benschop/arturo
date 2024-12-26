@@ -198,3 +198,42 @@ int FSYSGetSetPosition(int handle,int newPosition) {
 	}
 	return current;
 }  	
+
+// ***************************************************************************************
+//
+//								Open Directory for reading
+//
+// ***************************************************************************************
+
+static DIR currentDirectory;
+
+int FSYSOpenDirectory(char *directory) {
+	return _FSYSMapError(f_opendir(&currentDirectory,directory));  					// Open directory
+}
+
+// ***************************************************************************************
+//
+//			Read next directory entry. This does not exclude .. or . at this level.
+// 			Returns FIO_EOF if there is no directory information to read
+//
+// ***************************************************************************************
+
+int FSYSReadDirectory(char *fileName) {
+	FILINFO fi;
+	FRESULT fr = f_readdir(&currentDirectory,&fi);  								// Read next
+	if (fr != FR_OK) return _FSYSMapError(fr);  									// Error
+	if (fi.fname[0] == '\0') return FIO_EOF;  										// End of directory data.
+	fi.fname[MAX_FILENAME_SIZE] = '\0';  											// Truncate file name.
+	strcpy(fileName,fi.fname);
+	return FIO_OK;
+}  	
+
+// ***************************************************************************************
+//
+//								Close directory being read
+//
+// ***************************************************************************************
+
+int FSYSCloseDirectory(void) {
+	return _FSYSMapError(f_closedir(&currentDirectory));  		
+}

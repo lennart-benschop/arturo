@@ -30,7 +30,7 @@
 #define MAX_FILENAME_SIZE 	(32) 													// Max size of filename base
 
 typedef struct _FIO_Information {
-	char name[MAX_FILENAME_SIZE+1]; 												// Name goes here (directory reading)
+	char name[MAX_FILENAME_SIZE+1]; 												// Name goes here 
 	int  length;  																	// Byte size
 	bool isDirectory;  																// True if directory	
 } FIOInfo;
@@ -52,7 +52,7 @@ int 	FSYSDeleteFile(char *name);  												// Delete a file
 int  	FSYSDeleteDirectory(char *name);
 
 int 	FSYSOpenDirectory(char *directory);  										// Open a directory
-int 	FSYSReadDirectory(FIOInfo *info);  											// Read next directory entry
+int 	FSYSReadDirectory(char *fileName); 											// Read next directory entry
 int 	FSYSCloseDirectory(void);  													// Close directory
 
 #endif

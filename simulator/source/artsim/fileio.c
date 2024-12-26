@@ -61,7 +61,7 @@ static int _FSYSMapError(void) {
 static char *_FSYSMapName(char *name) {
 	static char buffer[256];
 	mkdir("storage",0777);  													// Creates the working directory
-	strcpy(buffer,"storage/");strcat(buffer,name);  							// Convert filename to working file name.
+	strcpy(buffer,"storage/");strcat(buffer,name);  								// Convert filename to working file name.
 	return(buffer);
 }
 
@@ -214,12 +214,44 @@ int FSYSGetSetPosition(int handle,int newPosition) {
 	return current;
 }  	
 
+// ***************************************************************************************
+//
+//								Open Directory for reading
+//
+// ***************************************************************************************
+
+static DIR* currentDirectory;
+
 int FSYSOpenDirectory(char *directory) {
+	directory = _FSYSMapName(directory);  											// Map directory
+	currentDirectory = opendir(directory);  										// Open directory.
+	return (currentDirectory == NULL) ? _FSYSMapError() : FIO_OK;  					// Return OK, or error.
 }
 
-int FSYSReadDirectory(FIOInfo *info) {
+// ***************************************************************************************
+//
+//			Read next directory entry. This does not exclude .. or . at this level.
+// 			Returns FIO_EOF if there is no directory information to read
+//
+// ***************************************************************************************
+
+int FSYSReadDirectory(char *fileName) {
+	struct dirent *next = readdir(currentDirectory); 								// Read next entry.
+	if (next == NULL) {  															// Read failed.
+		if (errno == 0) return FIO_EOF;  											// End of directory
+		return _FSYSMapError();  													// All other errors.
+	}
+	next->d_name[MAX_FILENAME_SIZE] = '\0';  										// Truncate file name.
+	strcpy(fileName,next->d_name);
+	return FIO_OK;
 }  	
 
-int FSYSCloseDirectory(void) {
+// ***************************************************************************************
+//
+//								Close directory being read
+//
+// ***************************************************************************************
 
+int FSYSCloseDirectory(void) {
+	return closedir(currentDirectory) < 0 ? _FSYSMapError() : FIO_OK;
 }
