@@ -42,8 +42,8 @@ int main() {
     USBKeyboardEvent(0,0xFF,0);                                                 // Announce keyboard has been reset
     USBSynchronise();                                                           // Synchronise storage
     TMRStartTickInterrupt();                                                    // Start the tick interrupt.
+    FIOInitialise();                                                            // Initialise the file system (core)
     LOCSetLocale(ARTURO_KBD_LOCALE);                                            // Default Locale
-    FSYSInitialise();                                                           // Initialise the file system (core)
     CONWriteString("Booting...\r");
     ARTURO_RUN_FUNCTION();                                                      // Run whatever (defined in config.make)
 }

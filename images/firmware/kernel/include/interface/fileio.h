@@ -37,6 +37,9 @@ typedef struct _FIO_Information {
 
 #define FIO_MAX_HANDLES 	(8) 													// Maximum number of supported files.
 
+//
+//		Do not use these, use the FIO versions instead.
+//
 void 	FSYSInitialise(void);
 
 int  	FSYSOpen(int handle,char *name);  											// Open an existing file
