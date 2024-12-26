@@ -85,7 +85,7 @@ int FSYSCreateFile(char *name) {
 	FRESULT fr = f_open(&fRec,name,FA_CREATE_ALWAYS|FA_WRITE);  				// Try to create a file
 	if (fr != FR_OK) return _FSYSMapError(fr);  								// Creation failed.
 	f_close(&fRec);  															// Close it.
-	return 0;
+	return FIO_OK;
 }  	
 
 // ***************************************************************************************
@@ -96,8 +96,8 @@ int FSYSCreateFile(char *name) {
 
 int FSYSDeleteFile(char *name) {
 	FRESULT fr = f_unlink(name);
-	if (fr == FR_OK) return 0;  												// Delete worked okay.
-	if (fr == FR_NO_FILE || fr == FR_NO_PATH) return 0;   						// Does not exist
+	if (fr == FR_OK) return FIO_OK;  											// Delete worked okay.
+	if (fr == FR_NO_FILE || fr == FR_NO_PATH) return FIO_OK;  					// Does not exist
 	return _FSYSMapError(fr);	
 }
 
@@ -109,8 +109,8 @@ int FSYSDeleteFile(char *name) {
 
 int FSYSCreateDirectory(char *name) {  											
 	FRESULT fr = f_mkdir(name);
-	if (fr == FR_OK) return 0;  												// Create worked okay.
-	if (fr == FR_EXIST) return 0;  												// It already exists, not an error
+	if (fr == FR_OK) return FIO_OK;  											// Create worked okay.
+	if (fr == FR_EXIST) return FIO_OK; 											// It already exists, not an error
 	return _FSYSMapError(fr);
 }
 
@@ -123,4 +123,3 @@ int FSYSCreateDirectory(char *name) {
 int FSYSDeleteDirectory(char *name) {
 	return FSYSDeleteFile(name);  												// Same as delete file :)
 }  											
-

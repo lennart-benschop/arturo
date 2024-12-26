@@ -79,7 +79,7 @@ int FSYSFileInformation(char *name,FIOInfo *info) {
 		if (info != NULL) {  													// Fill in if required.
 			info->length = 0;info->isDirectory = -1; 
 		}
-		return 0;  			
+		return FIO_OK;  			
 	}
 	struct stat ffi;
 	if (stat(_FSYSMapName(name),&ffi) != 0) return _FSYSMapError();  			// Try for file, Stat failed
@@ -87,7 +87,7 @@ int FSYSFileInformation(char *name,FIOInfo *info) {
 		info->isDirectory = false;
 		info->length = info->isDirectory ? 0 : ffi.st_size;    					// Length if file, 0 for directory.
 	}
-	return 0;
+	return FIO_OK;
 }
 
 // ***************************************************************************************
@@ -100,7 +100,7 @@ int FSYSCreateFile(char *name) {
 	FILE *f = fopen(_FSYSMapName(name),"w");  									// Creates an empty file.
 	if (f == NULL) return _FSYSMapError();  									// Create filed.
 	fclose(f);  																// Close the new file.
-	return 0;
+	return FIO_OK;
 }  	
 
 // ***************************************************************************************
@@ -110,8 +110,8 @@ int FSYSCreateFile(char *name) {
 // ***************************************************************************************
 
 int FSYSDeleteFile(char *name) {
-	if (unlink(_FSYSMapName(name)) == 0) return 0;  							// Delete worked okay.
-	if (errno == ENOENT) return 0;  											// Didn't exist, that's okay.
+	if (unlink(_FSYSMapName(name)) == 0) return FIO_OK; 						// Delete worked okay.
+	if (errno == ENOENT) return FIO_OK;											// Didn't exist, that's okay.
 	return _FSYSMapError();	
 }
 
@@ -122,8 +122,8 @@ int FSYSDeleteFile(char *name) {
 // ***************************************************************************************
 
 int FSYSCreateDirectory(char *name) {  											
-	if (mkdir(_FSYSMapName(name),0777) == 0) return 0;  						// Create directory okay
-	if (errno == EEXIST) return 0;  											// It already exists, not an error
+	if (mkdir(_FSYSMapName(name),0777) == 0) return FIO_OK; 					// Create directory okay
+	if (errno == EEXIST) return FIO_OK;  										// It already exists, not an error
 	return _FSYSMapError();
 }
 
@@ -134,16 +134,82 @@ int FSYSCreateDirectory(char *name) {
 // ***************************************************************************************
 
 int FSYSDeleteDirectory(char *name) {
-	if (rmdir(_FSYSMapName(name)) == 0) return 0;  								// Removal okay
+	if (rmdir(_FSYSMapName(name)) == 0) return FIO_OK;  							// Removal okay
 	if (errno == ENOENT || errno == EEXIST || 
-						errno == ENOTEMPTY || errno == ENOTDIR) return 0;  		// Not present, not empty etc.
+						errno == ENOTEMPTY || errno == ENOTDIR) return FIO_OK;  	// Not present, not empty etc.
 	return _FSYSMapError();
 }  											
 
-int  	FSYSOpen(char *name);  														// Open an existing file, read or write.
-int 	FSYSClose(int handle);  													// Close an open file.
-int  	FSYSRead(int handle,void *data,int size);  									// Read bytes from a file.
-int  	FSYSWrite(int handle,void *data,int size);  								// Write bytes to a file.
+// ***************************************************************************************
+//
+//							Open File in R/W mode, rewind to start
+//
+// ***************************************************************************************
 
-int 	FSYSEndOfFile(int handle);  												// Check EOF
-int 	FSYSGetSetPosition(int handle,int newPosition);  							// Read and optionally set position.
+int FSYSOpen(int handle,char *name) {
+	files[handle] = fopen(_FSYSMapName(name),"r+");  								// Open read/write
+	if (files[handle] == NULL) return _FSYSMapError();   							// Open failed.
+	if (fseek(files[handle],0,SEEK_SET) < 0) return _FSYSMapError();  				// Rewind it.
+	return FIO_OK;
+};
+
+// ***************************************************************************************
+//
+//										Close the file
+//
+// ***************************************************************************************
+
+int FSYSClose(int handle) {
+	if (fclose(files[handle]) < 0) return _FSYSMapError();  						// Close file.
+	return FIO_OK;
+}
+
+// ***************************************************************************************
+//
+//				Read data from the file. Returns error or # of bytes read.
+//
+// ***************************************************************************************
+
+int FSYSRead(int handle,void *data,int size) {
+	int bytesRead = fread(data,1,size,files[handle]);  								// Attempt to read data from file.
+	if (bytesRead < 0) return _FSYSMapError();  									// Read failed.
+	return bytesRead;
+}
+
+// ***************************************************************************************
+//
+//								Write data to the file. 
+//
+// ***************************************************************************************
+
+int FSYSWrite(int handle,void *data,int size) {
+	int bytesWritten = fwrite(data,1,size,files[handle]);  							// Attempt to write.
+	if (bytesWritten < 0) return _FSYSMapError(); 									// Error occurred
+	if (bytesWritten != size) return FIO_ERR_SYSTEM;  								// For some reason, did not write.
+	return FIO_OK;  																// It's okay.
+}
+
+// ***************************************************************************************
+//
+//		Check end of file. Return -ve on error, 0 if more data, +ve if eof
+//
+// ***************************************************************************************
+
+int FSYSEndOfFile(int handle) {
+	return feof(files[handle]) ? FIO_EOF : FIO_OK;  								// Seems not to be able to error :)
+}
+
+// ***************************************************************************************
+//
+//				Returns current position, and sets new position if >= 0
+//
+// ***************************************************************************************
+
+int FSYSGetSetPosition(int handle,int newPosition) {
+	int current = ftell(files[handle]);  											// Where are we now ?
+	if (current < 0) return _FSYSMapError();  										// Failed.
+	if (newPosition >= 0) {  														// Moving ?
+		if (fseek(files[handle],newPosition,SEEK_SET) < 0) return _FSYSMapError();  // Move and check.
+	}
+	return current;
+}  	

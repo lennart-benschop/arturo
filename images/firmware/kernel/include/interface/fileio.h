@@ -25,6 +25,8 @@
 #define FIO_ERR_HANDLE 		(-5)  													// Bad handle / not open
 #define FIO_ERR_READONLY 	(-6)  													// Writing to read opened file.
 
+#define FIO_EOF  			(1)
+
 typedef struct _FIO_Information {
 	int  length;  																	// Byte size
 	bool isDirectory;  																// True if directory	
@@ -34,10 +36,11 @@ typedef struct _FIO_Information {
 
 void 	FSYSInitialise(void);
 
-int  	FSYSOpen(char *name,char access);  											// Open an existing file, read or write.
+int  	FSYSOpen(int handle,char *name);  											// Open an existing file
 int 	FSYSClose(int handle);  													// Close an open file.
 int  	FSYSRead(int handle,void *data,int size);  									// Read bytes from a file.
 int  	FSYSWrite(int handle,void *data,int size);  								// Write bytes to a file.
+int 	FSYSGetSetPosition(int handle,int newPosition);  							// Read and optionally set position.
 
 int 	FSYSFileInformation(char *name,FIOInfo *info); 								// Check if file exists/get information.
 int 	FSYSCreateFile(char *name);  												// Create an empty file of that name.
