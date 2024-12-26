@@ -13,6 +13,7 @@
 // ***************************************************************************************
 
 #include "common.h"
+#include "ff.h"
 
 // ***************************************************************************************
 //
@@ -57,15 +58,69 @@ static int _FSYSMapError(FRESULT r) {
 void FSYSInitialise(void) {
 }
 
+// ***************************************************************************************
+//
+//				Get file information. Fills structure if provided and no error.
+//
+// ***************************************************************************************
 
-int  	FSYSOpen(char *name,char access);  											// Open an existing file, read or write.
-int 	FSYSClose(int handle);  													// Close an open file.
-int  	FSYSRead(int handle,void *data,int size);  									// Read bytes from a file.
-int  	FSYSWrite(int handle,void *data,int size);  								// Write bytes to a file.
+int FSYSFileInformation(char *name,FIOInfo *info) {
+	FILINFO ffi;
+	FRESULT r = f_stat(name,&ffi);  												// Read the information
+	if (r == FR_OK && info != NULL) {  												// Information received.
+		info->isDirectory = (ffi.fattrib & AM_DIR) != 0;  							// Directory flag
+		info->length = info->isDirectory ? 0 : ffi.fsize;    						// Length if file, 0 for directory.
+	}
+	return _FSYSMapError(r);
+}
 
-int 	FSYSFileExists(char *name); 												// Check if file exists.
-int 	FSYSCreateFile(char *name);  												// Create an empty file of that name.
-int 	FSYSDeleteFile(char *name);  												// Delete a file
+// ***************************************************************************************
+//
+//					Create a new file, deleting any currently existing file
+//
+// ***************************************************************************************
 
-int  	FSYSCreateDirectory(char *name);  											// Create a directory of that name
-int  	FSYSDeleteDirectory(char *name);  											// Delete a directory of that name
+int FSYSCreateFile(char *name) {
+	FIL fRec;
+	FRESULT fr = f_open(&fRec,name,FA_CREATE_ALWAYS|FA_WRITE);  				// Try to create a file
+	if (fr != FR_OK) return _FSYSMapError(fr);  								// Creation failed.
+	f_close(&fRec);  															// Close it.
+	return 0;
+}  	
+
+// ***************************************************************************************
+//
+//						Delete file, ignoring if it does not exist
+//
+// ***************************************************************************************
+
+int FSYSDeleteFile(char *name) {
+	FRESULT fr = f_unlink(name);
+	if (fr == FR_OK) return 0;  												// Delete worked okay.
+	if (fr == FR_NO_FILE || fr == FR_NO_PATH) return 0;   						// Does not exist
+	return _FSYSMapError(fr);	
+}
+
+// ***************************************************************************************
+//
+//					Create a new directory if it does not already exist
+//
+// ***************************************************************************************
+
+int FSYSCreateDirectory(char *name) {  											
+	FRESULT fr = f_mkdir(name);
+	if (fr == FR_OK) return 0;  												// Create worked okay.
+	if (fr == FR_EXIST) return 0;  												// It already exists, not an error
+	return _FSYSMapError(fr);
+}
+
+// ***************************************************************************************
+//
+//				Delete directory, ignoring if it does not exist/not empty
+//
+// ***************************************************************************************
+
+int FSYSDeleteDirectory(char *name) {
+	return FSYSDeleteFile(name);  												// Same as delete file :)
+}  											
+

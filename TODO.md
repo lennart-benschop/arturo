@@ -6,6 +6,7 @@
 	- File I/O - alternating simulator and image.
 		Redo low level.
 		Redo high level.
+		Parent GetInfo should clear structure.
 		
 	- File High level (initialise in main.c)
 	

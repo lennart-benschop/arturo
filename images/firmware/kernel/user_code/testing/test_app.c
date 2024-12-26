@@ -19,8 +19,26 @@
 // ***************************************************************************************
 
 void TESTShowUSBRootDirectory(void) {
+    FIOInfo fi;int e;char *s;
 
-  
+    CONWriteString("FSYSFileInformation\r");
+    s = "inline.bas";e = FSYSFileInformation(s,&fi);CONWriteString("Info (%d) %s %d %d\r",e,s,fi.length,fi.isDirectory);
+    s = "inline.xxx";e = FSYSFileInformation(s,&fi);CONWriteString("Info (%d) %s %d %d\r",e,s,fi.length,fi.isDirectory);
+    s = "aadir";e = FSYSFileInformation(s,&fi);CONWriteString("Info (%d) %s %d %d\r",e,s,fi.length,fi.isDirectory);
+    s = "abdir";e = FSYSFileInformation(s,&fi);CONWriteString("Info (%d) %s %d %d\r",e,s,fi.length,fi.isDirectory);
+
+    CONWriteString("FSYSCreateFile/FSYSDeleteFile\r");
+    e = FSYSCreateFile("newfile.1");  CONWriteString("Create %d\r",e);
+    e = FSYSCreateFile("newfile.2");  CONWriteString("Create %d\r",e);
+    e = FSYSDeleteFile("newfile.1");  CONWriteString("Delete %d\r",e);
+    e = FSYSDeleteFile("newfile.3");  CONWriteString("Delete %d\r",e);
+
+    CONWriteString("FSYSCreateDirectory/FSYSDeleteDirectory\r");
+    e = FSYSCreateDirectory("newDirectory.1");  CONWriteString("Create %d\r",e);
+    e = FSYSCreateDirectory("newDirectory.2");  CONWriteString("Create %d\r",e);
+    e = FSYSDeleteDirectory("newDirectory.1");  CONWriteString("Delete %d\r",e);
+    e = FSYSDeleteDirectory("newDirectory.3");  CONWriteString("Delete %d\r",e);
+
 }
 
 // ***************************************************************************************
