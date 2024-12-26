@@ -30,5 +30,6 @@
 void CONInitialise(void);
 void CONWrite(char c);
 void CONWriteString(const char *fmt, ...);
+void CONDrawPixel(uint x, uint y, uint rgb);
 
 #endif

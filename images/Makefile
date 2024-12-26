@@ -30,14 +30,21 @@ always:
 CONFIG_OUT_FILE = firmware/kernel/include/data/__config.h
 LOCALE_OUT_FILE = ../include/support/__locale.h
 
-prelim: $(CONFIG_OUT_FILE)
+LOGO_DIRECTORY = $(ROOTDIR)images/scripts/
+LOGO_OUT_FILE = $(ROOTDIR)images/firmware/kernel/include/support/__logo_data.h
+LOGO_IN_FILE = $(LOGO_DIRECTORY)olimex.png
+
+prelim: $(CONFIG_OUT_FILE) $(LOGO_OUT_FILE)
 	mkdir -p $(BINDIR)
 	rm -f $(BINDIR)*.elf $(BINDIR)*.uf2
 	cd firmware/kernel/locale ; $(PYTHON) keymaps.py >$(LOCALE_OUT_FILE)
 
 $(CONFIG_OUT_FILE) : $(BUILDENVDIR)/config.make
 	$(PYTHON) scripts/makeconfig.py '$(CONFIG_DATA)' >$(CONFIG_OUT_FILE)
-	
+
+$(LOGO_OUT_FILE) : $(LOGO_IN_FILE)
+	cd $(LOGO_DIRECTORY) ; $(PYTHON) makelogo.py >$(LOGO_OUT_FILE)
+
 # ***************************************************************************************
 #
 #									Build the firmware

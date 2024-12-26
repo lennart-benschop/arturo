@@ -33,6 +33,7 @@ int main(int argc,char *argv[]) {
 	KBDReceiveEvent(0,0xFF,0);
 	FIOInitialise();
 	SYSOpen();
+	LOGODrawTitle();
 	TESTApplication();
 	SYSClose();
 	return(0);
