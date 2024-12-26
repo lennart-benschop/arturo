@@ -23,7 +23,7 @@ void TESTShowUSBRootDirectory(void);
 void TESTApplication(void) {
     int n = 0;
     CONWriteString("\rTest App\r");                                                 // Exciting title
-    TESTShowUSBRootDirectory();
+    //TESTShowUSBRootDirectory();
     //
     //      A typical 'main'
     //
