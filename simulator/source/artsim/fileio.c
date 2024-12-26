@@ -213,3 +213,13 @@ int FSYSGetSetPosition(int handle,int newPosition) {
 	}
 	return current;
 }  	
+
+int FSYSOpenDirectory(char *directory) {
+}
+
+int FSYSReadDirectory(FIOInfo *info) {
+}  	
+
+int FSYSCloseDirectory(void) {
+
+}

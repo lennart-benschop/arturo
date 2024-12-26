@@ -25,7 +25,7 @@
 #define FIO_ERR_HANDLE 		(-5)  													// Bad handle / not open
 #define FIO_ERR_READONLY 	(-6)  													// Writing to read opened file.
 
-#define FIO_EOF  			(1)
+#define FIO_EOF  			(1)  													// End of file / Directory lsit.
 
 #define MAX_FILENAME_SIZE 	(32) 													// Max size of filename base
 
@@ -50,5 +50,9 @@ int 	FSYSCreateFile(char *name);  												// Create an empty file of that na
 int  	FSYSCreateDirectory(char *name);  											// Create a directory of that name
 int 	FSYSDeleteFile(char *name);  												// Delete a file
 int  	FSYSDeleteDirectory(char *name);
+
+int 	FSYSOpenDirectory(char *directory);  										// Open a directory
+int 	FSYSReadDirectory(FIOInfo *info);  											// Read next directory entry
+int 	FSYSCloseDirectory(void);  													// Close directory
 
 #endif
