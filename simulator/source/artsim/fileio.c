@@ -135,14 +135,15 @@ int FSYSCreateDirectory(char *name) {
 
 int FSYSDeleteDirectory(char *name) {
 	if (rmdir(_FSYSMapName(name)) == 0) return 0;  								// Removal okay
-	printf("%d\n",errno);
 	if (errno == ENOENT || errno == EEXIST || 
 						errno == ENOTEMPTY || errno == ENOTDIR) return 0;  		// Not present, not empty etc.
 	return _FSYSMapError();
 }  											
 
-int  	FSYSOpen(char *name,char access);  											// Open an existing file, read or write.
+int  	FSYSOpen(char *name);  														// Open an existing file, read or write.
 int 	FSYSClose(int handle);  													// Close an open file.
 int  	FSYSRead(int handle,void *data,int size);  									// Read bytes from a file.
 int  	FSYSWrite(int handle,void *data,int size);  								// Write bytes to a file.
 
+int 	FSYSEndOfFile(int handle);  												// Check EOF
+int 	FSYSGetSetPosition(int handle,int newPosition);  							// Read and optionally set position.
