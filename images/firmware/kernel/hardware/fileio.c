@@ -21,7 +21,7 @@
 //
 // ***************************************************************************************
 
-static FILINFO files[FIO_MAX_HANDLES];
+static FIL files[FIO_MAX_HANDLES];
 
 // ***************************************************************************************
 //
@@ -123,3 +123,78 @@ int FSYSCreateDirectory(char *name) {
 int FSYSDeleteDirectory(char *name) {
 	return FSYSDeleteFile(name);  												// Same as delete file :)
 }  											
+
+// ***************************************************************************************
+//
+//							Open File in R/W mode, rewind to start
+//
+// ***************************************************************************************
+
+int FSYSOpen(int handle,char *name) {
+	FRESULT fr = f_open(&files[handle],name,FA_READ|FA_WRITE|FA_OPEN_EXISTING);  	// Open read/write										
+	if (fr != FR_OK) return _FSYSMapError(fr);  									// Error occurred of some sort.
+	fr = f_lseek(&files[handle],0);   												// Rewind
+	return _FSYSMapError(fr);
+};
+
+// ***************************************************************************************
+//
+//										Close the file
+//
+// ***************************************************************************************
+
+int FSYSClose(int handle) {
+	return _FSYSMapError(f_close(&files[handle])); 			 						// Close file.
+}
+
+// ***************************************************************************************
+//
+//				Read data from the file. Returns error or # of bytes read.
+//
+// ***************************************************************************************
+
+int FSYSRead(int handle,void *data,int size) {
+	UINT count;
+	FRESULT fr = f_read(&files[handle],data,size,&count); 							// Attempt to read data from file.
+	if (fr != FR_OK) return _FSYSMapError(fr);  									// Error occurred of some sort.
+	return (int)count;  															// Bytes read.
+}
+
+// ***************************************************************************************
+//
+//								Write data to the file. 
+//
+// ***************************************************************************************
+
+int FSYSWrite(int handle,void *data,int size) {
+	UINT count;
+	FRESULT fr = f_write(&files[handle],data,size,&count); 							// Attempt to write data to file.
+	if (fr != FR_OK) return _FSYSMapError(fr);  									// Error occurred of some sort.
+	if (count != size) return FIO_ERR_SYSTEM;  										// Write did not complete.
+	return FIO_OK;  																// It's okay.
+}
+
+// ***************************************************************************************
+//
+//		Check end of file. Return -ve on error, 0 if more data, +ve if eof
+//
+// ***************************************************************************************
+
+int FSYSEndOfFile(int handle) {
+	return f_eof(&files[handle]) ? FIO_EOF : FIO_OK;  								// Seems not to be able to error :)
+}
+
+// ***************************************************************************************
+//
+//				Returns current position, and sets new position if >= 0
+//
+// ***************************************************************************************
+
+int FSYSGetSetPosition(int handle,int newPosition) {
+	int current = f_tell(&files[handle]);  											// Where are we now (cannot error in fatfs)
+	if (newPosition >= 0) {  														// Moving ?
+		FRESULT fr = f_lseek(&files[handle],newPosition);  							// Move it and check
+		if (fr != FR_OK) return _FSYSMapError(fr);
+	}
+	return current;
+}  	

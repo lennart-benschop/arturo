@@ -27,7 +27,10 @@
 
 #define FIO_EOF  			(1)
 
+#define MAX_FILENAME_SIZE 	(32) 													// Max size of filename base
+
 typedef struct _FIO_Information {
+	char name[MAX_FILENAME_SIZE+1]; 												// Name goes here (directory reading)
 	int  length;  																	// Byte size
 	bool isDirectory;  																// True if directory	
 } FIOInfo;
