@@ -34,6 +34,7 @@ add_executable(kernel
 include_directories(
 	include
 	user_code/include
+	${APP_DIRECTORY}/include
 )
 
 target_compile_options(kernel PRIVATE -Wall -Wno-unused-function -Wno-unused-variable)

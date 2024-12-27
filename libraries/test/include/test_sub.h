@@ -1,16 +1,15 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//      Name :      test_main.c
+//      Name :      test_sub.h
 //      Authors :   Paul Robson (paul@robsons.org.uk)
 //      Date :      27th December 2024
 //      Reviewed :  No
-//      Purpose :   Test library.
+//      Purpose :   Test library header.
 //
 // ***************************************************************************************
 // ***************************************************************************************
 
-//
-//		So we have some sub includes here.
-//
-#include "test_sub.h"
+#pragma once
+
+void PrintHello(void);

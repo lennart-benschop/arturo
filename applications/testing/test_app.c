@@ -11,8 +11,7 @@
 // ***************************************************************************************
 
 #include "common.h"
-
-void DemoApp_CheckFileIO(void);
+#include "testapp.h"
 
 // ***************************************************************************************
 //
@@ -22,7 +21,7 @@ void DemoApp_CheckFileIO(void);
 
 void DemoApp_RunApp(void) {
     int n = 0;
-    CONWriteString("\rKernel Demo App\r");                                                 // Exciting title
+    CONWriteString("Kernel Demo Application\r");                                          
     //DemoApp_CheckFileIO();
     //
     //      A typical 'main'
@@ -71,57 +70,8 @@ int8_t DemoApp_GetSample(int channel) {
         int toggleRate = SNDGetSampleFrequency() / (440*2);                         // 440Hz is A
         return ((count/toggleRate) & 1) ? -127:127;
     }
-    if (channel == 1) {  															// Noise on right channel if supported
+    if (channel == 1) {                                                             // Noise on right channel if supported
          return rand() & 0xFF;
     } 
     return 0; 
-}
-
-// ***************************************************************************************
-//
-//                          This tests the USB key is working.
-//
-// ***************************************************************************************
-
-void DemoApp_CheckFileIO(void) {
-    FIOInfo fi;int e;char *s;
-    char buffer[42];
-
-    CONWriteString("\rFSYSFileInformation\r");
-    s = "inline.bas";e = FSYSFileInformation(s,&fi);CONWriteString("(%d) %s %d %d ",e,s,fi.length,fi.isDirectory);
-    s = "inline.xxx";e = FSYSFileInformation(s,&fi);CONWriteString("(%d) %s %d %d ",e,s,fi.length,fi.isDirectory);
-    s = "aadir";e = FSYSFileInformation(s,&fi);CONWriteString("(%d) %s %d %d ",e,s,fi.length,fi.isDirectory);
-    s = "abdir";e = FSYSFileInformation(s,&fi);CONWriteString("(%d) %s %d %d\r",e,s,fi.length,fi.isDirectory);
-
-    CONWriteString("\rFSYSCreateFile/FSYSDeleteFile\r");
-    e = FSYSCreateFile("newfile.1");  CONWriteString("Create %d ",e);
-    e = FSYSCreateFile("newfile.2");  CONWriteString("Create %d ",e);
-    e = FSYSDeleteFile("newfile.1");  CONWriteString("Delete %d ",e);
-    e = FSYSDeleteFile("newfile.3");  CONWriteString("Delete %d\r",e);
-
-    CONWriteString("\rFSYSCreateDirectory/FSYSDeleteDirectory\r");
-    e = FSYSCreateDirectory("newDirectory.1");  CONWriteString("Create %d ",e);
-    e = FSYSCreateDirectory("newDirectory.2");  CONWriteString("Create %d ",e);
-    e = FSYSDeleteDirectory("newDirectory.1");  CONWriteString("Delete %d ",e);
-    e = FSYSDeleteDirectory("newDirectory.3");  CONWriteString("Delete %d\r",e);
-
-    CONWriteString("\rFile R/W\r");
-    e = FSYSCreateFile("test.file");CONWriteString(" %d",e);
-    e = FSYSOpen(0,"test.file");CONWriteString(" %d",e);
-    e = FSYSWrite(0,"Hello world",5);CONWriteString(" %d",e);
-    e = FSYSClose(0);CONWriteString(" %d\n",e);
-
-    strcpy(buffer,"_________");
-    e = FSYSOpen(0,"test.file");CONWriteString(" %d",e);
-    e = FSYSRead(0,buffer,2);CONWriteString(" %d %s",e,buffer);    
-    e = FSYSRead(0,buffer+3,3);CONWriteString(" %d %s",e,buffer);
-    e = FSYSGetSetPosition(0,1);CONWriteString(" %d",e);
-    e = FSYSRead(0,buffer+7,1);CONWriteString(" %d %s",e,buffer);
-    e = FSYSClose(0);CONWriteString(" %d\n",e);
-
-    CONWriteString("\rFSYSOpenDirectory\r");
-    e = FSYSOpenDirectory("/");CONWriteString(" %d",e);
-    while (e = FSYSReadDirectory(buffer),e == 0) CONWriteString(" %s",buffer);
-    CONWriteString(" %d",e);
-    e = FSYSCloseDirectory();CONWriteString(" %d",e);
 }

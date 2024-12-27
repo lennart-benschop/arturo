@@ -19,7 +19,7 @@ SOURCE2 = $(shell find -L $(ARTURO_APP_DIRECTORY) -name "*.c")
 
 SOURCES = $(SOURCE1) $(SOURCE2)
 OBJECTS = $(subst .c,.o,$(SOURCES))
-INCLUDES = -I include -I __include_x
+INCLUDES = -I include -I __include_x -I $(ARTURO_APP_DIRECTORY)/include
 
 TGTBIN = $(BINDIR)$(APPNAME)
 KERNELDIR = $(ROOTDIR)images/firmware/kernel/
