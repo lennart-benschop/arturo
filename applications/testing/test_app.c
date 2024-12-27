@@ -19,7 +19,7 @@
 //
 // ***************************************************************************************
 
-void DemoApp_RunApp(void) {
+void ApplicationRun(void) {
     int n = 0;
     CONWriteString("Kernel Demo Application\r");                                          
     //DemoApp_CheckFileIO();
@@ -64,7 +64,7 @@ void DemoApp_RunApp(void) {
 
 static int count = 0;
 
-int8_t DemoApp_GetSample(int channel) {
+int8_t ApplicationGetChannelSample(int channel) {
     count++;
     if (channel == 0) {                                                             // Square wave on left channel.
         int toggleRate = SNDGetSampleFrequency() / (440*2);                         // 440Hz is A

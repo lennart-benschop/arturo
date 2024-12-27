@@ -56,9 +56,4 @@
 #endif
 #include "support.h"
 
-//
-//		Note: this is a MACRO (#define) set up in config.make
-//
-void ARTURO_RUN_FUNCTION(void);
-
 #endif

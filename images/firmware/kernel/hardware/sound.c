@@ -17,8 +17,6 @@
 static int sampleFrequency = -1;
 static bool combineSoundChannels = false;
 
-int8_t ARTURO_SND_FUNCTION(int channel);
-
 // ***************************************************************************************
 //
 //      Function that returns the sample rate in Hz of the implementeing hardware
@@ -40,11 +38,11 @@ int SNDGetSampleFrequency(void) {
 
 void pwm_interrupt_handler() {
     pwm_clear_irq(pwm_gpio_to_slice_num(AUDIO_PIN_L));                           	// Acknowledge interrupt   
-    uint8_t sample0 = ARTURO_SND_FUNCTION(0)+128;  									// Get sample 1, copy to Left Pin
+    uint8_t sample0 = ApplicationGetChannelSample(0)+128;  							// Get sample 1, copy to Left Pin
     pwm_set_gpio_level(AUDIO_PIN_L,sample0);
     if (AUDIO_HARDWARE_CHANNELS == 2) {  											// If there are 2 channels.
         uint8_t sample1 = (combineSoundChannels ? 									// Reuse sample 1 if combined, otherwise get sample 2
-        							sample0 : ARTURO_SND_FUNCTION(1)+128);
+        							sample0 : ApplicationGetChannelSample(1)+128);
         pwm_set_gpio_level(AUDIO_PIN_R,sample1); 
     }
 }

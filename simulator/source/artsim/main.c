@@ -49,7 +49,7 @@ int main(int argc,char *argv[]) {
 	SYSOpen(true);  																// Start SDL and Mouse/Controller/Sound that use it
 	LOGODrawTitle();  																// Boot logo
 	LOGOTextHeader();  																// Boot text
-	ARTURO_RUN_FUNCTION();  														// Run the program
+	ApplicationRun();  																// Run the program
 	SYSClose();  																	// Close down
 	return(0);
 }

@@ -46,5 +46,6 @@ int main() {
     FIOInitialise();                                                            // Initialise the file system (core)
     LOCSetLocale(ARTURO_KBD_LOCALE);                                            // Default Locale
     CONWriteString("Booting application...\r\r");
-    ARTURO_RUN_FUNCTION();                                                      // Run whatever (defined in config.make)
+    ApplicationRun();                                                           // Run application
+    while (true) {}
 }

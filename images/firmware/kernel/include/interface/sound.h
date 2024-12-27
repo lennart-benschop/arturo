@@ -13,6 +13,7 @@
 #ifndef _SOUND_H
 #define _SOUND_H
 
+int8_t ApplicationGetChannelSample(int channel);
 int SNDGetSampleFrequency(void);
 
 #endif

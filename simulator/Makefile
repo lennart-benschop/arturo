@@ -14,15 +14,16 @@ include ../build_env/config.make
 
 APPNAME = artsim
 
-SOURCE1 = $(shell find -L source -name "*.c")
-SOURCE2 = $(shell find -L $(ARTURO_APP_DIRECTORY) -name "*.c")
-
-SOURCES = $(SOURCE1) $(SOURCE2)
-OBJECTS = $(subst .c,.o,$(SOURCES))
-INCLUDES = -I include -I __include_x -I $(ARTURO_APP_DIRECTORY)/include
-
 TGTBIN = $(BINDIR)$(APPNAME)
 KERNELDIR = $(ROOTDIR)images/firmware/kernel/
+
+SOURCE1 = $(shell find -L source -name "*.c")
+SOURCE2 = $(shell find -L $(ARTURO_APP_DIRECTORY) -name "*.c")
+SOURCE3 = $(shell find -L $(KERNELDIR)support -name "*.c")
+
+SOURCES = $(SOURCE1) $(SOURCE2) $(SOURCE3)
+OBJECTS = $(subst .c,.o,$(SOURCES))
+INCLUDES = -I include -I __include_x -I $(ARTURO_APP_DIRECTORY)/include -I $(KERNELDIR)include
 
 SDL_CFLAGS = $(shell sdl2-config --cflags)
 SDL_LDFLAGS = $(shell sdl2-config --libs)
@@ -33,7 +34,7 @@ SDL_LDFLAGS = $(shell sdl2-config --libs)
 #
 # ***************************************************************************************
 
-build : prebuild $(TGTBIN)
+build : $(TGTBIN)
 
 run : build
 	$(TGTBIN)
@@ -44,26 +45,3 @@ $(TGTBIN): $(OBJECTS)
 %.o:%.c
 	$(CC) $(CADDRESSES) $(CFLAGS) $(SDL_CFLAGS) $(INCLUDES) -c -o $@ $<
 
-# ***************************************************************************************
-#
-#						Clean & Import interface from firmware
-#
-# ***************************************************************************************
-
-clean:
-
-# ***************************************************************************************
-#
-#						Prebuild stuff, generating files & tables		
-#
-# ***************************************************************************************
-
-prebuild:
-	rm -f __include_x
-	ln -s $(KERNELDIR)include __include_x
-
-	rm -f source/__usercode
-	ln -s $(KERNELDIR)user_code source/__usercode
-
-	rm -f source/__support
-	ln -s $(KERNELDIR)support source/__support

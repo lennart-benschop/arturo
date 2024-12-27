@@ -14,6 +14,10 @@
 #define _MISCELLANY_H
 
 //
+//		Main execution
+//
+void ApplicationRun(void);
+//
 //		Timer/Interrupt functions.
 //
 int TMRRead(void);

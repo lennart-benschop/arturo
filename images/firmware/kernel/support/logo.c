@@ -52,7 +52,7 @@ void LOGOTextHeader(void) {
     CONWriteString("*** Arturo Kernel ***\r\r");
     CONSetColour(CON_COL_YELLOW,CON_COL_BLACK);
     CONWriteString("Hardware by Olimex\r");
-    CONWriteString("Software by Paul Robson 2024/2025\r");
+    CONWriteString("Software by Paul Robson 2024/2025 (MIT License)\r");
     CONWriteString("Version 0.1.0 (27-12-24)\r");
     CONWriteString("%s version\r",PICO_PLATFORM_NAME);
 }

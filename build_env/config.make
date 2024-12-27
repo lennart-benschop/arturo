@@ -28,10 +28,6 @@ PLATFORM = rp2040
 #
 PICO_HARDWARE = PICO_HW_RP2040PC
 #
-# 		Name of the application to run.
-#
-ARTURO_APP = DemoApp
-#
 #		Directory the App is in.
 #
 ARTURO_APP_DIRECTORY = $(ROOTDIR)/applications/testing/
@@ -88,8 +84,6 @@ CONFIG_DATA="\
 \#define PICO_HW_NEO6502 	(1) |\
 \#define PICO_HARDWARE 		$(PICO_HARDWARE) 	|\
 \
-\#define ARTURO_RUN_FUNCTION $(ARTURO_APP)_RunApp 				|\
-\#define ARTURO_SND_FUNCTION $(ARTURO_APP)_GetSample 			|\
 \#define ARTURO_PROCESS_KEYS $(ARTURO_PROCESS_KEYS) 			|\
 \#define ARTURO_MONO_SOUND   $(ARTURO_MONO_SOUND) 				|\
 \#define ARTURO_KBD_LOCALE 	 $(ARTURO_KBD_LOCALE) 				|\
