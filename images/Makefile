@@ -15,7 +15,7 @@ include $(BUILDENVDIR)/config.make
 
 PROJECT = kernel
 
-CMAKEOPTS = -DPICO_HARDWARE=$(PICO_HARDWARE)
+CMAKEOPTS = -DAPP_DIRECTORY=$(ARTURO_APP_DIRECTORY)
 
 all: build
 
@@ -65,8 +65,10 @@ build: prelim always
 #
 # ***************************************************************************************
 
-clean: always
+cleanall: always
 	rm -Rf  build/*
+
+clean: always
 	cmake --fresh -B build $(CMAKEOPTS)
 	cmake --build build --target clean
 

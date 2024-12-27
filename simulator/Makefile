@@ -10,12 +10,14 @@
 # *******************************************************************************************
 
 include ../build_env/common.make
+include ../build_env/config.make
 
 APPNAME = artsim
 
 SOURCE1 = $(shell find -L source -name "*.c")
+SOURCE2 = $(shell find -L $(ARTURO_APP_DIRECTORY) -name "*.c")
 
-SOURCES = $(SOURCE1)
+SOURCES = $(SOURCE1) $(SOURCE2)
 OBJECTS = $(subst .c,.o,$(SOURCES))
 INCLUDES = -I include -I __include_x
 

@@ -42,14 +42,14 @@ int USBUpdate(void) {
 // ***************************************************************************************
 
 int main(int argc,char *argv[]) {
-	DVISetMode(DVI_MODE_640_240_8);
-	CONInitialise();
-	KBDReceiveEvent(0,0xFF,0);
-	FIOInitialise();
-	SYSOpen(true);  																// Shuts up the audio :)
-	LOGODrawTitle();
-	LOGOTextHeader();
-	TESTApplication();
-	SYSClose();
+	DVISetMode(DVI_MODE_640_240_8);  												// Initialise display
+	CONInitialise();  																// Initialise console
+	KBDReceiveEvent(0,0xFF,0);  													// Initialise keyboard manager
+	FIOInitialise();  																// Initialise file system
+	SYSOpen(true);  																// Start SDL and Mouse/Controller/Sound that use it
+	LOGODrawTitle();  																// Boot logo
+	LOGOTextHeader();  																// Boot text
+	ARTURO_RUN_FUNCTION();  														// Run the program
+	SYSClose();  																	// Close down
 	return(0);
 }

@@ -34,9 +34,7 @@ void KBDProcessEvent(int scanCode,int modifiers,bool isDown);
 
 void CTLFindControllers(void);
 
-#define SNDGetNextSample TESTApplication_GetSample
-
-int8_t SNDGetNextSample(int channel);
+int8_t ARTURO_SND_FUNCTION(int channel);
 
 void SOUNDOpen(void);
 void SOUNDClose(void);

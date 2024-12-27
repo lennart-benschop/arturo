@@ -72,7 +72,7 @@ static void audioCallback(void* userdata,uint8_t* stream,int len) {
 	// Write data to the entire buffer by iterating through all samples and
 	// channels.
 	for (int sample = 0; sample < audioSpec.samples; ++sample) {
-		double data = ((double)SNDGetNextSample(0))/128.0;
+		double data = ((double)ARTURO_SND_FUNCTION(0))/128.0;
 		// Write the same data to all channels
 		for (int channel = 0; channel < audioSpec.channels; ++channel) {
 			int offset = m_calculateOffset(sample, channel);

@@ -12,7 +12,7 @@
 
 #include "common.h"
 
-void TESTShowUSBRootDirectory(void);
+void DemoApp_CheckFileIO(void);
 
 // ***************************************************************************************
 //
@@ -20,10 +20,10 @@ void TESTShowUSBRootDirectory(void);
 //
 // ***************************************************************************************
 
-void TESTApplication(void) {
+void DemoApp_RunApp(void) {
     int n = 0;
-    CONWriteString("\rTest App\r");                                                 // Exciting title
-    //TESTShowUSBRootDirectory();
+    CONWriteString("\rKernel Demo App\r");                                                 // Exciting title
+    //DemoApp_CheckFileIO();
     //
     //      A typical 'main'
     //
@@ -31,7 +31,7 @@ void TESTApplication(void) {
   
         n = KBDGetKey();                                                            // Echo any keystroke
         if (n != 0) CONWriteString("%d %c\r",n,n);
-        if (n == ' ') TESTShowUSBRootDirectory();                                  // Dump the USB key on space
+        if (n == ' ') DemoApp_CheckFileIO();                                  // Dump the USB key on space
 
         if (KBDEscapePressed(true)) {                                               // Escaped ?
             CONWriteString("Escape !\r");
@@ -65,7 +65,7 @@ void TESTApplication(void) {
 
 static int count = 0;
 
-int8_t TESTApplication_GetSample(int channel) {
+int8_t DemoApp_GetSample(int channel) {
     count++;
     if (channel == 0) {                                                             // Square wave on left channel.
         int toggleRate = SNDGetSampleFrequency() / (440*2);                         // 440Hz is A
@@ -83,7 +83,7 @@ int8_t TESTApplication_GetSample(int channel) {
 //
 // ***************************************************************************************
 
-void TESTShowUSBRootDirectory(void) {
+void DemoApp_CheckFileIO(void) {
     FIOInfo fi;int e;char *s;
     char buffer[42];
 
