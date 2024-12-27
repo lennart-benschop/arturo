@@ -66,7 +66,6 @@ void TESTApplication(void) {
 static int count = 0;
 
 int8_t TESTApplication_GetSample(int channel) {
-    return 0;
     count++;
     if (channel == 0) {                                                             // Square wave on left channel.
         int toggleRate = SNDGetSampleFrequency() / (440*2);                         // 440Hz is A

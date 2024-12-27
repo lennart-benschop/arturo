@@ -23,7 +23,7 @@
 
 void TESTApplication(void);
 
-void SYSOpen(void);
+void SYSOpen(bool muteSound);
 int SYSPollUpdate(void);
 void SYSClose(void);
 void SYSRectangle(SDL_Rect *rc,int colour);

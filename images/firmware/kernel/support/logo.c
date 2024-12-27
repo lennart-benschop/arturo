@@ -11,12 +11,24 @@
 // ***************************************************************************************
 
 #include "common.h"
-
 #include "support/__logo_data.h"
+#include "support/__config.h"
+
+// ***************************************************************************************
+//
+//                              Draw logos on boot screen
+//
+// ***************************************************************************************
 
 void LOGODrawTitle(void) {
     LOGODraw(DVIGetModeInformation()->width-LOGO_WIDTH_BYTES*8-4,4,LOGO_WIDTH_BYTES,LOGO_HEIGHT,logoData,1,0);
 }
+
+// ***************************************************************************************
+//
+//                                  Draw a specific logo
+//
+// ***************************************************************************************
 
 void LOGODraw(int x,int y,int w,int h,const uint8_t *pixelData,int fgr,int bgr) {
     for (int yc = 0;yc < h;yc++) {
@@ -27,4 +39,20 @@ void LOGODraw(int x,int y,int w,int h,const uint8_t *pixelData,int fgr,int bgr) 
             pixelData++;
         }
     }
+}
+
+// ***************************************************************************************
+//
+//                                  Display text header
+//
+// ***************************************************************************************
+
+void LOGOTextHeader(void) {
+    CONSetColour(CON_COL_CYAN,CON_COL_BLACK);
+    CONWriteString("*** Arturo Kernel ***\r\r");
+    CONSetColour(CON_COL_YELLOW,CON_COL_BLACK);
+    CONWriteString("Hardware by Olimex\r");
+    CONWriteString("Software by Paul Robson 2024/2025\r");
+    CONWriteString("Version 0.1.0 (27-12-24)\r");
+    CONWriteString("%s version\r",PICO_PLATFORM_NAME);
 }

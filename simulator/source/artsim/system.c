@@ -29,23 +29,23 @@ static void SYSUpdateMouse(void);
 //
 // *******************************************************************************************************************************
 
-void SYSOpen(void) {
+void SYSOpen(bool muteSound) {
 
 	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_GAMECONTROLLER) < 0)	{	// Try to initialise SDL Video and Audio
 		exit(printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError()));
 	}
 	mainWindow = SDL_CreateWindow("Artsim", SDL_WINDOWPOS_UNDEFINED, 				// Try to create a window
-							SDL_WINDOWPOS_UNDEFINED, 640*AS_SCALE,480*AS_SCALE, SDL_WINDOW_SHOWN );
+							SDL_WINDOWPOS_UNDEFINED, 640*AS_SCALE+16,480*AS_SCALE+16, SDL_WINDOW_SHOWN );
 	if (mainWindow == NULL) {
 		exit(printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() ));
 	}
 
 	mainSurface = SDL_GetWindowSurface(mainWindow);									// Get a surface to draw on.
 
-	CTLFindControllers();
+	CTLFindControllers();  															// Have to be done after SDL Initialisation.
 	MSEInitialise();
 	SOUNDOpen();
-	SOUNDPlay();
+	if (!muteSound) SOUNDPlay();
 
 	SDL_ShowCursor(SDL_DISABLE);                                                    // Hide mouse cursor
 	startTime = TMRRead();

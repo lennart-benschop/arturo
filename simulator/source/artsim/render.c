@@ -77,16 +77,18 @@ void RNDRender(SDL_Surface *surface) {
 	struct DVIModeInformation *dm = DVIGetModeInformation();
 	uint8_t *pr,*pg,*pb,r,g,b;
 	SDL_Rect rc;
+	rc.x = rc.y = 0;rc.w = AS_SCALE*640+16;rc.h = AS_SCALE*480+16;
+	SYSRectangle(&rc,0);
 	for (int y = 0;y < dm->height;y++) {
 		rc.w = AS_SCALE * 640/dm->width;
 		rc.h = AS_SCALE * 480/dm->height;
-		rc.y = y*rc.h;
+		rc.y = y*rc.h+8;
 		pr = dm->bitPlane[0]+y*dm->bytesPerLine;
 		pg = dm->bitPlane[1]+y*dm->bytesPerLine;
 		pb = dm->bitPlane[2]+y*dm->bytesPerLine;
 		if (y == 0) *pr = *pg = *pb = 0x80;
 		for (int x = 0;x < dm->width;x+= 8) {
-			rc.x = x*rc.w;
+			rc.x = x*rc.w+8;
 			r = *pr++;g = *pg++;b = *pb++;
 			for (int bt = 0;bt < 8;bt++) {
 				uint8_t c = ((r & 0x80) >> 7)+((g & 0x80) >> 6)+((b & 0x80) >> 5);
@@ -97,5 +99,4 @@ void RNDRender(SDL_Surface *surface) {
 			}
 		}
 	}	
-	//for (int i = 0;i < 640*2;i++) { printf("%d ",greenPlane[i]); } printf("\n");
 }

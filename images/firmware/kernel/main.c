@@ -33,8 +33,8 @@ static void _showRAMAvailable(void) {
 int main() {
 	DVIStart();																	// Start DVI running.
 	CONInitialise();  															// Initialise the console.
-    LOGODrawTitle();
-        CONWriteString("Arturo Kernel 0.0.1 in development\r\r",PICO_PLATFORM_NAME);// Prompt string.
+    LOGODrawTitle();                                                            // Olimex Logo.
+    LOGOTextHeader();                                                           // Write text header
     _showRAMAvailable();                                                        // Show RAM free.
     SNDInitialise(ARTURO_MONO_SOUND != 0);                                      // Start the sound system, seperate channels according to config.
     MSEInitialise();                                                            // Initialise the mouse system

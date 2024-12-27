@@ -59,6 +59,17 @@ static uint bgcol = CON_COL_BLACK;
 
 void CONInitialise(void) {
 	CONWrite(12);																	// CHR(12) is clear screen.
+	CONSetColour(CON_COL_GREEN,CON_COL_BLACK);
+}
+
+// ***************************************************************************************
+//
+//									Set Colour
+//
+// ***************************************************************************************
+
+void CONSetColour(int foreground,int background) {
+	fgcol = foreground;bgcol = background;
 }
 
 // ***************************************************************************************
@@ -76,10 +87,7 @@ void CONWrite(char c) {
 			for (uint x = 0; x < dmi->width; ++x)
 				for (uint y = 0; y < dmi->height; ++y)
 					CONDrawPixel(x, y, CON_COL_BLACK);			
-			fgcol = CON_COL_WHITE;													// Reset colours.
-			bgcol = CON_COL_BLACK;
 			x0 = y0 = 0;  															// Home cursor
-			for (int i = 0;i < 240;i++) CONDrawPixel(i,i,i & 7);
 			break;
 		case 10:
 		case 13:  																	// New line

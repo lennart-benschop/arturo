@@ -20,12 +20,12 @@
 #include <string.h>
 #include <malloc.h>
 
+#include <support/__config.h>
 //
 //		Used building for the PICO
 //
 #ifdef PICO
 #include "ff.h"
-#include "data/__config.h"
 #include "pico/stdlib.h"
 #include "pico/multicore.h"
 #include "hardware/clocks.h"

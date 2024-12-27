@@ -18,5 +18,6 @@ void LOCSetLocale(char *loc);
 
 void LOGODrawTitle(void);
 void LOGODraw(int x,int y,int w,int h,const uint8_t *pixelData,int fgr,int bgr);
+void LOGOTextHeader(void);
 
 #endif

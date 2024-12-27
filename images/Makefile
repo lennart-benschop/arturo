@@ -27,7 +27,7 @@ always:
 #
 # ***************************************************************************************
 
-CONFIG_OUT_FILE = firmware/kernel/include/data/__config.h
+CONFIG_OUT_FILE = firmware/kernel/include/support/__config.h
 LOCALE_OUT_FILE = ../include/support/__locale.h
 
 LOGO_DIRECTORY = $(ROOTDIR)images/scripts/
