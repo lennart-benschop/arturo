@@ -16,40 +16,35 @@ There are two versions of the Kernel, which share a fair amount of code at the b
 
 ## Graphics
 
-Currently only a single mode is provided, which is initialised at the start, this is an 8 colour 640x240 mode, which operates using bitplanes rather like an Amiga. The first bitplane is red, the second green, the third blue.  
+Currently three provided, which is initialised at the start, the default is an 8 colour 640x240 mode, which operates using bitplanes rather like an Amiga. The first bitplane is red, the second green, the third blue.   There is also an 8 colour 320x240 mode, and a 2 colour 640x480 mode.
 
 Information on this can be obtained from the function *DVIGetModeInformation()* which returns a pointer to a *DVIModeInformation* structure.
 
-The mode can be changed by *DVISetMode()* , which currently has the options, an 8 colour 340x240 mode, with gaming in mind, and a 2 colour 640x480 mode.
-
-### Notes
-
-There is in development a 320x240x256 byte mode, which will be selectable by a *DVISetMode()* function but this is not currently working with PicoDVI, and I'm not sure why.
-
-Other modes should be theoretically possible.
+The mode can be changed by *DVISetMode()*
 
 ## File Storage
 
 A USB key plugged into the board (RP2040PC) or external hub (Neo6502) is exposed as a FAT32 storage device. The keys ID is displayed during the bootup sequence.
 
-The key can be accessed via the fatfs library documented [here](http://elm-chan.org/fsw/ff/00index_e.html) , but a set of wrappers are available, and should be used where possible. Examples are in the file *test_app.c*
+There is a wrapper class for fatfs (or stdio) which is shown in the test application file "filesystem.c"
 
 All error values are negative, apart from non terminal ones (e.g. EndOfFile returns 1 if true, 0 if false, -x on error)
 
 | Function           | Purpose                                                      |
 | ------------------ | ------------------------------------------------------------ |
-| FIOOpen            | Opens a file in read/write mode, creating it if it does not exist |
-| FIOOpenRead        | Opens a file in read only mode                               |
-| FIOOpenCreate      | Creates a new empty file and opens it in read/write mode, replacing any existing file. |
-| FIOOpenDirectory   | Opens a directory                                            |
-| FIOClose           | Close file or directory                                      |
-| FIORead            | Read from a file or directory                                |
-| FIOReadDirectory   | Helper function for reading directories, wrapper for FIORead |
-| FIOGetPosition     | Read current offset in file                                  |
-| FIOSetPosition     | Set current offset in file                                   |
+| FIOOpen            | Opens an existing file in read/write mode                    |
+| FIOClose           | Close a file.                                                |
+| FIORead            | Read data from a file                                        |
+| FIOWrite           | Write data to a file.                                        |
+| FIOGetSetPosition  | Get, and optionally set, the position in a file.             |
+| FIOFileInformation | Get information on a file or directory, if it exists         |
+| FIOOpenDirectory   | Open a directory to read the filenames (currently only one is supported) |
+| FIOReadDirectory   | Read the next filename in a directory                        |
+| FIOCloseDirectory  | Close a directory                                            |
+| FIOCreateFile      | Create a new empty file                                      |
 | FIOCreateDirectory | Create directory if it does not exist                        |
-| FIODelete          | Delete a file or directory (directory must be empty)         |
-| FIOChangeDirectory | Change the current directory.                                |
+| FIODeleteFile      | Delete a file                                                |
+| FIODeleteDirectory | Delete a directory                                           |
 
 It is not required to have a USB key, however this will slow the boot down. When the hardware starts, there is a delay loop which is waiting for the USB system to stabilise, which takes about a second. This will time out after a few seconds.
 
@@ -67,7 +62,7 @@ An RP2040PC has two sound channels at present they are combined by default, and 
 
 The concept is that a sampling function is called to get the next sample at a frequency of *SNDGetSampleFrequency()* , and you can figure out what you want the output level to be. In the example in test_app.c channel 1 (right) returns white noise, channel 0 (left) a square wave beep at 440Hz.
 
-The name of the function that is called to get the sample is related to the one described in the "Main function" section below. If *ARTURO_RUN_FUNCTION* is set to TESTApplication then the function called to get the sample will be called TESTApplication_GetSample and should be declared and used as in test_app.c
+The name of the function that is called to get the sample *ApplicationGetChannelSample()* used as in test_app.c
 
 The returned value should be -128 .. 127 and can be samples or similar. 
 
@@ -89,9 +84,11 @@ This is deliberately not done using interrupts as a way of avoiding any issues. 
 
 ## Application source
 
-Your application code can go in user_code and user_code/include ; anything placed in user_code should be picked up and compiled.
+Application source can go anywhere, there are examples in the 'applications' directory including the very simple "testing".  The location is set in config.make.
 
-This includes the file testing/test_app.c ; this should be removed by the linker.
+## Libraries
+
+The system libraries go in the libraries subdirectory, there is a simple example which prints "Hello world" on the console. These should be picked up automatically. 
 
 ## Configuration
 
@@ -99,9 +96,7 @@ Configuration is done using the **config.make** file, which allows you to change
 
 ### Main function
 
-The primary function setting is the *ARTURO_RUN_FUNCTION* setting. This specifies the C function that is run to actually execute the code, and is currently set to "TestApplication" which causes the function *TestApplication()* to be called once initialisation is complete.
-
-If you change this to run something else, then the TestApplication() and associated functions should be removed by the linker.
+The main application function is called *ApplicationRun()* and there is an example in test_app.c
 
 This function should not be returned. Code is running on core 0, core 1 is running the DVI code.
 
@@ -111,7 +106,7 @@ The standard keyboard manager can be disabled using *ARTURO_PROCESS_KEYS* which 
 
 ### Mono Sound
 
-The sound can be set to function as a single channel using *ARTURO_MONO_SOUND* which is 0 by default, when non-zero the RP2040PC stereo channels are combined into a single channel.
+The sound can be set to function as a single channel using *ARTURO_MONO_SOUND* which is 1 by default, when zero the RP2040PC two channels operate seperately.
 
 ### Default Locale
 
@@ -134,10 +129,6 @@ It is also possible to access the keyboard current state allowing the keys to be
 | KBDIsKeyAvailable | Returns true if there is a key in the keyboard queue.        |
 | KBDGetKey         | Returns and removes the next key in the keyboard queue, returns 0 if the queue is empty. Control constants are in control_codes.h. This value should be standard ASCII. |
 | KBDEscapePressed  | Returns true when the escape key has been pressed, optionally can reset it on reading this. |
-
-## Graphics Support
-
-tbc
 
 ## Mouse Support
 
@@ -191,10 +182,6 @@ The six million dollar question is, what are those bits ? Most of this you have 
 	}
 
 If this is set to true, then reports from unknown devices are dumped on the console. From this it should be possible to figure out which bits in the report correspond to which buttons. 
-
-## Sound Support
-
-tbc
 
 ------
 

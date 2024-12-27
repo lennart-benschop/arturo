@@ -56,4 +56,5 @@
 #endif
 #include "support.h"
 
+#include <libraries.h>
 #endif

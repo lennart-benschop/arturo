@@ -45,6 +45,10 @@ ARTURO_MONO_SOUND = 1
 #		Set the default locale, the list is in the locale directory
 #
 ARTURO_KBD_LOCALE = "gb"
+#
+#		Directory containing libraries
+#
+ARTURO_LIB_DIRECTORY = $(ROOTDIR)libraries
 
 # *******************************************************************************************
 #

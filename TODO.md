@@ -1,4 +1,4 @@
 # TODO stuff
 
-- Create libraries subdirectory, same thing (should support move ?)
+- Add change directory (!)
 - Think about Graphics API. 	(Probably point / hline based ? Viewports ?)

@@ -22,7 +22,7 @@
 void ApplicationRun(void) {
     int n = 0;
     CONWriteString("Kernel Demo Application\r");                                          
-    //DemoApp_CheckFileIO();
+    PrintHello();                                                                   // A library function
     //
     //      A typical 'main'
     //
@@ -30,7 +30,7 @@ void ApplicationRun(void) {
   
         n = KBDGetKey();                                                            // Echo any keystroke
         if (n != 0) CONWriteString("%d %c\r",n,n);
-        if (n == ' ') DemoApp_CheckFileIO();                                  // Dump the USB key on space
+        if (n == ' ') DemoApp_CheckFileIO();                                        // Dump the USB key on space
 
         if (KBDEscapePressed(true)) {                                               // Escaped ?
             CONWriteString("Escape !\r");

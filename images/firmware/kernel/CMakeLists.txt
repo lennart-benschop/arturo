@@ -16,13 +16,14 @@
 #
 # ***************************************************************************************
 
-file(GLOB_RECURSE USER_C_SOURCES "${APP_DIRECTORY}/*.c")
+file(GLOB_RECURSE APP_C_SOURCES "${APP_DIRECTORY}/*.c")
 file(GLOB_RECURSE HARDWARE_C_SOURCES "hardware/*.c")
 file(GLOB_RECURSE SUPPORT_C_SOURCES "support/*.c")
+file(GLOB_RECURSE LIBRARY_C_SOURCES "${LIBRARY_DIRECTORY}/*.c")
 
 add_executable(kernel
 	main.c 
-	${USER_C_SOURCES} ${HARDWARE_C_SOURCES} ${SUPPORT_C_SOURCES}
+	${APP_C_SOURCES} ${HARDWARE_C_SOURCES} ${SUPPORT_C_SOURCES} ${LIBRARY_C_SOURCES}
 )
 
 # ***************************************************************************************
@@ -35,6 +36,7 @@ include_directories(
 	include
 	user_code/include
 	${APP_DIRECTORY}/include
+	${LIBRARY_DIRECTORY}
 )
 
 target_compile_options(kernel PRIVATE -Wall -Wno-unused-function -Wno-unused-variable)
