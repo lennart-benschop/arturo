@@ -116,6 +116,18 @@ int FSYSCreateDirectory(char *name) {
 
 // ***************************************************************************************
 //
+//								Change to a new directory
+//
+// ***************************************************************************************
+
+int FSYSChangeDirectory(char *directory) {
+	FRESULT fr = f_chdir(directory);
+	return _FSYSMapError(fr);
+}
+
+
+// ***************************************************************************************
+//
 //				Delete directory, ignoring if it does not exist/not empty
 //
 // ***************************************************************************************
@@ -237,3 +249,4 @@ int FSYSReadDirectory(char *fileName) {
 int FSYSCloseDirectory(void) {
 	return _FSYSMapError(f_closedir(&currentDirectory));  		
 }
+

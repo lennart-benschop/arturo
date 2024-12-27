@@ -40,7 +40,8 @@ All error values are negative, apart from non terminal ones (e.g. EndOfFile retu
 | FIOFileInformation | Get information on a file or directory, if it exists         |
 | FIOOpenDirectory   | Open a directory to read the filenames (currently only one is supported) |
 | FIOReadDirectory   | Read the next filename in a directory                        |
-| FIOCloseDirectory  | Close a directory                                            |
+| FIOCloseDirectory  | Close a directory for reading                                |
+| FIOChangeDirectory | Change the current directory                                 |
 | FIOCreateFile      | Create a new empty file                                      |
 | FIOCreateDirectory | Create directory if it does not exist                        |
 | FIODeleteFile      | Delete a file                                                |

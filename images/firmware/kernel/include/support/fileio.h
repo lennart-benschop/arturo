@@ -26,6 +26,7 @@ int FIOCreateDirectory(char *fileName);
 int FIODeleteFile(char *fileName);
 int FIODeleteDirectory(char *fileName);
 int FIOFileInformation(char *name,FIOInfo *info); 								
+int FIOChangeDirectory(char *directory);
 
 int FIOOpenDirectory(char *directory);  		
 int FIOReadDirectory(int handle,char *fileName); 

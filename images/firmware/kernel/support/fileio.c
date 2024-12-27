@@ -113,6 +113,10 @@ int FIODeleteDirectory(char *fileName) {
 	return FSYSDeleteDirectory(fileName);
 }
 
+int FIOChangeDirectory(char *fileName) {
+	return FSYSChangeDirectory(fileName);
+}
+
 int FIOFileInformation(char *name,FIOInfo *info) {
 	if (info != NULL) {  															// FSYSFileInformation doesn't clear FIOInfo
 		strcpy(info->name,"?");
