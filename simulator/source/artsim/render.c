@@ -86,7 +86,6 @@ void RNDRender(SDL_Surface *surface) {
 		pr = dm->bitPlane[0]+y*dm->bytesPerLine;
 		pg = dm->bitPlane[1]+y*dm->bytesPerLine;
 		pb = dm->bitPlane[2]+y*dm->bytesPerLine;
-		if (y == 0) *pr = *pg = *pb = 0x80;
 		for (int x = 0;x < dm->width;x+= 8) {
 			rc.x = x*rc.w+8;
 			r = *pr++;g = *pg++;b = *pb++;

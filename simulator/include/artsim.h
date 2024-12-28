@@ -33,8 +33,6 @@ void KBDProcessEvent(int scanCode,int modifiers,bool isDown);
 
 void CTLFindControllers(void);
 
-int8_t ARTURO_SND_FUNCTION(int channel);
-
 void SOUNDOpen(void);
 void SOUNDClose(void);
 void SOUNDPlay(void);

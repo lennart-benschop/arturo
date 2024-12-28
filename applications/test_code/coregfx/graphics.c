@@ -21,8 +21,18 @@
 
 void ApplicationRun(void) {
     int n = 0;
+    GFXPort vp;
     CONWriteString("%s Graphics Demo Application\r",XXX);                                          
-    PrintHello();                                                                   // A library function
+    GFXPortInitialise(&vp,48,64,400,150);
+    GFXASetPort(&vp);
+    for (int y = 0;y < 240;y++) {
+        for (int i = 0;i < 640;i++) {
+            GFXAMove(i,y);
+            GFXAPlot(i >> 2);
+        }
+    }
+
+    printf("%02x\n",DVIGetModeInformation()->bitPlane[0][0]);
     //
     //      A typical 'main'
     //
@@ -48,4 +58,5 @@ void ApplicationRun(void) {
 
 int8_t ApplicationGetChannelSample(int channel) {
     return 0; 
+
 }

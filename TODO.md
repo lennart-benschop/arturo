@@ -1,3 +1,6 @@
 # TODO stuff
 
-- Think about Graphics API. (Probably point / hline based ? Viewports ?)
+- up down left right
+- default line drawing
+- check monochrome works.
+- optimise line drawing.
