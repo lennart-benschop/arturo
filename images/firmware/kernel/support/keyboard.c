@@ -102,7 +102,7 @@ uint8_t *KBDGetStateArray(void) {
 	return keyboardState;
 }
 
-uint8_t KBDGetModifiers(void) {
+int KBDGetModifiers(void) {
 	return keyboardModifiers;
 };
 
@@ -112,7 +112,7 @@ uint8_t KBDGetModifiers(void) {
 //
 // ***************************************************************************************
 
-bool KBDEscapePressed(bool resetEscape) {
+int KBDEscapePressed(int resetEscape) {
 	bool state = escapeFlag;
 	if (resetEscape) escapeFlag = false;
 	return state;
@@ -124,7 +124,7 @@ bool KBDEscapePressed(bool resetEscape) {
 //
 // ***************************************************************************************
 
-void KBDInsertQueue(uint8_t ascii) {
+void KBDInsertQueue(int ascii) {
 	if (queueSize < MAX_QUEUE_SIZE) {   										// Do we have a full queue ?
 		queue[queueSize] = ascii;  												// If not insert it.
 		queueSize++;
@@ -137,7 +137,7 @@ void KBDInsertQueue(uint8_t ascii) {
 //
 // ***************************************************************************************
 
-bool KBDIsKeyAvailable(void) {
+int KBDIsKeyAvailable(void) {
 	return queueSize != 0;
 }
 
@@ -147,7 +147,7 @@ bool KBDIsKeyAvailable(void) {
 //
 // ***************************************************************************************
 
-uint8_t KBDGetKey(void) {
+int KBDGetKey(void) {
 	if (queueSize == 0) return 0; 												// Queue empty.
 	uint8_t key = queue[0];
 	for (uint8_t i = 0;i < queueSize;i++) queue[i] = queue[i+1];  				// Dequeue it

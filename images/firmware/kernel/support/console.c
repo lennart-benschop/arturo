@@ -25,7 +25,7 @@
 //
 // ***************************************************************************************
 
-void CONDrawPixel(uint x, uint y, uint rgb) {
+void CONDrawPixel(int x, int y, int rgb) {
 	struct DVIModeInformation *dmi = DVIGetModeInformation();  						// Identify mode data.
 	if (dmi == NULL) return;
 	uint8_t mask = 0x80 >> (x % 8);  												// Mask from lower 8 bits.
@@ -78,7 +78,7 @@ void CONSetColour(int foreground,int background) {
 //
 // ***************************************************************************************
 
-void CONWrite(char c) {
+void CONWrite(int c) {
 	struct DVIModeInformation *dmi = DVIGetModeInformation();  						// Identify mode data.
 	if (dmi == NULL) return;
 

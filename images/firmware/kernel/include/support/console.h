@@ -26,8 +26,8 @@
 //		Console output functionality.
 //
 void CONInitialise(void);
-void CONWrite(char c);
+void CONWrite(int c);
 void CONWriteString(const char *fmt, ...);
-void CONDrawPixel(uint x, uint y, uint rgb);
+void CONDrawPixel(int x, int y, int rgb);
 void CONSetColour(int foreground,int background);
 

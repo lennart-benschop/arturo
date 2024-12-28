@@ -17,8 +17,9 @@
 
 void KBDReceiveEvent(uint8_t isDown,uint8_t keyCode,uint8_t modifiers);
 void KBDCheckTimer(void);
-uint8_t KBDGetModifiers(void);
-void KBDInsertQueue(uint8_t ascii);
-bool KBDIsKeyAvailable(void);
-uint8_t KBDGetKey(void);
-bool KBDEscapePressed(bool resetEscape);
+int KBDGetModifiers(void);
+void KBDInsertQueue(int ascii);
+int KBDIsKeyAvailable(void);
+uint8_t *KBDGetStateArray(void);
+int KBDGetKey(void);
+int KBDEscapePressed(int resetEscape);
