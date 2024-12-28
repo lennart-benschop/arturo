@@ -10,10 +10,8 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _SOUND_H
-#define _SOUND_H
+#pragma once
 
 int8_t ApplicationGetChannelSample(int channel);
 int SNDGetSampleFrequency(void);
 
-#endif

@@ -10,8 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _SUPPORT_H
-#define _SUPPORT_H
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,4 +26,3 @@
 #include "support/control_codes.h"
 #include "support/fileio.h"
 
-#endif

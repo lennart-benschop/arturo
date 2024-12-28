@@ -10,9 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _MISCELLANY_H
-#define _MISCELLANY_H
-
+#pragma once
 //
 //		Main execution
 //
@@ -30,5 +28,3 @@ extern bool tick50HzHasFired;
 //
 #define HASTICK50_FIRED()	(tick50HzHasFired)
 #define TICK50_RESET() 		{ tick50HzHasFired = false; }
-
-#endif

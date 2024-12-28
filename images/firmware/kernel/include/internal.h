@@ -10,8 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _INTERNAL_H
-#define _INTERNAL_H
+#pragma once
 
 #include "internal/sound.h"
 #include "internal/dvi_common.h"
@@ -21,4 +20,3 @@
 #include "internal/usb_interface.h"
 #include "internal/keyboard.h"
 
-#endif

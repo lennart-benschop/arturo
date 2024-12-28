@@ -10,8 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _MOUSE_H
-#define _MOUSE_H
+#pragma once
 
 bool MSEMousePresent(void);
 void MSESetPosition(int x, int y);
@@ -26,4 +25,4 @@ void MSEUpdateScrollWheel(int8_t ds);
 void MSEUpdateButtonState(uint8_t bs);
 void MSEOffsetPosition(int8_t dx, int8_t dy);
 
-#endif
+

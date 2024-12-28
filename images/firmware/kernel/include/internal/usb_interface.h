@@ -10,10 +10,8 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _USB_INTERFACEI_H
-#define _USB_INTERFACEI_H
+#pragma once
 
 void USBInitialise(void);
 void USBSynchronise(void);
 
-#endif

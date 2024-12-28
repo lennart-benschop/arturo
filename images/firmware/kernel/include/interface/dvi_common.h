@@ -10,8 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _DVI_COMMON_H
-#define _DVI_COMMON_H
+#pragma once
 //
 //		Structure for mode information.
 //
@@ -37,4 +36,3 @@ struct DVIModeInformation {
 bool DVISetMode(int mode);
 struct DVIModeInformation *DVIGetModeInformation(void);
 
-#endif

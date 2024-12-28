@@ -10,9 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _MISCELLANYI_H
-#define _MISCELLANYI_H
-
+#pragma once
 //
 //		Timer/Interrupt functions.
 //
@@ -20,4 +18,3 @@ void TMRStartTickInterrupt(void);
 //
 //		Synchronisation method.
 //
-#endif

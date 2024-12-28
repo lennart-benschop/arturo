@@ -10,9 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _KEYBOARDI_H
-#define _KEYBOARDI_H
-
+#pragma once
 //
 //		If this constant is set to non-zero, the full keyboard decoding is used. Otherwise
 //		the user can handle the Keyboard events from the usb driver themselves.
@@ -21,4 +19,3 @@
 #define USBKeyboardEvent(x,y,z) KBDReceiveEvent(x,y,z)
 #endif
 
-#endif

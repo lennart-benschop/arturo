@@ -10,8 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _GAMEPADI_H
-#define _GAMEPADI_H
+#pragma once
 
 #define CTL_DEVICE_TYPE_ID(vid,pid) 			(((vid) << 16)|(pid))  				// 32 bit device type.
 #define CTL_HARDWARE_ID(dev_addr,instance)		(((dev_addr << 8)|(instance))) 		// 16 bit composite identifier
@@ -31,4 +30,4 @@ int  CTLSendMessage(int command,uint16_t hwid,struct _CTL_MessageData *msg);
 int  CTLDispatchMessage(int command,CTLState *cs,struct _CTL_MessageData *msg);
 void CTLAnnounceDevice(CTLState *cs,const char *name);
 
-#endif
+

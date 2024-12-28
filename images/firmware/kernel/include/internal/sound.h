@@ -10,8 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _SOUNDI_H
-#define _SOUNDI_H
+#pragma once
 
 void SNDInitialise(bool _combineChannels);
 //
@@ -31,4 +30,3 @@ void SNDInitialise(bool _combineChannels);
 
 #define SAMPLE_DIVIDER (32)                 // Divider, affects the interrupts / second of the PWM sample output. More samples are better but slower.
 
-#endif

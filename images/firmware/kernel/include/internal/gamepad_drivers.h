@@ -10,12 +10,9 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _GAMEPAD_DRV_H
-#define _GAMEPAD_DRV_H
+#pragma once
 
 //
 //		List of drivers for gamepads, all should have the same signature.
 //
 int  CTLDriverSNESType(int command,CTLState *cs,struct _CTL_MessageData *msg);
-
-#endif

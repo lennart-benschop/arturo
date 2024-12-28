@@ -10,9 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _CONSOLE_H
-#define _CONSOLE_H
-
+#pragma once
 //
 //		Standard colours RGB format, same as the BBC Micro.
 //
@@ -33,4 +31,3 @@ void CONWriteString(const char *fmt, ...);
 void CONDrawPixel(uint x, uint y, uint rgb);
 void CONSetColour(int foreground,int background);
 
-#endif

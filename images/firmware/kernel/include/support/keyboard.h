@@ -10,8 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _KEYBOARD_H
-#define _KEYBOARD_H
+#pragma once
 
 #define KBD_REPEAT_START 	(90)  												// Time for first repeat (100ms units)
 #define KBD_REPEAT_AFTER  	(12)  												// Time for subsequent repeats (100ms units)
@@ -23,5 +22,3 @@ void KBDInsertQueue(uint8_t ascii);
 bool KBDIsKeyAvailable(void);
 uint8_t KBDGetKey(void);
 bool KBDEscapePressed(bool resetEscape);
-
-#endif

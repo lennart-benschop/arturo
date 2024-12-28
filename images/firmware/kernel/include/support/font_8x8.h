@@ -10,8 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _FONT8X8_H
-#define _FONT8X8_H
+#pragma once
 
 #ifndef _IMG_ASSET_SECTION
 #define _IMG_ASSET_SECTION ".data"
@@ -116,5 +115,3 @@ static const char __attribute__((aligned(4), section(_IMG_ASSET_SECTION ".font_8
     0x62, 0x92, 0x8c, 0x00, 0x00, 0x00, 0x00, 0x00, // ~ 
     0x42, 0x99, 0xa5, 0xa1, 0xa1, 0xa5, 0x99, 0x42, // © 
 };
-
-#endif

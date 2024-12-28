@@ -10,8 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _ARTSIM_H
-#define _ARTSIM_H
+#pragma once
 
 #include <common.h>
 #include <SDL.h>
@@ -40,4 +39,3 @@ void SOUNDOpen(void);
 void SOUNDClose(void);
 void SOUNDPlay(void);
 void SOUNDStop(void);
-#endif

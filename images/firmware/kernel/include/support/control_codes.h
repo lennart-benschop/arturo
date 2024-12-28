@@ -10,8 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _CONTROL_CODES_H
-#define _CONTROL_CODES_H
+#pragma once
 
 #define CONTROL(c) 	((c) & 0x1F)
 
@@ -32,4 +31,3 @@
 #define CC_DELETE 	CONTROL('Z')
 #define CC_ESC 		CONTROL('[')
 
-#endif

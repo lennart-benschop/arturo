@@ -10,8 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _FILEIO_H
-#define _FILEIO_H
+#pragma once
 
 void FIOInitialise(void);
 
@@ -32,5 +31,3 @@ int FIOOpenDirectory(char *directory);
 int FIOReadDirectory(int handle,char *fileName); 
 int FIOCloseDirectory(int handle); 
 
-
-#endif

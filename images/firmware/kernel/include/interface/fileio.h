@@ -10,9 +10,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-
-#ifndef _FILEIOI_H
-#define _FILEIOI_H
+#pragma once
 
 //
 //		New errors. The numbers refer to FatFS errors, these are combined.
@@ -59,4 +57,3 @@ int 	FSYSOpenDirectory(char *directory);  										// Open a directory
 int 	FSYSReadDirectory(char *fileName); 											// Read next directory entry
 int 	FSYSCloseDirectory(void);  													// Close directory
 
-#endif

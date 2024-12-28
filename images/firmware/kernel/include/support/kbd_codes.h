@@ -11,8 +11,7 @@
 // ***************************************************************************************
 // ***************************************************************************************
 
-#ifndef _KEYBOARD_CODES_H
-#define _KEYBOARD_CODES_H
+#pragma once
 //
 //		Bits in the first byte of the data packet.
 //
@@ -87,4 +86,3 @@
 
 #define KBD_MAX_KEYCODE (0x65)	// The biggest scancode we store, +1
 
-#endif
