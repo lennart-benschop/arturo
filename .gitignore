@@ -19,3 +19,4 @@ __*
 __*/
 CMakeCache.txt
 simulator/storage/*
+images/firmware/CMakeLists.txt
