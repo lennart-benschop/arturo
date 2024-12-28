@@ -1,13 +1,6 @@
-# ***************************************************************************************
-# ***************************************************************************************
 #
-#		Name : 		CMakeLists.txt
-#		Author :	Paul Robson (paul@robsons.org.uk)
-#		Date : 		18th December 2024
-#		Reviewed :	No
-#		Purpose :	Middle level CMake configuration
+# This is automatically generated.
 #
-# ***************************************************************************************
-# ***************************************************************************************
-
+set(APPLICATION_DIRECTORY "/home/paulr/Projects/arturo/build_env/..//applications/testing/")
+set(LIBRARY_DIRECTORY "/home/paulr/Projects/arturo/build_env/../libraries")
 add_subdirectory(kernel)

@@ -2,7 +2,8 @@
 # ***************************************************************************************
 #
 #		Name : 		CMakeLists.txt
-#		Author :	Paul Robson (paul@robsons.org.uk)
+#		Authors :	Paul Robson (paul@robsons.org.uk)
+#					Sascha Schneider
 #		Date : 		18th December 2024
 #		Reviewed :	No
 #		Purpose :	Outer level CMake configuration
@@ -16,15 +17,20 @@
 #
 # ***************************************************************************************
 
-file(GLOB_RECURSE APP_C_SOURCES "${APP_DIRECTORY}/*.c")
+file(GLOB_RECURSE APP_C_SOURCES "${APPLICATION_DIRECTORY}/*.c")
+file(GLOB_RECURSE LIBRARY_C_SOURCES "${LIBRARY_DIRECTORY}/*.c")
 file(GLOB_RECURSE HARDWARE_C_SOURCES "hardware/*.c")
 file(GLOB_RECURSE SUPPORT_C_SOURCES "support/*.c")
-file(GLOB_RECURSE LIBRARY_C_SOURCES "${LIBRARY_DIRECTORY}/*.c")
 
 add_executable(kernel
 	main.c 
 	${APP_C_SOURCES} ${HARDWARE_C_SOURCES} ${SUPPORT_C_SOURCES} ${LIBRARY_C_SOURCES}
 )
+
+#message("*** ${LIBRARY_DIRECTORY}")
+#message("*** ${APPLICATION_DIRECTORY}")
+#message("*** ${APP_C_SOURCES}")
+#message("*** ${LIBRARY_C_SOURCES}")
 
 # ***************************************************************************************
 #
@@ -35,7 +41,7 @@ add_executable(kernel
 include_directories(
 	include
 	user_code/include
-	${APP_DIRECTORY}/include
+	${APPLICATION_DIRECTORY}/include
 	${LIBRARY_DIRECTORY}
 )
 
@@ -79,4 +85,3 @@ target_compile_definitions(firmware_boot2 PRIVATE
 )
 
 pico_set_boot_stage2(kernel firmware_boot2)
-
