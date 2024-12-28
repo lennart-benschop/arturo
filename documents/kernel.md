@@ -85,11 +85,11 @@ This is deliberately not done using interrupts as a way of avoiding any issues. 
 
 ## Application source
 
-Application source can go anywhere, there are examples in the 'applications' directory including the very simple "testing".  The location is set in config.make.
+Application source can go anywhere, there are examples in the 'applications' directory including the very simple "applications/test_code/kernel".  The location is set in config.make.
 
 ## Libraries
 
-The system libraries go in the libraries subdirectory, there is a simple example which prints "Hello world" on the console. These should be picked up automatically. 
+The system libraries go in the libraries subdirectory, There is a simple example which prints "Hello world" on the console. These should be picked up automatically. 
 
 ## Configuration
 
