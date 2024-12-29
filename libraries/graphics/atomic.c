@@ -131,9 +131,35 @@ void GFXAHorizLine(int x1,int x2,int y,int colour) {
 
 // ***************************************************************************************
 //
-//								Move current position
+//			Move current position. These avoid change location/recalculate
 //
 // ***************************************************************************************
+
+void GFXAUp(void) {
+	yPixel--;  																		// Pixel up
+	pl0 -= _dmi->bytesPerLine;   													// Shift pointers to next line up.
+	pl1 -= _dmi->bytesPerLine;  
+	pl2 -= _dmi->bytesPerLine;  
+	dataValid = (yPixel >= 0);  													// Still in window
+}
+
+void GFXADown(void) {
+	yPixel++;  																		// Pixel down
+	pl0 += _dmi->bytesPerLine;   													// Shift pointers to next line down
+	pl1 += _dmi->bytesPerLine;  
+	pl2 += _dmi->bytesPerLine;  
+	dataValid = (yPixel < height); 													// Still in window
+}
+
+void GFXALeft(void) {
+	xPixel--;  																		// Pixel left
+	bitMask = (bitMask << 1) & 0xFF; 												// Shift bitmap left
+	if (bitMask == 0) {  															// Off the left side.
+		bitMask = 0x01;  															// Reset bitmap
+		pl0--;pl1--;pl2--;  														// Bump plane pointers		
+	}
+	dataValid = (xPixel >= 0);  													// Still in window
+}
 
 void GFXARight(void) {
 	xPixel++;  																		// Pixel right
