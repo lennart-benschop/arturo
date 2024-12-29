@@ -17,6 +17,7 @@ void TestCodeHorizontalLines(void);
 void TestCodeRandomLines(void);
 void TestCodeVerticalLines(void);
 void TestScrollAndRect(void);
+void TestEllipse(void);
 
 // ***************************************************************************************
 //
@@ -28,7 +29,7 @@ static GFXPort vp;
 
 void ApplicationRun(void) {
     int n = 0;
-    //DVISetMode(DVI_MODE_320_240_8);
+    // GFXSetMode(DVI_MODE_640_240_8);
     CONWriteString("%s Graphics Demo Application\r",XXX);                                          
     GFXPortInitialise(&vp,45,64,553,150);
     //
@@ -40,7 +41,9 @@ void ApplicationRun(void) {
         // TestCodeRandomLines();
         // TestCodeVerticalLines();
         // TestScrollAndRect();
-        GFXFrameEllipse(&vp,20,30,300,130,3);
+        //TestEllipse();
+        GFXFillTriangle(&vp,80,10,10,70,230,110,1);
+        GFXFrameTriangle(&vp,80,10,10,70,230,110,7);
 
         if (KBDEscapePressed(true)) {                                               // Escaped ?
             CONWriteString("Escape !\r");
@@ -122,4 +125,16 @@ void TestScrollAndRect(void) {
     GFXScrollPort(&vp,s,s);
     GFXFillRect(&vp,9,9,301,101,ctr & 7);
     ctr++;
+}
+
+// ***************************************************************************************
+//
+//                                  Ellipse test
+//
+// ***************************************************************************************
+
+void TestEllipse(void) {
+    GFXFillEllipse(&vp,20,30,300,130,3);
+    GFXFrameEllipse(&vp,20,30,300,130,5);
+    GFXFrameRect(&vp,20,30,300,130,1);
 }

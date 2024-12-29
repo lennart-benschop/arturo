@@ -46,6 +46,20 @@ static GFXPort _fullScreen;  														// Used for full screen viewport
 
 // ***************************************************************************************
 //
+//						Set the current mode, clear the screen
+//
+// ***************************************************************************************
+
+void GFXSetMode(int mode) {
+	DVISetMode(mode);  																// Set the mode.
+	_dmi = DVIGetModeInformation();  												// Get mode information
+	for (int i = 0;i < _dmi->bitPlaneCount;i++) {  									// Clear all the bit planes.
+		memset(_dmi->bitPlane[i],0,_dmi->bytesPerLine*_dmi->height);
+	}
+}
+
+// ***************************************************************************************
+//
 //								Set the current viewport
 //
 // ***************************************************************************************

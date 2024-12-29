@@ -55,14 +55,27 @@ static void _GFXDrawEllipseMain(GFXPort *vp,int x0,int y0,int x1,int y1,int colo
 // ***************************************************************************************
 
 static void _GFXFramePart(int x,int y,int colour) {
-	GFXAPlot(xc+x,yc+y,3);
+	GFXAPlot(xc+x,yc+y,colour);
 	if (x != 0) {  																// If at 0 horizontal only do once
-		GFXAPlot(xc-x,yc+y,3);
+		GFXAPlot(xc-x,yc+y,colour);
 	}
 	if (y != 0) {  																// If at 0 vertical only do once.
-		GFXAPlot(xc+x,yc-y,3);
-		GFXAPlot(xc-x,yc-y,3);
+		GFXAPlot(xc+x,yc-y,colour);
+		GFXAPlot(xc-x,yc-y,colour);
 	}
+}
+
+// ***************************************************************************************
+//
+//                                  Draw the line
+//
+// ***************************************************************************************
+
+static void _GFXLinePart(int x,int y,int colour) {
+    GFXAHorizLine(xc-x,xc+x,yc+y,colour);
+    if (yc != 0) {                                                              // Don't redraw the middle.
+        GFXAHorizLine(xc-x,xc+x,yc-y,colour);
+    }
 }
 
 // ***************************************************************************************
@@ -80,7 +93,11 @@ static void _GFXDrawEllipse(int colour, bool fill) {
  
     while (dx < dy) 
     {
-    	if (!fill) _GFXFramePart(x,y,colour);
+        if (fill) {
+            _GFXLinePart(x,y,colour);
+        } else {
+            _GFXFramePart(x,y,colour);
+        }
         if (d1 < 0)
         {
             x++;
@@ -101,7 +118,11 @@ static void _GFXDrawEllipse(int colour, bool fill) {
  
     while (y >= 0)
     {
-    	if (!fill) _GFXFramePart(x,y,colour);
+        if (fill) {
+            _GFXLinePart(x,y,colour);
+        } else {
+            _GFXFramePart(x,y,colour);
+        }
         if (d2 > 0) 
         {
             y--;
