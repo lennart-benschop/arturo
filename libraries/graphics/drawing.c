@@ -19,7 +19,7 @@
 //
 // ***************************************************************************************
 
-void GFXFrame(GFXPort *vp,int x0,int y0,int x1,int y1,int colour) {
+void GFXFrameRect(GFXPort *vp,int x0,int y0,int x1,int y1,int colour) {
 	GFXASetPort(vp);
 	if (y0 > y1) { int n = y0;y0 = y1;y1 = n; }  									// Sort horizontally.
 	GFXAHorizLine(x0,x1,y0,colour);  												// Top line.
@@ -36,7 +36,7 @@ void GFXFrame(GFXPort *vp,int x0,int y0,int x1,int y1,int colour) {
 //
 // ***************************************************************************************
 
-void GFXRectangle(GFXPort *vp,int x0,int y0,int x1,int y1,int colour) {
+void GFXFillRect(GFXPort *vp,int x0,int y0,int x1,int y1,int colour) {
 	GFXASetPort(vp);
 	for (int y = y0;y <= y1;y++) {
 		GFXAHorizLine(x0,x1,y,colour);

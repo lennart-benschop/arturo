@@ -39,7 +39,9 @@ void ApplicationRun(void) {
         // TestCodeHorizontalLines();
         // TestCodeRandomLines();
         // TestCodeVerticalLines();
-        TestScrollAndRect();
+        // TestScrollAndRect();
+        GFXFrameEllipse(&vp,20,30,300,130,3);
+
         if (KBDEscapePressed(true)) {                                               // Escaped ?
             CONWriteString("Escape !\r");
         }
@@ -118,6 +120,6 @@ void TestScrollAndRect(void) {
     GFXPlot(&vp,0,0,7);GFXPlot(&vp,vp.width-1,0,7);GFXPlot(&vp,0,vp.height-1,7);
     int s = -(ctr % 100);
     GFXScrollPort(&vp,s,s);
-    GFXRectangle(&vp,9,9,301,101,ctr & 7);
+    GFXFillRect(&vp,9,9,301,101,ctr & 7);
     ctr++;
 }

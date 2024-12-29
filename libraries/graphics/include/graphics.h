@@ -29,6 +29,7 @@ void GFXPlot(GFXPort *vp,int x,int y,int colour);
 void GFXLine(GFXPort *vp,int x0, int y0, int x1, int y1,int colour);
 void GFXHLine(GFXPort *vp,int x0, int x1, int y,int colour);
 void GFXVLine(GFXPort *vp,int x, int y0, int y1,int colour);
-void GFXFrame(GFXPort *vp,int x0,int x1,int y0,int y1,int colour);
-void GFXRectangle(GFXPort *vp,int x0,int y0,int x1,int y1,int colour);
-
+void GFXFrameRect(GFXPort *vp,int x0,int x1,int y0,int y1,int colour);
+void GFXFillRect(GFXPort *vp,int x0,int y0,int x1,int y1,int colour);
+void GFXFillEllipse(GFXPort *vp,int x0,int y0,int x1,int y1,int colour);
+void GFXFrameEllipse(GFXPort *vp,int x0,int y0,int x1,int y1,int colour);
