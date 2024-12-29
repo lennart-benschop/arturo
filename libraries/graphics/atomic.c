@@ -22,7 +22,8 @@ static void _GFXAValidate(void);
 //
 //		These functions are atomic. They assume once you've selected the viewport 
 //		the mode, port will not change for the duration of any function that uses them
-//		e.g. to draw rectangles.
+//		e.g. to draw rectangles you set the viewport and draw multiple horizontal lines
+//		that sort of thing :)
 //
 // ***************************************************************************************
 
@@ -99,10 +100,32 @@ void GFXAHorizLine(int x1,int x2,int y,int colour) {
 	xPixel = x1;yPixel = y;dataValid = false;  										// First pixel.
 	_GFXAValidate();  
 	int pixelCount = x2-x1+1;  														// Pixels to draw 
-	while (pixelCount-- > 0) {
+
+	//
+	//		First, we go to a byte boundary, if there are enough pixels.
+	//	
+	while (pixelCount-- > 0 && bitMask != 0x80) {   								// Shift until reached byte boundary
 		_GFXDrawBitmap(colour);
 		GFXARight();
 	}
+	//
+	//		While on a byte boundary, if there are enough pixels, do whole bytes. I did consider doing it in longs at this point.
+	//
+	while (pixelCount >= 8) {  														// Now do it byte chunks.
+		bitMask = 0xFF;_GFXDrawBitmap(colour); 										// This does the line in whole bytes.
+		pl0++;pl1++;pl2++;  														// Advance pointer
+		pixelCount -= 8;  															// 8 fewer pixels
+		xPixel += 8;  																// Keep the position up to date, doesn't really matter.
+	}
+	//
+	//		Do any remaining single pixels
+	//
+	bitMask = 0x80;  																// We know we are on a byte boundary
+	while (pixelCount-- > 0) {   													// Draw any remaining pixels.
+		_GFXDrawBitmap(colour);
+		GFXARight();
+	}
+
 }
 
 
