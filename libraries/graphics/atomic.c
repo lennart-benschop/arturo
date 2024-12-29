@@ -41,6 +41,8 @@ static int width,height;  															// Size
 #define OFFWINDOWV(y) 	((y) < 0 || (y) >= height)
 #define OFFWINDOW(x,y) 	(OFFWINDOWH(x) || OFFWINDOWV(y))
 
+static GFXPort _fullScreen;  														// Used for full screen viewport
+
 // ***************************************************************************************
 //
 //								Set the current viewport
@@ -50,6 +52,10 @@ static int width,height;  															// Size
 void GFXASetPort(GFXPort *vp) {
 	_currentPort = vp;  															// Save viewport
 	_dmi = DVIGetModeInformation();  												// Record current information
+	if (_currentPort == NULL) {  													// NULL implies whole screen.
+		GFXPortInitialise(&_fullScreen,0,0,_dmi->width-1,_dmi->height-1);
+		_currentPort = &_fullScreen;
+	}
 	width = _currentPort->width;height = _currentPort->height;  					// Temporary variables.
 	dataValid = false;  															// Nothing is set up.
 }
@@ -125,7 +131,26 @@ void GFXAHorizLine(int x1,int x2,int y,int colour) {
 		_GFXDrawBitmap(colour);
 		GFXARight();
 	}
+}
 
+// ***************************************************************************************
+//
+//									Vertical line code.
+//
+// ***************************************************************************************
+
+void GFXAVertLine(int x,int y1,int y2,int colour) {
+	x = CONV_X(x);y1 = CONV_Y(y1);y2 = CONV_Y(y2);  								// Convert coordinates.
+	if (OFFWINDOWH(x)) return;  													// Off screen.
+	if (y1 > y2) { int n = y1;y1 = y2;y2 = n; }  									// Sort y coordinates
+	if (y2 < 0 || y1 >= height) return;  											// Wholly off top or bottom.
+	y1 = max(y1,0);y2 = max(y2,height-1); 											// Clip into region.
+	xPixel = x;yPixel = y1;dataValid = false;  										// Set start and validate
+	_GFXAValidate();
+	int pixelCount = y2-y1+1;  														// Pixels to draw 
+	while (pixelCount-- > 0) {   													// Shift until reached byte boundary
+		_GFXDrawBitmap(colour);GFXADown();
+	}
 }
 
 
@@ -140,7 +165,7 @@ void GFXAUp(void) {
 	pl0 -= _dmi->bytesPerLine;   													// Shift pointers to next line up.
 	pl1 -= _dmi->bytesPerLine;  
 	pl2 -= _dmi->bytesPerLine;  
-	dataValid = (yPixel >= 0);  													// Still in window
+	if (dataValid) dataValid = (yPixel >= 0);  										// Still in window
 }
 
 void GFXADown(void) {
@@ -148,7 +173,7 @@ void GFXADown(void) {
 	pl0 += _dmi->bytesPerLine;   													// Shift pointers to next line down
 	pl1 += _dmi->bytesPerLine;  
 	pl2 += _dmi->bytesPerLine;  
-	dataValid = (yPixel < height); 													// Still in window
+	if (dataValid) dataValid = (yPixel < height); 									// Still in window
 }
 
 void GFXALeft(void) {
@@ -158,7 +183,7 @@ void GFXALeft(void) {
 		bitMask = 0x01;  															// Reset bitmap
 		pl0--;pl1--;pl2--;  														// Bump plane pointers		
 	}
-	dataValid = (xPixel >= 0);  													// Still in window
+	if (dataValid) dataValid = (xPixel >= 0);  										// Still in window
 }
 
 void GFXARight(void) {
@@ -168,7 +193,44 @@ void GFXARight(void) {
 		bitMask = 0x80;  															// Reset bitmap
 		pl0++;pl1++;pl2++;  														// Bump plane pointers		
 	}
-	dataValid = (xPixel < width);  													// Still in window
+	if (dataValid) dataValid = (xPixel < width);  									// Still in window
+}
+
+// ***************************************************************************************
+//
+//					Line drawing algorithm (currently straight Bresenham)
+//
+// ***************************************************************************************
+
+void GFXALine(int x0, int y0, int x1, int y1,int colour) {
+	if (y0 == y1) GFXAHorizLine(x0,x1,y1,colour);  									// Use the horizontal one.
+
+    int dx = abs(x1 - x0);
+    int sx = x0 < x1 ? 1 : -1;
+    int dy = -abs(y1 - y0);
+    int sy = y0 < y1 ? 1 : -1;
+    int error = dx + dy;
+    
+    xPixel = x0;yPixel = y0;  														// Start at x0,y0
+
+    _GFXAValidate();  																// Validate the current
+    while(1) {
+    	if (!dataValid) _GFXAValidate();  											// Try to validate if invaluid
+        if (dataValid) {
+        	_GFXDrawBitmap(colour); 			 									// If valid, then draw line.
+        }
+        if (xPixel == x1 && yPixel == y1) return;  									// Completed line.
+
+        int e2 = 2 * error;
+        if (e2 >= dy) {
+            error = error + dy;
+            if (sx < 0) { GFXALeft(); } else { GFXARight(); }
+        }
+        if (e2 <= dx) {
+            error = error + dx;
+            if (sy < 0) { GFXAUp(); } else { GFXADown();}
+        }
+    }
 }
 
 // ***************************************************************************************

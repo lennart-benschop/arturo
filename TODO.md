@@ -1,6 +1,7 @@
 # TODO stuff
 
-- vertical line drawing
-- default line drawing
-- check monochrome works.
-- optimise line drawing.
+- clear screen on mode change ???
+- rectangles, frames
+- offset code.
+- ellipses / circles
+- triangles

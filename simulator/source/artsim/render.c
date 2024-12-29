@@ -58,7 +58,7 @@ struct DVIModeInformation *DVIGetModeInformation(void) {
 		case DVI_MODE_640_480_2:  													// 640x480x2 information.
 			dvi_modeInfo.width = 640;dvi_modeInfo.height = 480;
 			dvi_modeInfo.bitPlaneSize = sizeof(redPlane);
-			dvi_modeInfo.bitPlaneCount = 2;
+			dvi_modeInfo.bitPlaneCount = 1;
 			break;
 		default:
 			dvi_modeInfo.mode = -1;  												// Failed.
