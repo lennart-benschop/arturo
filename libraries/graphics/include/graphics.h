@@ -28,5 +28,6 @@ void GFXPortInitialise(GFXPort *vp,int x,int y,int w,int h);
 //		TODO: Move atomic functions out of scope.
 //
 void GFXASetPort(GFXPort *vp);
-void GFXAMove(int x,int y);
-void GFXAPlot(int colour);
+void GFXAPlot(int x,int y,int colour);
+void GFXARight(void);
+void GFXAHorizLine(int x1,int x2,int y,int colour);

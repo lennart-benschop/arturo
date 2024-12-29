@@ -23,20 +23,22 @@ void ApplicationRun(void) {
     int n = 0;
     GFXPort vp;
     CONWriteString("%s Graphics Demo Application\r",XXX);                                          
-    GFXPortInitialise(&vp,48,64,400,150);
-    GFXASetPort(&vp);
-    for (int y = 0;y < 240;y++) {
-        for (int i = 0;i < 640;i++) {
-            GFXAMove(i,y);
-            GFXAPlot(i >> 2);
-        }
-    }
+    GFXPortInitialise(&vp,45,64,403,150);
 
     printf("%02x\n",DVIGetModeInformation()->bitPlane[0][0]);
     //
     //      A typical 'main'
     //
     while (1) {
+        n++;
+        GFXASetPort(&vp);
+        GFXAPlot(0,0,7);GFXAPlot(vp.width-1,0,7);
+        for (int y = 2;y < 240;y++) {
+            // for (int i = 0;i < 640;i++) {
+            //     GFXAPlot(i,y,(y+n) >> 2);
+            // }            
+            GFXAHorizLine(0,640,y,(y+n) >> 2);
+        }
   
         if (KBDEscapePressed(true)) {                                               // Escaped ?
             CONWriteString("Escape !\r");
