@@ -36,8 +36,8 @@ static uint8_t bitMask;  															// Bitmask (when data is valid)
 static uint8_t *pl0,*pl1,*pl2;  													// Bitplane pointers.
 static int width,height;  															// Size
 
-#define CONV_X(x) 		(x)
-#define CONV_Y(y) 		(y)
+#define CONV_X(x) 		((x)+(_currentPort->xOffset))
+#define CONV_Y(y) 		((y)+(_currentPort->yOffset))
 #define OFFWINDOWH(x) 	((x) < 0 || (x) >= width)
 #define OFFWINDOWV(y) 	((y) < 0 || (y) >= height)
 #define OFFWINDOW(x,y) 	(OFFWINDOWH(x) || OFFWINDOWV(y))
@@ -111,9 +111,10 @@ void GFXAHorizLine(int x1,int x2,int y,int colour) {
 	//
 	//		First, we go to a byte boundary, if there are enough pixels.
 	//	
-	while (pixelCount-- > 0 && bitMask != 0x80) {   								// Shift until reached byte boundary
+	while (pixelCount > 0 && bitMask != 0x80) {   									// Shift until reached byte boundary
 		_GFXDrawBitmap(colour);
 		GFXARight();
+		pixelCount--;
 	}
 	//
 	//		While on a byte boundary, if there are enough pixels, do whole bytes. I did consider doing it in longs at this point.

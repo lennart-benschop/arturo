@@ -19,25 +19,16 @@
 //
 typedef struct _GFXPort {
 	int x,y,width,height;  															// Viewport position, pixels. 
+	int xOffset,yOffset;  															// Positional offset when drawing.
 } GFXPort;
 
 void GFXPortInitialise(GFXPort *vp,int x,int y,int w,int h);
+void GFXScrollPort(GFXPort *vp,int xo,int yo);
 
 void GFXPlot(GFXPort *vp,int x,int y,int colour);
 void GFXLine(GFXPort *vp,int x0, int y0, int x1, int y1,int colour);
 void GFXHLine(GFXPort *vp,int x0, int x1, int y,int colour);
 void GFXVLine(GFXPort *vp,int x, int y0, int y1,int colour);
+void GFXFrame(GFXPort *vp,int x0,int x1,int y0,int y1,int colour);
+void GFXRectangle(GFXPort *vp,int x0,int y0,int x1,int y1,int colour);
 
-//
-//		TODO: Move atomic functions out of scope.
-//
-void GFXASetPort(GFXPort *vp);
-void GFXAPlot(int x,int y,int colour);
-void GFXAHorizLine(int x1,int x2,int y,int colour);
-void GFXAVertLine(int x,int y1,int y2,int colour);
-void GFXALine(int x0, int y0, int x1, int y1,int colour);
-
-void GFXAUp(void);
-void GFXADown(void);
-void GFXALeft(void);
-void GFXARight(void);

@@ -16,6 +16,7 @@
 void TestCodeHorizontalLines(void);
 void TestCodeRandomLines(void);
 void TestCodeVerticalLines(void);
+void TestScrollAndRect(void);
 
 // ***************************************************************************************
 //
@@ -35,10 +36,10 @@ void ApplicationRun(void) {
     //
     while (1) {
         n++;
-        GFXPlot(&vp,0,0,7);GFXPlot(&vp,vp.width-1,0,7);GFXPlot(&vp,0,vp.height-1,7);
-        TestCodeHorizontalLines();
-        //  TestCodeRandomLines();
-        //  TestCodeVerticalLines();
+        // TestCodeHorizontalLines();
+        // TestCodeRandomLines();
+        // TestCodeVerticalLines();
+        TestScrollAndRect();
         if (KBDEscapePressed(true)) {                                               // Escaped ?
             CONWriteString("Escape !\r");
         }
@@ -99,5 +100,24 @@ void TestCodeVerticalLines(void) {
     for (int x = 2;x < 640;x++) {
         GFXLine(&vp,x,2,x,300,(x+ctr) >> 2);
     }
+    ctr++;
+}
+
+// ***************************************************************************************
+//
+//                                  Tests scrolling and frame/rect
+//
+// ***************************************************************************************
+
+static int nextDraw = 0;
+
+void TestScrollAndRect(void) {
+    if (TMRRead() < nextDraw) return;
+    nextDraw = TMRRead()+3;
+    GFXScrollPort(&vp,0,0);
+    GFXPlot(&vp,0,0,7);GFXPlot(&vp,vp.width-1,0,7);GFXPlot(&vp,0,vp.height-1,7);
+    int s = -(ctr % 100);
+    GFXScrollPort(&vp,s,s);
+    GFXRectangle(&vp,9,9,301,101,ctr & 7);
     ctr++;
 }
