@@ -11,6 +11,7 @@
 // ***************************************************************************************
 
 #include "common.h"
+#include "include/atomic.h"
 
 static inline void _GFXDrawBitmap1(int colour);
 static inline void _GFXDrawBitmap3(int colour);
@@ -203,8 +204,15 @@ void GFXARight(void) {
 // ***************************************************************************************
 
 void GFXALine(int x0, int y0, int x1, int y1,int colour) {
-	if (y0 == y1) GFXAHorizLine(x0,x1,y1,colour);  									// Use the horizontal one.
-
+	if (y0 == y1) { 							  									// Use the horizontal one.
+		GFXAHorizLine(x0,x1,y1,colour);
+		return;
+	}
+	if (x0 == x1) { 							 									// Use the vertical one.
+		 GFXAVertLine(x0,y0,y1,colour);
+		 return;
+	}
+	
     int dx = abs(x1 - x0);
     int sx = x0 < x1 ? 1 : -1;
     int dy = -abs(y1 - y0);
