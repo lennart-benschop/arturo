@@ -53,5 +53,5 @@ typedef struct {
 //		These files all need to have the Adafruit include removed. The simplest way
 //		is with a global search and replace
 //
-#include "FreeSans9pt7b.h"
-#include "FreeSerifItalic12pt7b.h"
+#include "freesans.h"
+#include "freeserifitalic.h"

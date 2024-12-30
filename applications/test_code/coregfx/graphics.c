@@ -36,17 +36,15 @@ void ApplicationRun(void) {
     //
     //      A typical 'main'
     //
-    GFXDrawCharacter(&vp,30,50,'?',6,4);
+    GFXDrawString(&vp,30,50,"Hello",6,1);
     while (1) {
         n++;
-        GFXFillTriangle(&vp,50,20,10,100,320,140,1);
-        GFXFrameTriangle(&vp,50,20,10,100,320,140,7);
         // TestCodeHorizontalLines();
         // TestCodeRandomLines();
         // TestCodeVerticalLines();
         // TestScrollAndRect();
         // TestEllipse();
-             TestTriangles();
+        // TestTriangles();
 
         if (KBDEscapePressed(true)) {                                               // Escaped ?
             CONWriteString("Escape !\r");

@@ -20,3 +20,5 @@ __*/
 CMakeCache.txt
 simulator/storage/*
 images/firmware/CMakeLists.txt
+documents/fontconvert/fonts/*.h
+documents/fontconvert/fontconvert

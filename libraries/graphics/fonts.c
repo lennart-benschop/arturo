@@ -39,10 +39,10 @@ static GFXglyph *GFXGetGlyph(const GFXfont *font,int c) {
 //
 // ***************************************************************************************
 
-int GFXDrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int colour,int scale) {
+static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int colour,int scale) {
 
     GFXASetPort(vp);
-    const GFXfont *font = &FreeSans9pt7b;
+    const GFXfont *font = &freesans7pt7b;
 
     GFXglyph *glyph = GFXGetGlyph(font,ch);                                         // Extract the glyph, exit if not available
     if (glyph == NULL) return 0;
@@ -70,4 +70,11 @@ int GFXDrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int colour,int scale) 
         }
     }
     return glyph->xAdvance;
+}
+
+void GFXDrawString(GFXPort *vp,int xPos,int yPos,char *s,int colour,int scale) {
+    while (*s != '\0' && xPos < vp->width) {
+        int w = _DrawCharacter(vp,xPos,yPos,*s++,colour,scale);
+        xPos += w;
+    }
 }
