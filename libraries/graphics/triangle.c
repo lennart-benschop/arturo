@@ -21,6 +21,9 @@ typedef struct _Vertice {
 static Vertice vt1,vt2,vt3;
 static int colour = 2;
 
+#define TOFIXED(n)          ((n) << 16)
+#define FROMFIXED(n)        ((n) >> 16)
+
 // ***************************************************************************************
 //
 //                                      Sort the vertices
@@ -56,18 +59,17 @@ static void sortVerticesAscendingByY(void)
 //
 // ***************************************************************************************
 
-#define FIXED_SCALE     (0x10000)
 
 static void fillBottomFlatTriangle(Vertice v1,Vertice v2,Vertice v3) {
 
-    int invslope1 = (v2.y == v1.y) ? 0 : FIXED_SCALE*(v2.x - v1.x) / (v2.y - v1.y);
-    int invslope2 = (v3.y == v1.y) ? 0 : FIXED_SCALE*(v3.x - v1.x) / (v3.y - v1.y);
+    int invslope1 = (v2.y == v1.y) ? 0 : TOFIXED(v2.x - v1.x)  / (v2.y - v1.y);
+    int invslope2 = (v3.y == v1.y) ? 0 : TOFIXED(v3.x - v1.x)  / (v3.y - v1.y);
 
-    int curx1 = v1.x * FIXED_SCALE;
-    int curx2 = v1.x * FIXED_SCALE;
+    int curx1 = TOFIXED(v1.x);
+    int curx2 = TOFIXED(v1.x);
 
     for (int scanlineY = v1.y; scanlineY <= v2.y; scanlineY++) {
-        GFXAHorizLine((int)(curx1/FIXED_SCALE),(int)(curx2/FIXED_SCALE),scanlineY,colour);
+        GFXAHorizLine(FROMFIXED(curx1),FROMFIXED(curx2),scanlineY,colour);
         curx1 += invslope1;
         curx2 += invslope2;
     }
@@ -81,14 +83,14 @@ static void fillBottomFlatTriangle(Vertice v1,Vertice v2,Vertice v3) {
 
 static void fillTopFlatTriangle(Vertice v1,Vertice v2,Vertice v3)
 {
-    int invslope1 = (v3.y == v1.y) ? 0 : FIXED_SCALE * (v3.x - v1.x) / (v3.y - v1.y);
-    int invslope2 = (v3.y == v2.y) ? 0 : FIXED_SCALE * (v3.x - v2.x) / (v3.y - v2.y);
+    int invslope1 = (v3.y == v1.y) ? 0 : TOFIXED(v3.x - v1.x) / (v3.y - v1.y);
+    int invslope2 = (v3.y == v2.y) ? 0 : TOFIXED(v3.x - v2.x) / (v3.y - v2.y);
 
-    int curx1 = v3.x * FIXED_SCALE;
-    int curx2 = v3.x * FIXED_SCALE;
+    int curx1 = TOFIXED(v3.x);
+    int curx2 = TOFIXED(v3.x);
 
     for (int scanlineY = v3.y; scanlineY > v1.y; scanlineY--) {
-        GFXAHorizLine((int)(curx1/FIXED_SCALE),(int)(curx2/FIXED_SCALE),scanlineY,colour);
+        GFXAHorizLine(FROMFIXED(curx1),FROMFIXED(curx2),scanlineY,colour);
         curx1 -= invslope1;
         curx2 -= invslope2;
     }
