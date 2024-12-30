@@ -56,15 +56,18 @@ static void sortVerticesAscendingByY(void)
 //
 // ***************************************************************************************
 
-static void fillBottomFlatTriangle(Vertice v1,Vertice v2,Vertice v3) {
-    float invslope1 = (float)(v2.x - v1.x) / (v2.y - v1.y);
-    float invslope2 = (float)(v3.x - v1.x) / (v3.y - v1.y);
+#define FIXED_SCALE     (0x10000)
 
-    float curx1 = v1.x;
-    float curx2 = v1.x;
+static void fillBottomFlatTriangle(Vertice v1,Vertice v2,Vertice v3) {
+
+    int invslope1 = (v2.y == v1.y) ? 0 : FIXED_SCALE*(v2.x - v1.x) / (v2.y - v1.y);
+    int invslope2 = (v3.y == v1.y) ? 0 : FIXED_SCALE*(v3.x - v1.x) / (v3.y - v1.y);
+
+    int curx1 = v1.x * FIXED_SCALE;
+    int curx2 = v1.x * FIXED_SCALE;
 
     for (int scanlineY = v1.y; scanlineY <= v2.y; scanlineY++) {
-        GFXAHorizLine((int)curx1,(int)curx2,scanlineY,colour);
+        GFXAHorizLine((int)(curx1/FIXED_SCALE),(int)(curx2/FIXED_SCALE),scanlineY,colour);
         curx1 += invslope1;
         curx2 += invslope2;
     }
@@ -78,14 +81,14 @@ static void fillBottomFlatTriangle(Vertice v1,Vertice v2,Vertice v3) {
 
 static void fillTopFlatTriangle(Vertice v1,Vertice v2,Vertice v3)
 {
-    float invslope1 = (float)(v3.x - v1.x) / (v3.y - v1.y);
-    float invslope2 = (float)(v3.x - v2.x) / (v3.y - v2.y);
+    int invslope1 = (v3.y == v1.y) ? 0 : FIXED_SCALE * (v3.x - v1.x) / (v3.y - v1.y);
+    int invslope2 = (v3.y == v2.y) ? 0 : FIXED_SCALE * (v3.x - v2.x) / (v3.y - v2.y);
 
-    float curx1 = v3.x;
-    float curx2 = v3.x;
+    int curx1 = v3.x * FIXED_SCALE;
+    int curx2 = v3.x * FIXED_SCALE;
 
     for (int scanlineY = v3.y; scanlineY > v1.y; scanlineY--) {
-        GFXAHorizLine((int)curx1,(int)curx2,scanlineY,colour);
+        GFXAHorizLine((int)(curx1/FIXED_SCALE),(int)(curx2/FIXED_SCALE),scanlineY,colour);
         curx1 -= invslope1;
         curx2 -= invslope2;
     }
