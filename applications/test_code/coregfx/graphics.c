@@ -36,6 +36,7 @@ void ApplicationRun(void) {
     //
     //      A typical 'main'
     //
+    GFXDrawCharacter(&vp,30,50,'?',6,4);
     while (1) {
         n++;
         // TestCodeHorizontalLines();
@@ -43,7 +44,8 @@ void ApplicationRun(void) {
         // TestCodeVerticalLines();
         // TestScrollAndRect();
         // TestEllipse();
-        TestTriangles();
+        // TestTriangles();
+
         if (KBDEscapePressed(true)) {                                               // Escaped ?
             CONWriteString("Escape !\r");
         }

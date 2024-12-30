@@ -37,3 +37,4 @@ void GFXFillEllipse(GFXPort *vp,int x0,int y0,int x1,int y1,int colour);
 void GFXFrameEllipse(GFXPort *vp,int x0,int y0,int x1,int y1,int colour);
 void GFXFillTriangle(GFXPort *vp,int x0,int y0,int x1,int y1,int x2,int y2,int colour);
 void GFXFrameTriangle(GFXPort *vp,int x0,int y0,int x1,int y1,int x2,int y2,int colour);
+int GFXDrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int colour,int scale);

@@ -22,22 +22,52 @@
 
 #include "fonts/fonts.h"
 
+// ***************************************************************************************
+//
+//          Get the Glyph for the given character and font, NULL if not found.
+//
+// ***************************************************************************************
 
-    // startWrite();
-    // for (yy = 0; yy < h; yy++) {
-    //   for (xx = 0; xx < w; xx++) {
-    //     if (!(bit++ & 7)) {
-    //       bits = pgm_read_byte(&bitmap[bo++]);
-    //     }
-    //     if (bits & 0x80) {
-    //       if (size_x == 1 && size_y == 1) {
-    //         writePixel(x + xo + xx, y + yo + yy, color);
-    //       } else {
-    //         writeFillRect(x + (xo16 + xx) * size_x, y + (yo16 + yy) * size_y,
-    //                       size_x, size_y, color);
-    //       }
-    //     }
-    //     bits <<= 1;
-    //   }
-    // }
-    // endWrite();
+static GFXglyph *GFXGetGlyph(const GFXfont *font,int c) {
+    if (c < font->first || c > font->last) return NULL;
+    return &(font->glyph[c-font->first]);
+}
+
+// ***************************************************************************************
+//
+//          Draw a single character, return the x adjustment to the next character.
+//
+// ***************************************************************************************
+
+int GFXDrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int colour,int scale) {
+
+    GFXASetPort(vp);
+    const GFXfont *font = &FreeSans9pt7b;
+
+    GFXglyph *glyph = GFXGetGlyph(font,ch);                                         // Extract the glyph, exit if not available
+    if (glyph == NULL) return 0;
+    
+    xPos = xPos+glyph->xOffset*scale;                                               // Adjust the drawing point by the offset
+    yPos = yPos+glyph->yOffset*scale;
+
+    uint8_t bitCount = 0;                                                           // Track when we need another byte
+    int byteOffset = glyph->bitmapOffset;                                           // Offset into byte data
+    uint8_t currentByte = 0xFF;                                                     // Current byte being used
+
+    for (int y = 0;y < glyph->height;y++) {                                         // Do vertical first
+        for (int x = 0;x < glyph->width;x++) {                                      // Then horizontal
+            if ((bitCount & 7) == 0) currentByte = font->bitmap[byteOffset++];      // Do we need another byte
+            bitCount++;
+
+            if ((currentByte & 0x80) != 0) {                                        // If bit on.
+                if (scale == 1) {
+                    GFXAPlot(xPos+x*scale,yPos+y*scale,colour);
+                } else {
+                    GFXFillRect(vp,xPos+x*scale,yPos+y*scale,xPos+x*scale+scale-1,yPos+y*scale+scale-1,colour);
+                }
+            }
+            currentByte <<= 1;                                                      // Access next byte
+        }
+    }
+    return glyph->xAdvance;
+}
