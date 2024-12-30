@@ -18,6 +18,7 @@ void TestCodeRandomLines(void);
 void TestCodeVerticalLines(void);
 void TestScrollAndRect(void);
 void TestEllipse(void);
+void TestTriangles(void);
 
 // ***************************************************************************************
 //
@@ -41,10 +42,8 @@ void ApplicationRun(void) {
         // TestCodeRandomLines();
         // TestCodeVerticalLines();
         // TestScrollAndRect();
-        //TestEllipse();
-        GFXFillTriangle(&vp,80,10,10,70,230,110,1);
-        GFXFrameTriangle(&vp,80,10,10,70,230,110,7);
-
+        // TestEllipse();
+        TestTriangles();
         if (KBDEscapePressed(true)) {                                               // Escaped ?
             CONWriteString("Escape !\r");
         }
@@ -137,4 +136,15 @@ void TestEllipse(void) {
     GFXFillEllipse(&vp,20,30,300,130,3);
     GFXFrameEllipse(&vp,20,30,300,130,5);
     GFXFrameRect(&vp,20,30,300,130,1);
+}
+
+// ***************************************************************************************
+//
+//                                  Triangle test
+//
+// ***************************************************************************************
+
+void TestTriangles(void) {
+    GFXFillTriangle(&vp,rand()%640,rand()%240,rand()%640,rand()%240,rand()%640,rand()%240,rand() & 7);
+    GFXFrameTriangle(&vp,rand()%640,rand()%240,rand()%640,rand()%240,rand()%640,rand()%240,rand() & 7);
 }
