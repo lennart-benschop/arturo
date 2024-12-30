@@ -15,7 +15,7 @@
 #include "include/atomic.h"
 
 typedef struct _Vertice {
-    float x,y;
+    int x,y;
 } Vertice;
 
 static Vertice vt1,vt2,vt3;
@@ -57,8 +57,8 @@ static void sortVerticesAscendingByY(void)
 // ***************************************************************************************
 
 static void fillBottomFlatTriangle(Vertice v1,Vertice v2,Vertice v3) {
-    float invslope1 = (v2.x - v1.x) / (v2.y - v1.y);
-    float invslope2 = (v3.x - v1.x) / (v3.y - v1.y);
+    float invslope1 = (float)(v2.x - v1.x) / (v2.y - v1.y);
+    float invslope2 = (float)(v3.x - v1.x) / (v3.y - v1.y);
 
     float curx1 = v1.x;
     float curx2 = v1.x;
@@ -78,8 +78,8 @@ static void fillBottomFlatTriangle(Vertice v1,Vertice v2,Vertice v3) {
 
 static void fillTopFlatTriangle(Vertice v1,Vertice v2,Vertice v3)
 {
-    float invslope1 = (v3.x - v1.x) / (v3.y - v1.y);
-    float invslope2 = (v3.x - v2.x) / (v3.y - v2.y);
+    float invslope1 = (float)(v3.x - v1.x) / (v3.y - v1.y);
+    float invslope2 = (float)(v3.x - v2.x) / (v3.y - v2.y);
 
     float curx1 = v3.x;
     float curx2 = v3.x;

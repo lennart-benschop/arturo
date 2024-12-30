@@ -39,6 +39,8 @@ void ApplicationRun(void) {
     GFXDrawCharacter(&vp,30,50,'?',6,4);
     while (1) {
         n++;
+        // GFXFillTriangle(&vp,50,20,10,100,320,140,1);
+        // GFXFrameTriangle(&vp,50,20,10,100,320,140,7);
         // TestCodeHorizontalLines();
         // TestCodeRandomLines();
         // TestCodeVerticalLines();
