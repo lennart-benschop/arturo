@@ -37,7 +37,7 @@ import re,os,sys
 #		Height (the recorded height - 1)
 #		First character
 #		Last character
-#		(Pad to 16 bytes)
+#		(Pad to 8 bytes)
 #		Offset from start of font data to first character (or $FFFF if character not defined)
 #
 #		Header size is 16 + (number of characters) * 2
@@ -71,7 +71,7 @@ class FontCharacter(object):
 		self.startData = min(self.startData,len(self.data))
 		self.endData = max(self.startData,self.endData)
 
-	def renderData(self,baseLineOffset,extraSpace):
+	def render(self,baseLineOffset,extraSpace):
 		self.renderData =  [ self.width,self.kerning * 16 + extraSpace,baseLineOffset,self.startData,self.endData-self.startData+1,len(self.data)-self.endData-1]
 
 		self.renderData.append(0)   												# Set up first byte, unused
@@ -136,10 +136,11 @@ class Font(object):
 			newChar.getExtent()
 
 	def render(self):
-		self.baseLine = self.chars[ord('o')].endData  								# This is the base line for the font.
+		ct = 'o' if 'o' in self.chars else 'O'
+		self.baseLine = self.chars[ord(ct)].endData+1  								# This is the base line for the font.
 
 		for c in self.chars.keys():   												# Convert data to pixels
-			self.chars[c].renderData(self.baseLine,self.xSpacing)
+			self.chars[c].render(self.baseLine,self.xSpacing)
 			#self.chars[c].print()
 
 		count = self.lastChar - self.firstChar + 1   								# No of records.
@@ -184,9 +185,11 @@ class FontCollection(object):
 		size = 0
 		for f in keys:
 			font = self.fonts[f]
+			font.render()
 			print("// {0} bytes\n".format(len(font.data)))
 			print("static const uint8_t {0}[] = {{ {1} }};\n\n".format(font.getFontIdentifier(),",".join([str(x) for x in font.data])))
 			size += len(font.data)
+
 		print("static int fontCount = {0};\n".format(len(keys)))
 
 		print("static const uint8_t *fontDataIndex[] = {{ {0} }};\n\n".format(",".join([self.fonts[x].getFontIdentifier() for x in keys])))

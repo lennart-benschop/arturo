@@ -36,7 +36,8 @@ void ApplicationRun(void) {
     //
     //      A typical 'main'
     //
-    GFXDrawString(&vp,30,50,"Hello",6,1);
+    GFXHLine(&vp,0,300,120,1);
+    GFXDrawString(&vp,30,120,"Hello worldy !",6,2);
     while (1) {
         n++;
         // TestCodeHorizontalLines();
