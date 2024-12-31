@@ -20,7 +20,9 @@
 //
 // ***************************************************************************************
 
-#include "__fonts.h"
+#include "__fontdata.h"
+
+static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int font,int colour,int scale);
 
 // ***************************************************************************************
 //
@@ -28,9 +30,10 @@
 //
 // ***************************************************************************************
 
-static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int colour,int scale) {
+static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int fontid,int colour,int scale) {
 
-    const uint8_t *font = _aribeth14_data;
+    if (fontid < 0 || fontid >= FONT_COUNT) return 0;                                   // Unknown font
+    const uint8_t *font = _font_list[fontid];
 
     if (ch < font[1] || ch > font[2]) return 0;                                     // Unknown character.
     int offset = 8 + (ch - font[1]) * 2;                                            // Address of the offset
@@ -65,7 +68,7 @@ static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int colour,int sc
         }
         yPos += scale;                                                              // Next line down.
     }
-    return (width + 1 + (chData[1] & 0x0F)) * scale;                                // Return size.
+    return (width*scale + 1 + (chData[1] & 0x0F));                                  // Return size.
 }
 
 // ***************************************************************************************
@@ -74,9 +77,9 @@ static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int colour,int sc
 //
 // ***************************************************************************************
 
-void GFXDrawString(GFXPort *vp,int xPos,int yPos,char *s,int colour,int scale) {
+void GFXDrawString(GFXPort *vp,int xPos,int yPos,char *s,int font,int colour,int scale) {
     while (*s != '\0' && xPos < vp->width) {
-        int w = _DrawCharacter(vp,xPos,yPos,*s++,colour,scale);
+        int w = _DrawCharacter(vp,xPos,yPos,*s++,font,colour,scale);
         xPos += w;
     }
 }

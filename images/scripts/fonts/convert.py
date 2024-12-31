@@ -179,24 +179,29 @@ class FontCollection(object):
 					self.fonts[nc.getFontName()] = nc
 
 	def render(self):
-		print("#pragma once\n\n")
+		h = open("__fontdata.h","w")
+		h.write("#pragma once\n\n")
 		keys = [x for x in self.fonts.keys()]
 		keys.sort()
 		size = 0
 		for f in keys:
 			font = self.fonts[f]
 			font.render()
-			print("// {0} bytes\n".format(len(font.data)))
-			print("static const uint8_t {0}[] = {{ {1} }};\n\n".format(font.getFontIdentifier(),",".join([str(x) for x in font.data])))
+			h.write("// {0} bytes\n\n".format(len(font.data)))
+			h.write("static const uint8_t {0}[] = {{ {1} }};\n\n".format(font.getFontIdentifier(),",".join([str(x) for x in font.data])))
 			size += len(font.data)
 
-		print("static int fontCount = {0};\n".format(len(keys)))
+		h.write("// Size {0}\n\n".format(size))
+		s = ",".join([self.fonts[f].getFontIdentifier() for f in keys])
+		h.write("static const uint8_t *_font_list[] = {{ {0} }};\n\n".format(s))
+		h.close()
 
-		print("static const uint8_t *fontDataIndex[] = {{ {0} }};\n\n".format(",".join([self.fonts[x].getFontIdentifier() for x in keys])))
-
-		print("static const char *fontNameIndex[] = {{ {0} }};\n\n".format(",".join(['"'+self.fonts[x].getFontName()+'"' for x in keys])))
-
-		print("// Size {0}".format(size))
+		h = open("__fontinclude.h","w")
+		h.write("#pragma once\n\n")
+		h.write("#define FONT_COUNT ({0})\n\n".format(len(keys)))
+		for i in range(0,len(keys)):
+			h.write("#define FONT_{0} ({1})\n".format(self.fonts[keys[i]].getFontName().upper(),i))
+		h.close()
 		
 FontCollection("fonts").render()
 

@@ -38,7 +38,7 @@ prelim: $(CONFIG_OUT_FILE) $(LOGO_OUT_FILE) $(CMAKE_OUT_FILE)
 	mkdir -p $(BINDIR)
 	rm -f $(BINDIR)*.elf $(BINDIR)*.uf2
 	cd firmware/kernel/locale ; $(PYTHON) keymaps.py >$(LOCALE_OUT_FILE)
-	cd scripts/fonts ; $(PYTHON) convert.py >$(ROOTDIR)libraries/graphics/__fonts.h
+	cd scripts/fonts ; $(PYTHON) convert.py ; cp __fontdata.h $(ROOTDIR)libraries/graphics/ ; cp __fontinclude.h $(ROOTDIR)libraries/graphics/include
 #
 #		Build the C configuration header file, passing constants into code.
 #

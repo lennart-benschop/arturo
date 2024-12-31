@@ -12,7 +12,7 @@
 
 #pragma once
 
-#define XXX "Hello"
+#include "__fontinclude.h"
 
 //
 //		A drawing area on the display.
@@ -37,4 +37,4 @@ void GFXFillEllipse(GFXPort *vp,int x0,int y0,int x1,int y1,int colour);
 void GFXFrameEllipse(GFXPort *vp,int x0,int y0,int x1,int y1,int colour);
 void GFXFillTriangle(GFXPort *vp,int x0,int y0,int x1,int y1,int x2,int y2,int colour);
 void GFXFrameTriangle(GFXPort *vp,int x0,int y0,int x1,int y1,int x2,int y2,int colour);
-void GFXDrawString(GFXPort *vp,int xPos,int yPos,char *s,int colour,int scale);
+void GFXDrawString(GFXPort *vp,int xPos,int yPos,char *s,int font,int colour,int scale);

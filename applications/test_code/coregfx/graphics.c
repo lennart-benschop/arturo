@@ -19,6 +19,7 @@ void TestCodeVerticalLines(void);
 void TestScrollAndRect(void);
 void TestEllipse(void);
 void TestTriangles(void);
+void TestFonts(void);
 
 // ***************************************************************************************
 //
@@ -31,13 +32,11 @@ static GFXPort vp;
 void ApplicationRun(void) {
     int n = 0;
     // GFXSetMode(DVI_MODE_640_240_8);
-    CONWriteString("%s Graphics Demo Application\r",XXX);                                          
+    CONWriteString("Graphics Demo Application\r");                                          
     GFXPortInitialise(&vp,45,64,553,150);
     //
     //      A typical 'main'
     //
-    GFXHLine(&vp,0,300,120,1);
-    GFXDrawString(&vp,30,120,"Hello worldy !",6,2);
     while (1) {
         n++;
         // TestCodeHorizontalLines();
@@ -46,6 +45,7 @@ void ApplicationRun(void) {
         // TestScrollAndRect();
         // TestEllipse();
         // TestTriangles();
+        TestFonts();
 
         if (KBDEscapePressed(true)) {                                               // Escaped ?
             CONWriteString("Escape !\r");
@@ -150,4 +150,15 @@ void TestEllipse(void) {
 void TestTriangles(void) {
     GFXFillTriangle(&vp,rand()%640,rand()%240,rand()%640,rand()%240,rand()%640,rand()%240,rand() & 7);
     GFXFrameTriangle(&vp,rand()%640,rand()%240,rand()%640,rand()%240,rand()%640,rand()%240,rand() & 7);
+}
+
+void TestFonts(void) {
+    for (int i = 0;i < FONT_COUNT;i++) {
+        char buffer[32];
+        int x = i % 6 * 80;
+        int y = i / 6 * 16 + 16;
+        if (i >= 12) y += 8;
+        sprintf(buffer,"%d. pest",i);
+        GFXDrawString(&vp,x,y,buffer,i,i % 7 + 1,1);
+    }
 }
