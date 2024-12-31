@@ -32,9 +32,8 @@ static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int font,int colo
 
 static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int fontid,int colour,int scale) {
 
-    if (fontid < 0 || fontid >= FONT_COUNT) return 0;                                   // Unknown font
+    if (fontid < 0 || fontid >= FONT_COUNT) return 0;                               // Unknown font
     const uint8_t *font = _font_list[fontid];
-
     if (ch < font[1] || ch > font[2]) return 0;                                     // Unknown character.
     int offset = 8 + (ch - font[1]) * 2;                                            // Address of the offset
     offset = font[offset] + (font[offset+1] << 8);                                  // Convert to the actual offset.
@@ -83,3 +82,4 @@ void GFXDrawString(GFXPort *vp,int xPos,int yPos,char *s,int font,int colour,int
         xPos += w;
     }
 }
+

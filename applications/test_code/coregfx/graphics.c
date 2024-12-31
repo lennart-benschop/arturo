@@ -156,8 +156,7 @@ void TestFonts(void) {
     for (int i = 0;i < FONT_COUNT;i++) {
         char buffer[32];
         int x = i % 6 * 80;
-        int y = i / 6 * 16 + 16;
-        if (i >= 12) y += 8;
+        int y = i / 6 * 24 + 24;
         sprintf(buffer,"%d. pest",i);
         GFXDrawString(&vp,x,y,buffer,i,i % 7 + 1,1);
     }
