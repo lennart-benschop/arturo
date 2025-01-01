@@ -157,7 +157,7 @@ void TestFonts(void) {
         char buffer[32];
         int x = i % 6 * 80;
         int y = i / 6 * 24 + 24;
-        sprintf(buffer,"%d. pest",i);
+        sprintf(buffer,"%dqrt",i);
         GFXDrawString(&vp,x,y,buffer,i,i % 7 + 1,1);
     }
 }

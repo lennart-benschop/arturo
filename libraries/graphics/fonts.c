@@ -20,9 +20,7 @@
 //
 // ***************************************************************************************
 
-#include "__fontdata.h"
-
-static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int font,int colour,int scale);
+#include "fontdata.h"
 
 // ***************************************************************************************
 //
@@ -33,25 +31,24 @@ static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int font,int colo
 static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int fontid,int colour,int scale) {
 
     if (fontid < 0 || fontid >= FONT_COUNT) return 0;                               // Unknown font
-    const uint8_t *font = _font_list[fontid];
-    if (ch < font[1] || ch > font[2]) return 0;                                     // Unknown character.
-    int offset = 8 + (ch - font[1]) * 2;                                            // Address of the offset
+    const uint8_t *font = fontTable[fontid];
+    if (ch < font[0] || ch > font[1]) return 0;                                     // Unknown character.
+    int offset = 64 + (ch - font[0]) * 2;                                           // Address of the offset
     offset = font[offset] + (font[offset+1] << 8);                                  // Convert to the actual offset.
     if (offset == 0xFFFF) return 0;                                                 // Font not defined.
     const uint8_t *chData = font + offset;                                          // Address of the font character record
-    const uint8_t *bitmapData = chData+6;                                           // Binary data from here.
+    const uint8_t *bitmapData = chData+3;                                           // Binary data from here.
     uint8_t bitMask = 0x80;                                                         // Bit to check.
 
-    int height = font[0];
-    int width = chData[0];
+    int height = font[2];                                                           // Total font height
+    int width = chData[0];                                                          // Width of the glyph
     GFXASetPort(vp);
 
-    yPos -= (scale * chData[2]) - 1;                                                // Adjust for baseline.
-    xPos -= (scale * (chData[1] >> 4));                                             // Kerning
+    yPos = yPos - scale * font[3];                                                  // Go to the top of the character from the baseline
     // TODO: Fill background ?
-    yPos += (scale * chData[3]);                                                    // Adjust top gap.
+    yPos = yPos + scale * chData[1];                                                // Go to the top of the data.
 
-    for (int y = 0;y < chData[4];y++) {                                             // For each line of actual data.
+    for (int y = 0;y < chData[2];y++) {                                             // For each line of actual data.
         for (int x = 0;x < width;x++) {                                             // Each horizontal pixel ?
             if (((*bitmapData) & bitMask) != 0) {                                   // Plot bitmap.
                 if (scale == 1) {                                                   // Pixel or Rectangle.
@@ -67,7 +64,8 @@ static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int fontid,int co
         }
         yPos += scale;                                                              // Next line down.
     }
-    return (width*scale + 1 + (chData[1] & 0x0F));                                  // Return size.
+    offset = scale * chData[0];                                                     // Actual data offset, no spacing.
+    return offset + max(1,height/10);
 }
 
 // ***************************************************************************************

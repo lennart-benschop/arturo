@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "__fontinclude.h"
+#include "fontinclude.h"
 
 //
 //		A drawing area on the display.
