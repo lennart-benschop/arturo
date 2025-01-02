@@ -19,6 +19,10 @@
 //
 // ***************************************************************************************
 
+static int mode;
+static int fg=7;
+static int bg=0;
+
 void ApplicationRun(void) {
     int n = 0;
     CONWriteString("Kernel Demo Application\r");                                          
@@ -32,10 +36,49 @@ void ApplicationRun(void) {
         if (n != 0) CONWriteString("%d %c\r",n,n);
         if (n == ' ') DemoApp_CheckFileIO();                                        // Dump the USB key on space
 
+	if (n == 'm') {
+	  mode=(mode+1) % 5;
+	  DVISetMode(mode);
+	  CONWrite(12);
+	  CONWriteString("Set mode to %d\n",mode);
+	}
+	if (n == 'f') {
+	  fg++;
+	  if (mode==3 && fg==64) {
+	    fg = 0; 
+	  }
+	  else if (mode!=3 && (fg & 7)==0) {
+	    fg = 0;
+	  }
+	  if (mode==2) {
+	    DVISetMonoColour(fg, bg);
+	  } else {
+	    CONSetColour(fg, bg);
+	  }	    
+	  CONWriteString("Set foreground to %d\n",fg);
+	}
+	if (n == 'b') {
+	  bg++;
+	  if (mode==3 && bg==64) {
+	    bg = 0; 
+	  }
+	  else if (mode!=3 && (bg & 7)==0) {
+	    bg = 0;
+	  }
+	  if (mode==2) {
+	    DVISetMonoColour(fg, bg);
+	  } else {
+	      CONSetColour(fg, bg);
+	  }	    
+	  CONWriteString("Set background to %d\n",bg);
+	}
+	 
+	
         if (KBDEscapePressed(true)) {                                               // Escaped ?
             CONWriteString("Escape !\r");
         }
 
+	
         if (HASTICK50_FIRED()) {                                                    // Time to do a 50Hz tick (Don't use this for timing !)
             TICK50_RESET();                                                         // Reset the tick flag
             if (USBUpdate() == 0) return;                                           // Update USB

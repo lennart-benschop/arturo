@@ -16,7 +16,9 @@
 //
 #define DVI_MODE_640_240_8 		(0)   												// Modes
 #define DVI_MODE_320_240_8		(1)
-#define DVI_MODE_640_480_2  	(2)
+#define DVI_MODE_640_480_2              (2)
+#define DVI_MODE_320_240_64             (3)            
+#define DVI_MODE_320_256_8              (4)            // Trick mode to get BBC Basic compatible 32 text rows.
 
 //
 //		DVI Mode information structure
@@ -33,6 +35,8 @@ struct DVIModeInformation {
 	int bitPlaneSize;  																// Byte size of each bitplane.
 };
 
+
+void DVISetMonoColour(int fg, int bg);
 bool DVISetMode(int mode);
 struct DVIModeInformation *DVIGetModeInformation(void);
 

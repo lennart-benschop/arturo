@@ -28,15 +28,32 @@
 void CONDrawPixel(int x, int y, int rgb) {
 	struct DVIModeInformation *dmi = DVIGetModeInformation();  						// Identify mode data.
 	if (dmi == NULL) return;
-	uint8_t mask = 0x80 >> (x % 8);  												// Mask from lower 8 bits.
+	uint8_t mask;
+	if (dmi->bitPlaneDepth == 2) {
+	  
+	  mask = 0x80 >> (2*(x % 4));  							  for (uint component = 0; component < dmi->bitPlaneCount; ++component) {  		// Do each bitplane
+	    uint8_t *idx = (x / 4) + y * dmi->bytesPerLine + dmi->bitPlane[component]; 	// Work out byte.
+	    
+	    if (rgb & (1u << component))  												// Set or clear the bit in the plane.
+	      *idx = *idx | mask;
+	    else
+	      *idx = *idx & (~mask);
+	    if (rgb & (1u << (component+3)))  												// Set or clear the bit in the plane.
+	      *idx = *idx | (mask>>1);
+	    else
+	      *idx = *idx & (~(mask>>1));
+	  }
+	} else {
+	  mask = 0x80 >> (x % 8);  												// Mask from lower 8 bits.
 
-	for (uint component = 0; component < dmi->bitPlaneCount; ++component) {  		// Do each bitplane
-		uint8_t *idx = (x / 8) + y * dmi->bytesPerLine + dmi->bitPlane[component]; 	// Work out byte.
-
-		if (rgb & (1u << component))  												// Set or clear the bit in the plane.
-			*idx = *idx | mask;
-		else
-			*idx = *idx & (~mask);
+	  for (uint component = 0; component < dmi->bitPlaneCount; ++component) {  		// Do each bitplane
+	    uint8_t *idx = (x / 8) + y * dmi->bytesPerLine + dmi->bitPlane[component]; 	// Work out byte.
+	    
+	    if (rgb & (1u << component))  												// Set or clear the bit in the plane.
+	      *idx = *idx | mask;
+	    else
+	      *idx = *idx & (~mask);
+	  }
 	}
 }
 

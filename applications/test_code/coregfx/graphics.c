@@ -20,6 +20,7 @@ void TestScrollAndRect(void);
 void TestEllipse(void);
 void TestTriangles(void);
 void TestFonts(void);
+void Test64Colours(void);
 
 // ***************************************************************************************
 //
@@ -32,7 +33,8 @@ static GFXPort vp;
 void ApplicationRun(void) {
     int n = 0;
     // GFXSetMode(DVI_MODE_640_240_8);
-    CONWriteString("Graphics Demo Application\r");                                          
+    CONWriteString("Graphics Demo Application\r");                                  Test64Colours();
+            
     GFXPortInitialise(&vp,45,64,553,150);
     //
     //      A typical 'main'
@@ -166,4 +168,26 @@ void TestFonts(void) {
         sprintf(buffer,"%d__iM",i);
         GFXDrawString(&vp,x,y,buffer,i,i % 7 + 1,1);
     }
+}
+
+void Test64Colours(void)
+{
+  DVISetMode(DVI_MODE_320_240_64);  						     
+  CONWrite(12);
+  for (int i=0; i<64; i++) {
+    CONSetColour(i,0);
+    CONWriteString("12345");
+    CONSetColour(0,i);
+    CONWriteString("12345");
+  }
+  for (int i=0; i<8; i++) {
+    CONSetColour(i*8,0);
+    CONWriteString("Bright level");
+    CONSetColour(i,0);
+    CONWriteString("Bright level");
+    CONSetColour(i*9,0);
+    CONWriteString("Bright level");
+    CONWrite(13);
+  }
+  CONSetColour(3,0);
 }
