@@ -3,7 +3,7 @@
 //
 #pragma once
 
-#define FONT_COUNT (15)
+#define FONT_COUNT (17)
 #define FONT_MONO08 (0)
 #define FONT_MONO10 (1)
 #define FONT_MONO12 (2)
@@ -19,3 +19,5 @@
 #define FONT_SERIF12 (12)
 #define FONT_SERIF14 (13)
 #define FONT_SERIF18 (14)
+#define FONT_TINY06 (15)
+#define FONT_TINY07 (16)
