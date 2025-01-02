@@ -30,6 +30,12 @@ class Font(object):
 		self.height = self.font[xlfd.PIXEL_SIZE]
 		self.baseLine = self.font[xlfd.FONT_ASCENT]  											# Top to baseline.
 		self.totalHeight = self.font[xlfd.FONT_DESCENT]+self.baseLine   						# Complete range
+		self.stub = fontFile.split(os.sep)[-1].replace(".bdf","").replace(".pbdf","").lower()
+		#
+		#	Works round an bdflib bug which has diffeent cases for the value and the constants :)
+		#
+		self.isMono = self.font[xlfd.SPACING].upper() == xlfd.SPACING_MONOSPACED.upper() or self.font[xlfd.SPACING].upper() == xlfd.SPACING_CHARCELL.upper()
+		self.fixedWidth = int(self.stub[-2:]) if self.isMono else 0  
 	#
 	#		Get Information
 	#
@@ -76,13 +82,7 @@ class Font(object):
 	#		Get the known name from the family, style, bold/italic and size, and the associated identifier.
 	#
 	def getName(self):
-		s = str(self.font[xlfd.FAMILY_NAME])[2:]
-		d = str(self.font[xlfd.ADD_STYLE_NAME])
-		s = s if d == "" else s+d[2:]
-		d = "Bold" if self.font[xlfd.WEIGHT_NAME].lower() == "bold" else ""
-		d += ("Italic" if self.font[xlfd.SLANT] == xlfd.SLANT_ITALIC else "")
-		s = s if d == "" else s + "_"+d
-		return s.replace(" ","").replace("'","").lower()+"_"+str(self.getSize())
+		return self.stub
 	#
 	def getIdentifier(self):
 		return "_"+self.getName()+"_data"
@@ -90,7 +90,8 @@ class Font(object):
 	#		Render the font as data.
 	#
 	def render(self):
-		self.data = [ 32, 127,self.totalHeight,self.baseLine]   								# +0 First char, +1 Last char, +2 total overall height, +3 baseline from top
+		self.data = [ 32, 127,self.totalHeight,self.baseLine,self.fixedWidth] 					# +0 First char, +1 Last char, +2 total overall height, +3 baseline from top
+																								# +4 Fixed width or zero.
 		self.data += [ 0 ] * (16 - len(self.data))  											# pad out to 16 with 0 bytes
 		for c in self.getName():   																# Get the name of the font and add that
 			self.data.append(ord(c))
@@ -144,7 +145,7 @@ total = 0
 
 for root,dirs,files in os.walk("fonts"):  														# Scan the directory tree for BDF files
 	for f in files:
-		if f.endswith(".bdf"):
+		if f.endswith(".bdf") or f.endswith(".pbdf"):
 			#print(">>>>",f)
 			font = Font(root+os.sep+f)  														# create it
 			data = font.render()  																# convert it

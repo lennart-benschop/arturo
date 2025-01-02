@@ -48,6 +48,10 @@ static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int fontid,int co
     // TODO: Fill background ?
     yPos = yPos + scale * chData[1];                                                // Go to the top of the data.
 
+    if (font[4] != 0) {                                                             // Mono spaced.
+        xPos = xPos + font[4]/2-width/2;                                            // Centre the character in its box.
+    }
+
     for (int y = 0;y < chData[2];y++) {                                             // For each line of actual data.
         for (int x = 0;x < width;x++) {                                             // Each horizontal pixel ?
             if (((*bitmapData) & bitMask) != 0) {                                   // Plot bitmap.
@@ -65,7 +69,7 @@ static int _DrawCharacter(GFXPort *vp,int xPos,int yPos,int ch,int fontid,int co
         yPos += scale;                                                              // Next line down.
     }
     offset = scale * chData[0];                                                     // Actual data offset, no spacing.
-    return offset + max(1,height/10);
+    return (font[4] == 0) ? offset + max(1,height/10) : font[4];
 }
 
 // ***************************************************************************************

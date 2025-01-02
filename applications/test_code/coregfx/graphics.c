@@ -152,12 +152,18 @@ void TestTriangles(void) {
     GFXFrameTriangle(&vp,rand()%640,rand()%240,rand()%640,rand()%240,rand()%640,rand()%240,rand() & 7);
 }
 
+// ***************************************************************************************
+//
+//                                  Font test
+//
+// ***************************************************************************************
+
 void TestFonts(void) {
     for (int i = 0;i < FONT_COUNT;i++) {
         char buffer[32];
         int x = i % 6 * 80;
         int y = i / 6 * 24 + 24;
-        sprintf(buffer,"%dqrt",i);
+        sprintf(buffer,"%d__iM",i);
         GFXDrawString(&vp,x,y,buffer,i,i % 7 + 1,1);
     }
 }

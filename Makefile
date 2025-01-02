@@ -24,3 +24,8 @@ hw:
 
 sw:
 	make -C simulator run
+
+fonts:
+	make -B -C libraries/graphics/fonts convert
+	rm -f applications/coregfx/graphics.o
+	rm -f libraries/graphics/fonts.o
