@@ -1,12 +1,12 @@
 // ***************************************************************************************
 // ***************************************************************************************
 //
-//		Name : 		dvi_640x480.c
-//		Author :	Paul Robson (paul@robsons.org.uk)
-//					Lennart Benschop 
-//		Date : 		18th December 2024
-//		Reviewed :	No
-//		Purpose :	DVI Driver 640x480 frame size. 
+//    Name :    	dvi_640x480.c
+//    Author :  	Paul Robson (paul@robsons.org.uk)
+//          		Lennart Benschop 
+//    Date :    	18th December 2024
+//    Reviewed :	No
+//    Purpose : 	DVI Driver 640x480 frame size. 
 //
 // ***************************************************************************************
 // ***************************************************************************************
@@ -22,23 +22,23 @@ struct dvi_serialiser_cfg *DVIGetHDMIConfig(void);
 
 // ***************************************************************************************
 //
-//				Frame buffer, these are 3 planar bitmaps for 640x480
+//        Frame buffer, these are 3 planar bitmaps for 640x480
 //
 // ***************************************************************************************
 
-#define FRAME_WIDTH 640  															// Not the *pixels*, it's the display setting.
+#define FRAME_WIDTH 640                               // Not the *pixels*, it's the display setting.
 #define FRAME_HEIGHT 480
 
-#define PLANE_SIZE_BYTES (FRAME_WIDTH * FRAME_HEIGHT / 2 / 8) 						// We don't support 640x480x8
+#define PLANE_SIZE_BYTES (FRAME_WIDTH * FRAME_HEIGHT / 2 / 8)             // We don't support 640x480x8
 
-static uint8_t framebuf[3 * PLANE_SIZE_BYTES];  									// Memory allowing 3 640x240 bitplanes maximum
+static uint8_t framebuf[3 * PLANE_SIZE_BYTES];                    // Memory allowing 3 640x240 bitplanes maximum
 
-struct dvi_inst dvi0;																// PicoDVI structure
-struct DVIModeInformation dvi_modeInfo;  											// Mode information structure.
+struct dvi_inst dvi0;                               // PicoDVI structure
+struct DVIModeInformation dvi_modeInfo;                       // Mode information structure.
 
 // ***************************************************************************************
 //
-//									Get mode information
+//                  Get mode information
 //
 // ***************************************************************************************
 
@@ -48,95 +48,94 @@ struct DVIModeInformation *DVIGetModeInformation(void) {
 
 // ***************************************************************************************
 //
-//									Set current mode
+//                  Set current mode
 //
 // ***************************************************************************************
 
 bool DVISetMode(int mode) {
 	bool supported = true;
 
-	dvi_modeInfo.mode = mode;  														// Record mode
+	dvi_modeInfo.mode = mode;                             // Record mode
 
 	switch(mode) {
 
-		case DVI_MODE_640_240_8: 													// 640x240x8 information.			
+		case DVI_MODE_640_240_8:                          // 640x240x8 information.     
 			dvi_modeInfo.width = 640;dvi_modeInfo.height = 240;
 			dvi_modeInfo.bitPlaneCount = 3;
 			dvi_modeInfo.bitPlaneSize = PLANE_SIZE_BYTES;
 			dvi_modeInfo.bitPlaneDepth = 1;
 			for (int i = 0;i <dvi_modeInfo.bitPlaneCount;i++)
-				dvi_modeInfo.bitPlane[i] = framebuf + PLANE_SIZE_BYTES * i;
-			dvi_modeInfo.bytesPerLine = dvi_modeInfo.width / 8;  					// Calculate bytes per line.
-			break;
+			dvi_modeInfo.bitPlane[i] = framebuf + PLANE_SIZE_BYTES * i;
+			dvi_modeInfo.bytesPerLine = dvi_modeInfo.width / 8;           // Calculate bytes per line.
+		break;
 
-		case DVI_MODE_640_480_2: 													// 640x480x2 information.			
+		case DVI_MODE_640_480_2:                          // 640x480x2 information.     
 			dvi_modeInfo.width = 640;dvi_modeInfo.height = 480;
 			dvi_modeInfo.bitPlaneCount = 1;
 			dvi_modeInfo.bitPlaneSize = PLANE_SIZE_BYTES;
 			dvi_modeInfo.bitPlaneDepth = 1;
 			dvi_modeInfo.bitPlane[0] = framebuf;
-			dvi_modeInfo.bytesPerLine = dvi_modeInfo.width / 8;  					// Calculate bytes per line.
-			break;
+			dvi_modeInfo.bytesPerLine = dvi_modeInfo.width / 8;           // Calculate bytes per line.
+		break;
 
-		case DVI_MODE_320_240_8:  													// 320x240x8 information.
+		case DVI_MODE_320_240_8:                            // 320x240x8 information.
 			dvi_modeInfo.width = 320;dvi_modeInfo.height = 240;
 			dvi_modeInfo.bitPlaneCount = 3;
 			dvi_modeInfo.bitPlaneSize = PLANE_SIZE_BYTES;
 			dvi_modeInfo.bitPlaneDepth = 1;
 			for (int i = 0;i <dvi_modeInfo.bitPlaneCount;i++)
-				dvi_modeInfo.bitPlane[i] = framebuf + PLANE_SIZE_BYTES * i;
-			dvi_modeInfo.bytesPerLine = dvi_modeInfo.width / 8;  					// Calculate bytes per line.
-			break;
+			dvi_modeInfo.bitPlane[i] = framebuf + PLANE_SIZE_BYTES * i;
+			dvi_modeInfo.bytesPerLine = dvi_modeInfo.width / 8;           // Calculate bytes per line.
+		break;
 
-		case DVI_MODE_320_256_8:  													// 320x240x8 information.
+		case DVI_MODE_320_256_8:                            // 320x240x8 information.
 			dvi_modeInfo.width = 320;dvi_modeInfo.height = 256;
 			dvi_modeInfo.bitPlaneCount = 3;
 			dvi_modeInfo.bitPlaneSize = PLANE_SIZE_BYTES;
 			dvi_modeInfo.bitPlaneDepth = 1;
 			for (int i = 0;i <dvi_modeInfo.bitPlaneCount;i++)
-				dvi_modeInfo.bitPlane[i] = framebuf + PLANE_SIZE_BYTES * i;
-			dvi_modeInfo.bytesPerLine = dvi_modeInfo.width / 8;  					// Calculate bytes per line.
-			break;
-		case DVI_MODE_320_240_64: 													// 640x240x8 information.			
+			dvi_modeInfo.bitPlane[i] = framebuf + PLANE_SIZE_BYTES * i;
+			dvi_modeInfo.bytesPerLine = dvi_modeInfo.width / 8;           // Calculate bytes per line.
+		break;
+		case DVI_MODE_320_240_64:                           // 640x240x8 information.     
 			dvi_modeInfo.width = 320;dvi_modeInfo.height = 240;
 			dvi_modeInfo.bitPlaneCount = 3;
 			dvi_modeInfo.bitPlaneSize = PLANE_SIZE_BYTES;
 			dvi_modeInfo.bitPlaneDepth = 2;
 			for (int i = 0;i <dvi_modeInfo.bitPlaneCount;i++)
-				dvi_modeInfo.bitPlane[i] = framebuf + PLANE_SIZE_BYTES * i;
-			dvi_modeInfo.bytesPerLine = dvi_modeInfo.width / 4;  					// Calculate bytes per line.
+			dvi_modeInfo.bitPlane[i] = framebuf + PLANE_SIZE_BYTES * i;
+			dvi_modeInfo.bytesPerLine = dvi_modeInfo.width / 4;           // Calculate bytes per line.
 			break;
 		default:
 			supported = false;
-			dvi_modeInfo.mode = -1;  												// Failed.
-	}
+			dvi_modeInfo.mode = -1;                         // Failed.
+		}
 	return supported;
 }
 
 // ***************************************************************************************
 //
-//						Set the current colours, monochrome mode
+//            Set the current colours, monochrome mode
 //
 // ***************************************************************************************
 
-static uint8_t mono_fg_bg = 0x43;  													// Current colours for 640x480x2 colour
+static uint8_t mono_fg_bg = 0x43;                           // Current colours for 640x480x2 colour
 
-void DVISetMonoColour(int fg, int bg)
-{
+void DVISetMonoColour(int fg, int bg) {
   mono_fg_bg = fg | (bg << 3);
 }
 
 // ***************************************************************************************
 //
-//									The main line renderer
+//                  The main line renderer
 //
 // ***************************************************************************************
 
-static uint8_t _buffer[80];   														// Buffer for line
-static uint16_t _mapping[256];  													// Table mapping 320 bits to 640 bits
+static uint8_t _buffer[80];                               // Buffer for line
+static uint16_t _mapping[256];                            // Table mapping 320 bits to 640 bits
 static uint32_t all_zero[20];
 static uint32_t all_one[20];
-		      
+		  
 void __not_in_flash("main") dvi_core1_main() {
 
 	uint32_t *tmdsbuf;
@@ -146,7 +145,7 @@ void __not_in_flash("main") dvi_core1_main() {
 	uint y0 = 0;
 	uint y1 = 0;
 	//
-	//		This table maps an 8 bit bit pattern into a 'double width' 16 bit pattern.
+	//    This table maps an 8 bit bit pattern into a 'double width' 16 bit pattern.
 	//
 	for (int i = 0;i < 256;i++) {
 		_mapping[i] = 0;
@@ -163,22 +162,20 @@ void __not_in_flash("main") dvi_core1_main() {
 		y = (y + 1) % FRAME_HEIGHT;
 		switch(dvi_modeInfo.mode) {
 			//
-			//		Mode 0 is 640x240x8 colours as 3 bitplanes.
+			//    Mode 0 is 640x240x8 colours as 3 bitplanes.
 			//
 			case DVI_MODE_640_240_8:
 				queue_remove_blocking_u32(&dvi0.q_tmds_free, &tmdsbuf);
-			 	for (uint component = 0; component < 3; ++component) {
-						tmds_encode_custom_1bpp(
-							(const uint32_t*)(framebuf+(y/2)*640/8 + component * PLANE_SIZE_BYTES),
-							tmdsbuf + (2-component) * FRAME_WIDTH / DVI_SYMBOLS_PER_WORD,  	// The (2-x) here makes it BGR Acordn standard
-							FRAME_WIDTH
-						);
-			  	}
+				for (uint component = 0; component < 3; ++component) {
+				tmds_encode_custom_1bpp((const uint32_t*)(framebuf+(y/2)*640/8 + component * PLANE_SIZE_BYTES),
+										tmdsbuf + (2-component) * FRAME_WIDTH / DVI_SYMBOLS_PER_WORD,   // The (2-x) here makes it BGR Acordn standard
+										FRAME_WIDTH);
+				}
 				queue_add_blocking_u32(&dvi0.q_tmds_valid, &tmdsbuf);
 				break;
 
 			//
-			//		Mode 1 is 320x240x8 colours as 3 bitplanes, also supports 320x256x8 for BBC Micro compatibility
+			//    Mode 1 is 320x240x8 colours as 3 bitplanes, also supports 320x256x8 for BBC Micro compatibility
 			//
 			case DVI_MODE_320_240_8:
 			case DVI_MODE_320_256_8:
@@ -188,37 +185,34 @@ void __not_in_flash("main") dvi_core1_main() {
 					uint16_t *_target = (uint16_t *)_buffer;
 
 					for (int i = 0;i < 320/8;i++) {
-						*_target++ = _mapping[*_source++];
+					*_target++ = _mapping[*_source++];
 					}
 
-					tmds_encode_custom_1bpp(
-						(const uint32_t*)_buffer,
-						tmdsbuf + (2-component) * FRAME_WIDTH / DVI_SYMBOLS_PER_WORD,  	// The (2-x) here makes it BGR Acordn standard
-						FRAME_WIDTH
-					);
+					tmds_encode_custom_1bpp((const uint32_t*)_buffer,
+											tmdsbuf + (2-component) * FRAME_WIDTH / DVI_SYMBOLS_PER_WORD,   // The (2-x) here makes it BGR Acordn standard
+											FRAME_WIDTH);
 				}
 				queue_add_blocking_u32(&dvi0.q_tmds_valid, &tmdsbuf);
 
-				if (dvi_modeInfo.mode == DVI_MODE_320_256_8 && (y1==14))  {  			// This squeezes 256 lines into 480 :)
-				  	y0 += 1; y1 = 0;
-				}
-				else {
-				  	if (y1 & 1) {
-				    	y0+=1;
-				  	}
-				  	y1 +=1;
+				if (dvi_modeInfo.mode == DVI_MODE_320_256_8 && (y1==14))  {       // This squeezes 256 lines into 480 :)
+					y0 += 1; y1 = 0;
+				} else {
+					if (y1 & 1) {
+						y0+=1;
+					}
+					y1 +=1;
 				}
 				if (y == 479) {
-				  	y0 = 0;y1 = 0;
+					y0 = 0;y1 = 0;
 				}
 				break;
 
 			//
-			//		Mode 2 is 640x480x1 colour as 1 bitplanes.
+			//    Mode 2 is 640x480x1 colour as 1 bitplanes.
 			//
 			case DVI_MODE_640_480_2:
 				queue_remove_blocking_u32(&dvi0.q_tmds_free, &tmdsbuf);
-			  	uint32_t * _source = (uint32_t*)(framebuf+y*640/8);
+				uint32_t * _source = (uint32_t*)(framebuf+y*640/8);
 				uint32_t * _target = (uint32_t*) _buffer;
 				    for (int i = 0; i < 20; i++) {
 				      	*_target++ = ~*_source++;
@@ -244,17 +238,17 @@ void __not_in_flash("main") dvi_core1_main() {
 				queue_add_blocking_u32(&dvi0.q_tmds_valid, &tmdsbuf);
 				break;
 			//
-			//		Mode is 320x240x64 colours
+			//    Mode is 320x240x64 colours
 			//
 			case DVI_MODE_320_240_64:
-			  	queue_remove_blocking_u32(&dvi0.q_tmds_free, &tmdsbuf);
-			  	for (uint component = 0; component < 3; ++component) {
+				queue_remove_blocking_u32(&dvi0.q_tmds_free, &tmdsbuf);
+				for (uint component = 0; component < 3; ++component) {
 					tmds_encode_custom_2bpp((const uint32_t*)(framebuf+(y/2)*640/8 + component * PLANE_SIZE_BYTES),
-											tmdsbuf + (2-component) * FRAME_WIDTH / DVI_SYMBOLS_PER_WORD,  	// The (2-x) here makes it BGR Acordn standard
+											tmdsbuf + (2-component) * FRAME_WIDTH / DVI_SYMBOLS_PER_WORD,   // The (2-x) here makes it BGR Acordn standard
 											FRAME_WIDTH);
 				}
 				queue_add_blocking_u32(&dvi0.q_tmds_valid, &tmdsbuf);
-				break;
+			break;
 
 			default:
 				break;
@@ -264,26 +258,26 @@ void __not_in_flash("main") dvi_core1_main() {
 
 // ***************************************************************************************
 //
-//									Start the DVI driver
+//                  					Start the DVI driver
 //
 // ***************************************************************************************
 
 void DVIStart(void) {
-    DVISetMode(DVI_MODE_640_240_8);
+	DVISetMode(DVI_MODE_640_240_8);
 	//DVISetMode(DVI_MODE_320_240_8);
 	//DVISetMode(DVI_MODE_320_256_8);
 	//DVISetMode(DVI_MODE_640_480_2);
 	//DVISetMode(DVI_MODE_320_240_64);
 
-	vreg_set_voltage(VREG_VSEL);  													// Set CPU voltage
-	sleep_ms(10);  																	// Let it settle for 0.01s
-	set_sys_clock_khz(DVI_TIMING.bit_clk_khz, true);  								// Set the DVI compatible clock speed
-	setup_default_uart();  															// Initialise the UART
+	vreg_set_voltage(VREG_VSEL);                            // Set CPU voltage
+	sleep_ms(10);                                   // Let it settle for 0.01s
+	set_sys_clock_khz(DVI_TIMING.bit_clk_khz, true);                  // Set the DVI compatible clock speed
+	setup_default_uart();                               // Initialise the UART
 
-	dvi0.timing = &DVI_TIMING;  													// Select timing and pinout
+	dvi0.timing = &DVI_TIMING;                            // Select timing and pinout
 	dvi0.ser_cfg = *DVIGetHDMIConfig();
 
-	dvi_init(&dvi0, next_striped_spin_lock_num(), next_striped_spin_lock_num());	// Initialise DVI
-	multicore_launch_core1(dvi_core1_main);  										// Run DVI driver on core #1
+	dvi_init(&dvi0, next_striped_spin_lock_num(), next_striped_spin_lock_num());  // Initialise DVI
+	multicore_launch_core1(dvi_core1_main);                     // Run DVI driver on core #1
 }
 
