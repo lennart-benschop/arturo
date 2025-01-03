@@ -223,7 +223,7 @@ void __not_in_flash("main") dvi_core1_main() {
 				    for (int i = 0; i < 20; i++) {
 				      	*_target++ = ~*_source++;
 				    }
-				}
+
 				for (uint component = 0; component < 3; ++component) {  				// 3 bitplanes RGB, each is bitplane, ~bitplane, all 0 all 1
 				  	uint32_t *_target = NULL;
 				  	switch ((mono_fg_bg >> component) & 0x11) {
@@ -258,7 +258,8 @@ void __not_in_flash("main") dvi_core1_main() {
 
 			default:
 				break;
-		}
+		}		
+	}
 }
 
 // ***************************************************************************************
