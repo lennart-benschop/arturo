@@ -33,8 +33,8 @@ static GFXPort vp;
 void ApplicationRun(void) {
     int n = 0;
     // GFXSetMode(DVI_MODE_640_240_8);
-    CONWriteString("Graphics Demo Application\r");                                  Test64Colours();
-            
+    CONWriteString("Graphics Demo Application\r");                                  
+    // Test64Colours();            
     GFXPortInitialise(&vp,45,64,553,150);
     //
     //      A typical 'main'
@@ -169,6 +169,12 @@ void TestFonts(void) {
         GFXDrawString(&vp,x,y,buffer,i,i % 7 + 1,1);
     }
 }
+
+// ***************************************************************************************
+//
+//                      Test of all 64 colours in 320x240x64
+//
+// ***************************************************************************************
 
 void Test64Colours(void)
 {
