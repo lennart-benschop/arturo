@@ -10,17 +10,32 @@
 # *******************************************************************************************
 
 
-SRCFONTS = $(shell find . -name "*.ttf")
+SRCFONTS1 = $(shell find . -name "*.ttf")
+SRCFONTS2 = $(shell find . -name "*.otf")
+CONVERT = fontconvert/fontconvert 
+RANGE = 32 127
+SYMRANGE = 32 255
+TARGET = ../fontdata.h
 
-fonts: clean $(SRCFONTS)
+fonts: convert clean $(SRCFONTS1) $(SRCFONTS2)
+
+convert:
+	make -C fontconvert
 
 clean:
-	rm -f *.bdf
+	rm -f $(TARGET)
 	
 %.ttf:
-	otf2bdf $@ -p 8 -o  $(*F)08.bdf || true
-	otf2bdf $@ -p 10 -o $(*F)10.bdf || true
-	otf2bdf $@ -p 12 -o $(*F)12.bdf || true
-	otf2bdf $@ -p 14 -o $(*F)14.bdf || true
-	otf2bdf $@ -p 18 -o $(*F)18.bdf || true
+	$(CONVERT) $@ 9 $(RANGE) >>$(TARGET)
+	$(CONVERT) $@ 12 $(RANGE) >>$(TARGET)
+	$(CONVERT) $@ 18 $(RANGE) >>$(TARGET)
 
+%.otf:
+	$(CONVERT) $@ 9 $(RANGE) >>$(TARGET)
+	$(CONVERT) $@ 12 $(RANGE) >>$(TARGET)
+	$(CONVERT) $@ 18 $(RANGE) >>$(TARGET)
+
+symbols.otf:
+	$(CONVERT) $@ 9 $(SYMRANGE) >>$(TARGET)
+	$(CONVERT) $@ 12 $(SYMRANGE) >>$(TARGET)
+	$(CONVERT) $@ 18 $(SYMRANGE) >>$(TARGET)

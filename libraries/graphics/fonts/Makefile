@@ -15,12 +15,6 @@ BPYTHON = bdflib/bin/python
 
 convert:
 	make -B -C fonts fonts
-	$(BPYTHON) convert.py 
-	cp fontdata.h ..
+	$(PYTHON) makeindex.py
 	cp fontinclude.h ../include
-
-create-venv:
-	rm -Rf bdflib
-	$(PYTHON) -m venv bdflib
-	bdflib/bin/pip install bdflib
 
